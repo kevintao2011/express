@@ -1,0 +1,8 @@
+
+
+#exclude node
+node_modules/
+
+
+#env file
+.env
