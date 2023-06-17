@@ -1,7 +1,7 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model} from 'mongoose';
 
 
-const UserSchema = new Schema({
+const UserSchema = new Schema({ //schema
     
     uid: String, // String is shorthand for {type: String}
     token: String,
@@ -14,6 +14,6 @@ const UserSchema = new Schema({
     created:{ type: Date, default: Date.now },
     last_sign_in:{ type: Date, default: Date.now },
 });
-const user = models.User || model("User", UserSchema); 
+const user = model("User", UserSchema);  //Creating a model
 
 export default user;
