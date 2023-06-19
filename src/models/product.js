@@ -1,26 +1,23 @@
+
 import { Schema, model} from 'mongoose';
+import activity from './activity.js';
+import { ObjectId } from 'mongodb';
 
+const ProductSchema = new Schema({ //schema
 
-const NewUserSchema = new Schema({ //schema
-
-    email:{
-        type: String,
-    },
-    username: String,
-    major:String,
-    gender:String,
-    contact:Number,
-    cohort:Date
-    // email: { //key
-    // type: String,
-    // unique: [true, 'Email already exists!'],
-    // required: [true, 'Email is required!'],
-    // },
-
-    
-    
+    activity:ObjectId,
+    index:String,
+    price:Number,
+    type: String,
+    inventory:Number,
+    total:Number,
+    status:String,
+    gallery:Array,
+    logo_url:String,
+    link:Array,
+    delivery_option:Array
     
 });
-const newUser = model("user", NewUserSchema);  //Creating a model
+const product = model("product", ProductSchema);  //Creating a model
 
-export default newUser;
+export default product;

@@ -9,8 +9,6 @@ const UserSchema = new Schema({ //schema
     gender:String,
     contact:Number,
     username: String,
-
-
     uid: String, // String is shorthand for {type: String}
     identifier: String,
     imgurl: String,

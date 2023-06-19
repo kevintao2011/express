@@ -6,6 +6,7 @@ import editUser from "./utils/editUser.js";
 import getUser from "./utils/getUser.js";
 import tryConnectDB from "./utils/tryConnectDB.js";
 import getinfo from "./utils/info/major.js";
+import getProduct from "./utils/getproduct.js";
 
 const app = express()
 const port = 3000
@@ -32,6 +33,13 @@ app.post('/getuser', async (req, res) => {
   
   
 })
+
+app.post('/product', async (req, res) => {
+  const product = await getProduct(req);
+  res.send(product);
+})
+
+
 
 app.post('/', (req, res) => {
   createUser(req);
