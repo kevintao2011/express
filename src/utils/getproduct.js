@@ -2,6 +2,8 @@ import mongoose, {  connect  } from "mongoose";
 import connectDB from "./connectDB.js";
 import product from "../models/product.js";
 import user from "../models/user.js";
+import activity from "../models/activity.js";
+import { DBRef, ObjectId } from "mongodb";
 
 const getProduct = async (req)=>{
     var connect;
@@ -13,23 +15,22 @@ const getProduct = async (req)=>{
         
         const productList = await product.find({})
 
-        console.log("productList",productList)
 
-        productList.forEach(doc => {
-            doc.activity=doc.activity._id
-        })
+        async function update (connect,productList) {
+            var newproductList = []
+            for (const doc of productList) {
+                console.log("productList",doc)
+                const act =  await activity.findById(doc.get("activity").toString(),{"activity_name":1})
+                doc.set("activity", act.get("activity_name"))
+                console.log("act",doc)
+                newproductList.push(doc)
+            }
+            connect.disconnect()
+            return newproductList
+        }
 
-        // if (productList){
-        //     // console.log(productList)
-            
-        // }else{
-        //     connect.disconnect()
-        //     return false
-        // }
-        connect.disconnect()
-        
+        return await update(connect,productList)
         return productList
-
     } catch (err) {
         console.log("error",err);
         console.log("failed");

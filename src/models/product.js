@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 
 const ProductSchema = new Schema({ //schema
 
-    activity:ObjectId,
+    activity:Object,
     index:String,
     price:Number,
     type: String,
@@ -18,6 +18,7 @@ const ProductSchema = new Schema({ //schema
     delivery_option:Array
     
 });
+ProductSchema.path('activity').ref(activity)
 const product = model("product", ProductSchema);  //Creating a model
 
 export default product;
