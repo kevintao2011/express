@@ -4,8 +4,9 @@ import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 
 const ProductSchema = new Schema({ //schema
-
-    activity:Object,
+    society:String,
+    activity:String,
+    activity_id:ObjectId,
     index:String,
     price:Number,
     type: String,
@@ -15,10 +16,11 @@ const ProductSchema = new Schema({ //schema
     gallery:Array,
     logo_url:String,
     link:Array,
-    delivery_option:Array
+    delivery_option:Array,
+    payment_method:Array,
     
 });
-ProductSchema.path('activity').ref(activity)
-const product = model("product", ProductSchema);  //Creating a model
+// ProductSchema.path('activity').ref(activity)
+const product = model("products", ProductSchema);  //Creating a model
 
 export default product;

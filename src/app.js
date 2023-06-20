@@ -7,9 +7,10 @@ import getUser from "./utils/getUser.js";
 import tryConnectDB from "./utils/tryConnectDB.js";
 import getinfo from "./utils/info/major.js";
 import getProduct from "./utils/getproduct.js";
+import createProduct from "./utils/createproduct.js";
 
 const app = express()
-const port = 3001
+const port = 3000
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -54,6 +55,10 @@ app.post('/info', async (req, res) => {
   res.send(result)
 })
 
+app.post('/createproduct',async (req, res) => {
+  const result = await createProduct(req);  
+  res.send(result)
+})
 
 
 app.listen(port, () => {

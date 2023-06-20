@@ -10,7 +10,10 @@ const ActivitySchema = new Schema({ //schema
     "activity_name": String,
     "participants": Array,
     "packages": Array,
-    "payment_method": String
+    "payment_method": String,
+    "description": String,
+    "status":String,
+    "links":Array,
     
 });
 const activity = model("activities", ActivitySchema);  //Creating a model
