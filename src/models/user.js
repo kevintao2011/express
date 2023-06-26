@@ -13,8 +13,8 @@ const UserSchema = new Schema({ //schema
     identifier: String,
     imgurl: String,
     token: String,
-    exp:{ type: Date  },
-    created:{ type: Date },
+    exp:Date,
+    created:Date,
     last_sign_in:{ type: Date },
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)

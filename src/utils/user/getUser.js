@@ -1,6 +1,6 @@
 import mongoose, {  connect  } from "mongoose";
-import connectDB from "./connectDB.js";
-import user from "../models/user.js";
+import connectDB from "../connectDB.js";
+import user from "../../models/user.js";
 
 const getUser = async (req)=>{
     var connect;

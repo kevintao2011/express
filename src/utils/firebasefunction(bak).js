@@ -1,8 +1,9 @@
 import { signInWithEmailAndPassword,getIdToken,createUserWithEmailAndPassword } from "firebase/auth";
-import { FirebaseError, initializeApp } from "firebase/app";
 // import { getFirestore,doc, getDoc } from "firebase/firestore";
-import { getAuth,signOut,sendEmailVerification} from 'firebase/auth'
+import { sendEmailVerification} from 'firebase/auth'
+import { initializeApp } from 'firebase-admin/app';
 
+import { getAuth} from 'firebase-admin/auth'
 
 // const firebaseConfig = {
 //     apiKey: process.env.FIREBASE_apikey,
@@ -41,29 +42,35 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
+export const appAuth = getAuth(app);
+
 export async function loginfirebase(email,password){
     
-    // console.log('Ïnitialized');
-    console.log(app.options);
-    const auth = getAuth(app);
-    const userCredential = await signInWithEmailAndPassword(auth,email,password);
-    
-    return userCredential;
+    // try{
+        const result = await loginfirebase(req.body.email,req.body.password); 
+        const jwt =  await result.user.getIdToken() //the session token
+        console.log('jwt: ',jwt) //session token
+        const uid =  result.user.uid
+        console.log('metadata: ',result.user.metadata) //time (createdAt , lastLoginAt,lastSignInTime,creationTime)
+        const createdAt = new Date(parseInt(result.user.metadata.createdAt* 1000))
+        const lastLoginAt = new Date(parseInt(result.user.metadata.lastLoginAt* 1000))
+        const lastSignInTime = new Date(result.user.metadata.lastSignInTime)
+        const creationTime = new Date(result.user.metadata.creationTime)
+        const expirationTime = new Date(result.user.metadata.expirationTime)
+        
+        console.log('TokenResult: ',await result.user.getIdTokenResult())
+        console.log('emailVerified: ',result.user.emailVerified)
+        res.json(result)
+    //   }catch (error){
+    //     var errorCode = String(error.code)
+    //     errorCode=errorCode.replace('-',' ').replace('auth/', '')
+    //     res.status(500)
+    //     res.json({"code":errorCode})
+    //   }
     
 }
 
 
-export async function logOutfirebase(){
-    const auth = getAuth(app);
-    await signOut(auth).then(() => {
-        // Sign-out successful.
-        return true;
-    }).catch((error) => {
-        // An error happened.
-        return false;
-    });
-    
-}
 export async function register (email,password){
     const auth = getAuth(app);
     var result;

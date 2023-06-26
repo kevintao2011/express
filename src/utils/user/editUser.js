@@ -1,6 +1,5 @@
 import mongoose, { connect } from "mongoose";
-import user from "../models/user.js";
-
+import user from "../../models/user.js";
 
 const editUser = async (req)=>{
     var connect;
@@ -10,16 +9,23 @@ const editUser = async (req)=>{
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         jwt = req.body.jwt;
         data = req.body.data;
-        console.log("jwt: ",jwt);
+        console.log("editUser jwt: ",jwt);
 
         
-        const ExistingUser = await user.findOne({
-            token:jwt.token
-        })   
+        const ExistingUser = await user.findOne(
+            {token:jwt.token},
+            {
+                "_id": 0,
+                "exp": 0,
+                "last_sign_in": 0,
+                "__v": 0,
+                "created": 0,
+                "token": 0,
+            }
+        )
+
         if (ExistingUser){
-            
             await ExistingUser.updateOne(data)
-            
         }else{
             connect.disconnect()
             return false
