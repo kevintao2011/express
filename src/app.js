@@ -1,21 +1,20 @@
 import express from "express";
-import connectDB from "./utils/connectDB.js";
-import createUser from "./utils/createUser.js";
 import "dotenv/config";
-import editUser from "./utils/editUser.js";
-import getUser from "./utils/getUser.js";
-import tryConnectDB from "./utils/tryConnectDB.js";
+import editUser from "./utils/user/editUser.js";
+import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
-import getProduct from "./utils/getproduct.js";
-import createProduct from "./utils/createproduct.js";
-import { loginfirebase } from "./utils/firebasefunction.js";
+import getProduct from "./utils/products/getproduct.js";
+import createProduct from "./utils/products/createproduct.js";
+import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import cors from "cors";
 // import https from "https"
 // import http from "http"
 // import fs from "fs";
 // import crypto from "crypto"
-import { AUTH_ERROR_CODES } from "../auth-errors.js";
-
+// import AUTH_ERROR_CODES from "../auth-errors.js";
+import { adminAuth } from "./auth/firebaseadminfunction.js";
+import { clientAuth } from "./auth/firebaseclientfunction.js";
+import  updateSession  from "./utils/session/updatesession.js"
 const app = express()
 const port = 3001
 
@@ -47,6 +46,48 @@ app.post('/api/getuser', async (req, res) => {
   
 })
 
+function checkAuth  (req, res, next) {
+  console.log('middleware - checkauth')
+  if (req.body.user.jwt) {
+    adminAuth.verifyIdToken(req.body.user.jwt)
+      .then((token) => {
+        
+        console.log('authorized,',token)
+        req.body.tokeninfo = token
+        console.log('req,',req.body)
+        next()
+      }).catch((e) => {
+        // console.log(e)
+        if (e.code == 'auth/id-token-expired') {
+          res.status(403).send(JSON.stringify({'status':'expired'}))
+        } else {
+          res.status(403).send(JSON.stringify({'status':'revoked'}))
+        }
+    
+        
+      });
+  } else {
+   
+    res.status(403).send(JSON.stringify({'status':'unauthorized'}))
+  }
+}
+app.post('/api/checkauth',checkAuth, async (req, res) => {
+  
+  console.log('calling api/checkauth')
+  if (req.body.user.jwt) {
+    if (updateSession(req)){
+      res.status(200).send(JSON.stringify({'result':"updated"}))
+    }else {
+      res.status(403).send(JSON.stringify({'result':"failed"}))
+    }
+    
+  } else {
+    res.status(403).send(JSON.stringify({'result':'Unauthorized'}))
+  }
+  
+  
+})
+
 app.post('/api/product', async (req, res) => {
   const product = await getProduct(req);
   res.send(product);
@@ -71,15 +112,16 @@ app.post('/api/createproduct',async (req, res) => {
   res.send(result)
 })
 
+//serverside login
 app.post('/api/signin',async (req, res) => {
   
   const data = req.body
   console.log("credentials",data)
-  try{
-    const result = await loginfirebase(req.body.email,req.body.password); 
+  // try{
+    const result = await loginfirebase(data.email,data.password); 
     const jwt =  await result.user.getIdToken() //the session token
     console.log('jwt: ',jwt) //session token
-    const uid = 
+    const uid =  result.user.uid
     console.log('metadata: ',result.user.metadata) //time (createdAt , lastLoginAt,lastSignInTime,creationTime)
     const createdAt = new Date(parseInt(result.user.metadata.createdAt* 1000))
     const lastLoginAt = new Date(parseInt(result.user.metadata.lastLoginAt* 1000))
@@ -90,26 +132,27 @@ app.post('/api/signin',async (req, res) => {
     console.log('TokenResult: ',await result.user.getIdTokenResult())
     console.log('emailVerified: ',result.user.emailVerified)
     res.json(result)
-  }catch (error){
-    var errorCode = String(error.code)
-    errorCode=errorCode.replace('-',' ').replace('auth/', '')
-    res.status(500)
-    res.json({"code":errorCode})
-  }
-  
+  // }catch (error){
+  //   var errorCode = String(error.code)
+  //   errorCode=errorCode.replace('-',' ').replace('auth/', '')
+  //   res.status(500)
+  //   res.json({"code":errorCode})
+  // }
+
+  // const idToken = data.jwt
+  // console.log("idToken",idToken)
+  // adminAuth.verifyIdToken(idToken)
+  // .then((decodedToken) => {
+  //   const uid = decodedToken.uid;
+    
+  // })
+  // .catch((error) => {
+  //   // Handle error (no id)
+  // });
+
   
 })
 
-// const encryptedKey = crypto.createPrivateKey({
-//   key: fs.readFileSync("./key.key"),
-//   format: "pem",
-//   passphrase: 'Tch7190520'})
-
-// console.log("encryptedKey",encryptedKey)
-
-// const decryptedKey = encryptedKey.export({
-//   format: 'pem',
-//   type: 'pkcs1',})
 
 
 // https
