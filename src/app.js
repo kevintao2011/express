@@ -15,6 +15,7 @@ import cors from "cors";
 import { adminAuth } from "./auth/firebaseadminfunction.js";
 import { clientAuth } from "./auth/firebaseclientfunction.js";
 import  updateSession  from "./utils/session/updatesession.js"
+import { register } from "./auth/firebaseadminfunction.js";
 const app = express()
 const port = 3001
 
@@ -152,7 +153,37 @@ app.post('/api/signin',async (req, res) => {
 
   
 })
+app.post('/api/signup',async (req, res) => {
+  var result;
+  console.log("Called signup upapi")
+  try{
+      // console.log(await req.json()) ;
+      const data = await req.body;
+      console.log('POST DATA',data);
+      // console.log('firstname', JSON.parse("data"));
+      const userCredential = await register(data.email,data.password)
+        
 
+      
+      res.status(200).send(JSON.stringify({
+          error: false,
+          data: userCredential,
+          
+      }))
+      
+      
+  }catch(e){
+      console.log("signup up api error: ",e.code);
+      // return new Response("Failed",{status:500});
+      
+      
+      res.status(500).send(JSON.stringify({
+          'error': true,
+          'code' : e.code
+      }))
+      
+  }
+})
 
 
 // https

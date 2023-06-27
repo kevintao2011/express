@@ -4,6 +4,7 @@ import { getAuth } from "firebase-admin/auth";
 
 // import { getFirestore,doc, getDoc } from "firebase/firestore";
 import { sendEmailVerification} from 'firebase/auth'
+import { clientAuth } from "./firebaseclientfunction.js";
 
 // const firebaseConfig = {
 //     apiKey: process.env.FIREBASE_apikey,
@@ -49,19 +50,18 @@ export const adminAuth = getAuth(app);
 
 
 export async function register (email,password){
-    const auth = getAuth(app);
     var result;
   
     try{
-        result = await createUserWithEmailAndPassword(auth, email, password);
+        result = await createUserWithEmailAndPassword(clientAuth, email, password);
         console.log("account has been registered");
         sendEmailVerification(result.user);
-        return true
+        return result.user
     }
     catch(e){
 
-        console.log("function logOutfirebase Error:",e.code);
-        throw e;
+        console.log("function register Error:",e.code);
+        throw e
         
     }
     
