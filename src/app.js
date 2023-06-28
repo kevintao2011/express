@@ -6,6 +6,7 @@ import getinfo from "./utils/info/major.js";
 import getProduct from "./utils/products/getproduct.js";
 import createProduct from "./utils/products/createproduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
+import { getUserSociety } from "./utils/info/info.js";
 import cors from "cors";
 // import https from "https"
 // import http from "http"
@@ -49,8 +50,9 @@ app.post('/api/getuser', async (req, res) => {
 
 function checkAuth  (req, res, next) {
   console.log('middleware - checkauth')
-  if (req.body.user.jwt) {
-    adminAuth.verifyIdToken(req.body.user.jwt)
+  console.log('req.body',req.body)
+  if (req.body.user.token) {
+    adminAuth.verifyIdToken(req.body.user.token)
       .then((token) => {
         
         console.log('authorized,',token)
@@ -71,11 +73,12 @@ function checkAuth  (req, res, next) {
    
     res.status(403).send(JSON.stringify({'status':'unauthorized'}))
   }
+  console.log('middleware - checked auth')
 }
 app.post('/api/checkauth',checkAuth, async (req, res) => {
   
   console.log('calling api/checkauth')
-  if (req.body.user.jwt) {
+  if (req.body.user.token) {
     if (updateSession(req)){
       res.status(200).send(JSON.stringify({'result':"updated"}))
     }else {
@@ -92,6 +95,11 @@ app.post('/api/checkauth',checkAuth, async (req, res) => {
 app.post('/api/product', async (req, res) => {
   const product = await getProduct(req);
   res.send(product);
+})
+
+app.post('/api/getusersocieties',checkAuth, async (req, res) => {
+  const societies = await getUserSociety(req);
+  res.status(200).send(JSON.stringify({societies}))
 })
 
 
@@ -117,6 +125,8 @@ app.post('/api/createproduct',async (req, res) => {
 app.post('/api/signin',async (req, res) => {
   
   const data = req.body
+ 
+  
   console.log("credentials",data)
   // try{
     const result = await loginfirebase(data.email,data.password); 
