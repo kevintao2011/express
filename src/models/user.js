@@ -15,6 +15,7 @@ const UserSchema = new Schema({ //schema
     token: String,
     exp:Date,
     created:Date,
+    societies:Object,
     last_sign_in:{ type: Date },
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
