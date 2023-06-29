@@ -41,23 +41,26 @@ app.post('/api/edituser', async (req, res) => {
   
 })
 
-app.post('/api/getuser', async (req, res) => {
-  const user = await getUser(req);
-  res.send(user)
+app.post('/api/getuser',checkAuth, async (req, res) => {
+  console.log("calling getuser",req.body)
+
+  const user = await getUser(req.body.tokeninfo.uid);
+  console.log("reutrning",user)
+  res.send(JSON.stringify(user))
   
   
 })
 
 function checkAuth  (req, res, next) {
   console.log('middleware - checkauth')
-  console.log('req.body',req.body)
+  // console.log('req.body',req.body)
   if (req.body.user.token) {
     adminAuth.verifyIdToken(req.body.user.token)
       .then((token) => {
         
-        console.log('authorized,',token)
+        // console.log('authorized,',token)
         req.body.tokeninfo = token
-        console.log('req,',req.body)
+        // console.log('req,',req.body)
         next()
       }).catch((e) => {
         // console.log(e)
