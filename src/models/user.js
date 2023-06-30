@@ -20,4 +20,4 @@ const UserSchema = new Schema({ //schema
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
 
-export default user;
+export default user ;
