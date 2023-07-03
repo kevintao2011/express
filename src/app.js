@@ -7,6 +7,7 @@ import getProduct from "./utils/products/getproduct.js";
 import createProduct from "./utils/products/createproduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import { getUserSociety } from "./utils/info/info.js";
+import handleUserLogin from "./utils/user/handleUserLogin.js";
 import cors from "cors";
 // import https from "https"
 // import http from "http"
@@ -32,21 +33,27 @@ app.use(cors(corsOptions))
 // app.use(()=>{"get req"})
 
 
-app.post('/api/edituser', async (req, res) => {
-  if(await editUser(req)){
-    res.send('updateduser',200)
-  }else{
-    res.send('cannot updated user',500)
-  }
+app.post('/api/edituser',checkAuth, async (req, res) => {
+  await editUser(req).then(result=>{
+    console.log("result.code",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
   
 })
 
 app.post('/api/getuser',checkAuth, async (req, res) => {
   console.log("calling getuser",req.body)
 
-  const user = await getUser(req.body.tokeninfo.uid);
+  const user = await handleUserLogin(req);
   console.log("reutrning",user)
   res.send(JSON.stringify(user))
+  //Create user profile on mongo when first log in
   
   
 })
@@ -56,14 +63,21 @@ function checkAuth  (req, res, next) {
   // console.log('req.body',req.body)
   if (req.body.user.token) {
     adminAuth.verifyIdToken(req.body.user.token)
+    
       .then((token) => {
-        
-        // console.log('authorized,',token)
-        req.body.tokeninfo = token
-        // console.log('req,',req.body)
-        next()
+        if(!token.email_verified)
+        {
+          console.log(token.email,"token.email_verified",token.email_verified)
+          res.status(500).send(JSON.stringify({'status':'not-authorized'}))
+        }else{
+          // console.log('authorized,',token)
+          req.body.tokeninfo = token
+          // console.log('req,',req.body)
+          next()
+        }       
+      
       }).catch((e) => {
-        // console.log(e)
+        console.log(e)
         if (e.code == 'auth/id-token-expired') {
           res.status(403).send(JSON.stringify({'status':'expired'}))
         } else {
@@ -115,6 +129,12 @@ app.get('/api/test', async (req, res) => {
 app.post('/info', async (req, res) => {
   const result = await getinfo(req);
 
+  
+  // res.status(200).send(JSON.stringify({result}))
+})
+
+app.get('/api/getjupas', async (req, res) => {
+  const result = await getinfo();
   
   res.send(result)
 })
