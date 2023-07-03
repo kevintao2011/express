@@ -13,10 +13,12 @@ const UserSchema = new Schema({ //schema
     identifier: String,
     imgurl: String,
     token: String,
+    sid: String,
     exp:Date,
     created:Date,
     societies:Object,
     last_sign_in:{ type: Date },
+    first_login:Boolean,
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
 

@@ -26,6 +26,7 @@ const getUser = async (UID)=>{
         if (User){
             console.log(User)
         }else{
+            user.create()
             connect.disconnect()
             console.log("no record")
             return false

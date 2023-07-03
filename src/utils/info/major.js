@@ -18,7 +18,9 @@ const getinfo = async (req)=>{
         { useNewUrlParser: true, useUnifiedTopology: true }
         );
         const coll = client.db('website').collection('jupas');
-        const cursor = coll.find();
+        const cursor = coll.find({},{
+            projection:{_id:0}
+        });
         const result = await cursor.toArray();
         await client.close();
         return result
