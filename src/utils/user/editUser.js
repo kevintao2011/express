@@ -1,24 +1,27 @@
 import mongoose, { connect } from "mongoose";
 import user from "../../models/user.js";
+import society from "../../models/society.js";
 
 
 
 const editUser = async (req)=>{
     var connect;
-    var data;
+  
     try {
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         
-        data = req.body.data;
-        console.log("editUser data: ",req.body.tokeninfo.uid,data);
+        
+        console.log("editUser data: ",req.body.data);
 
-        data.first_login=false
-        data.cohort = new Date(data.cohort)
+        req.body.data.first_login=false
+        req.body.data.cohort = new Date(req.body.data.cohort)
+        // req.body.data.societies = req.body.data.societies
         const DuplicateName = await user.findOne(
-            {username:data.username}
+            {username:req.body.data.username}
         )
+        console.log(req.body.sid)
         const DuplicateSID = await user.findOne(
-            {sid:data.sid}
+            {sid:req.body.data.sid}
         )
         if (DuplicateName){
             console.log("duplicated name")
@@ -30,13 +33,13 @@ const editUser = async (req)=>{
             connect.disconnect()
             return {code:"duplicated-sid"}
         }else{
-            
+            //update user profile info
             const dbuser = await user.findOneAndUpdate(
                 {uid:req.body.tokeninfo.uid},
-                data,{
+                req.body.data,{
                     new: true,
                     projection:{
-                        societies:1,
+                        // societies:1,
                         contact:1,
                         cohort:1,
                         username:1,
@@ -53,7 +56,16 @@ const editUser = async (req)=>{
                 return updatedUser
                 
             })
+            //add user sid to society
+            await society.findOneAndUpdate(
+                {code:req.body.data.major},
+                {$push: { member: req.body.data.sid  }}
+            ).then(soc=>{
+                console.log("soc",soc)
+            })
+            connect.disconnect()
             return {code:"success",user:dbuser}
+            
             
             
         }
