@@ -26,14 +26,10 @@ const findUser = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // connect.disconnect();
+        connect.disconnect();
 
     }
-    try{
-
-    }catch(err){
-        console.log("error",err);
-    }
+    
 }
 
 export default findUser;

@@ -24,6 +24,7 @@ const handleUserLogin = async (req)=>{
 
         if (User){
             console.log(User)
+            
         }else{
             await user.create({
                 email:req.body.tokeninfo.email,
@@ -36,7 +37,7 @@ const handleUserLogin = async (req)=>{
                 console.log("created User")
             })
             
-            connect.disconnect()
+            
             return User
         }
         connect.disconnect()

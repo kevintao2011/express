@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 const connectDB = async ()=>{
+    var connect
     try {
-        const connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority");
+        connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority");
         console.log(
             "Database connected: ",
             connect.connection.host,
@@ -16,6 +17,7 @@ const connectDB = async ()=>{
         // );
     } catch (err) {
         console.log(err);
+        await connect.disconnect()
         process.exit(1);
         
     }

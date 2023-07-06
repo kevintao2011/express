@@ -2,20 +2,27 @@
 import user from "../../models/user.js"
 import mongoose, { connect } from "mongoose";
 export async function getUserSociety(req){
-    const connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
-    console.log("get user society",req.body.tokeninfo.uid)
-    const soc = await user.findOne(
-        {uid:req.body.tokeninfo.uid}
-        ,{
-            "societies": 1,
-            "_id":0,
+    var connect
+    try{
+        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        console.log("get user society",req.body.tokeninfo.uid)
+        const soc = await user.findOne(
+            {uid:req.body.tokeninfo.uid}
+            ,{
+                "societies": 1,
+                "_id":0,
+            }
+        )
+        if (soc){
+            return soc.societies
+        }else{
+            return {}
         }
-    )
-    if (soc){
-        return soc.societies
-    }else{
-        return {}
+    }catch(e){
+        console.log(e)
+        connect.disconnect()
     }
+    
     
     
     // .then(doc=>{

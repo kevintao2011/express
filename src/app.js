@@ -18,6 +18,7 @@ import { adminAuth } from "./auth/firebaseadminfunction.js";
 import { clientAuth } from "./auth/firebaseclientfunction.js";
 import  updateSession  from "./utils/session/updatesession.js"
 import { register } from "./auth/firebaseadminfunction.js";
+import { getSociety } from "./utils/info/society.js";
 const app = express()
 const port = 3001
 
@@ -139,7 +140,20 @@ app.get('/api/getjupas', async (req, res) => {
   res.send(result)
 })
 
+app.get('/api/getsocieties', async (req, res) => {
+  await getSociety().then(result=>{
+    console.log("result",result)
+    res.status(200).send(JSON.stringify(result))
+  })
+ 
+  
+})
+
 app.post('/api/createproduct',async (req, res) => {
+  const result = await createProduct(req);  
+  res.send(result)
+})
+app.post('/api/createacticvity',async (req, res) => { //check auth checkpriviledge
   const result = await createProduct(req);  
   res.send(result)
 })

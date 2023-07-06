@@ -4,7 +4,7 @@ import { Schema, model} from 'mongoose';
 
 const ActivitySchema = new Schema({ //schema
 
-    "society": String,
+    "code": String,
     "end_date": Date,
     "start_date": Date,
     "activity_name": String,

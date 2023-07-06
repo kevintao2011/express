@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 const tryConnectDB = async ()=>{
+    var connect
     try {
-        const connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority");
+        connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority");
         console.log(
             "Database connected: ",
             connect.connection.host,
             connect.connection.name
             
         );
-        connect.disconnect()
+        await connect.disconnect()
         return true;
         // await connect.disconnect();
         // console.log(
@@ -17,6 +18,7 @@ const tryConnectDB = async ()=>{
         // );
     } catch (err) {
         console.log(err);
+        connect.disconnect();
         process.exit(1);
         
     }
