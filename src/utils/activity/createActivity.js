@@ -6,43 +6,52 @@ import activity from "../../models/activity.js";
 import { DBRef, ObjectId } from "mongodb";
 
 // for show product in carousell 
-const createProduct = async (req)=>{
+const createActivity = async (req)=>{
     var connect;
-    var jwt;
+    var newActivity
     const body = req.body;
     try {
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
-        const newActivity = new activity({
-            society:body.data.society,
-            start_date:body.data.start_date,
-            end_date:body.data.end_date,
-            activity_name:body.data.activity_name,
-            payment_method:body.data.payment_method,
-            maximum_participant:body.data.maximum_participant,
-            
-            //create product ticket at the same time
-            
-            
+        if(body.data.single_date){
+            newActivity = new activity({
+                code:body.data.code,
+                activity_name:body.data.activity_name,
+                single_date:body.data.single_date,
+                start_date:body.data.start_date,
+                start_time:body.data.start_time,
+                end_time:body.data.end_time,
+                payment_method:body.data.payment_method,
+                status:body.data.status
 
-            product_name:body.data.product_name,
-            price:parseInt(body.data.price),
-            type: body.data.type,
-            total:parseInt(body.data.total),
-            link:body.data.link,
-            delivery:body.data.delivery,
-            payment_method:body.data.payment_method
-        })
+            })
+            
+        }else {
+            newActivity = new activity({
+                
+                code:body.data.code,
+                start_date:body.data.start_date,
+                single_date:body.data.single_date,
+                activity_name:body.data.activity_name,
+                end_date:body.data.end_date,
+                payment_method:body.data.payment_method,
+                status:body.data.status,
+                //create product ticket at the same time
+                
+                
+            })
+        }
+        
 
         await activity.create(newActivity)
+        console.log("created activity")
+        return JSON.stringify({code:"success"})
 
-        return true
-        
     } catch (err) {
         console.log("error",err);
         console.log("failed");
         connect.disconnect()
-        return false
+        return JSON.stringify({code:err})
 
     }
     
@@ -50,4 +59,4 @@ const createProduct = async (req)=>{
     
 }
 
-export default createProduct;
+export default createActivity;

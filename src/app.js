@@ -19,6 +19,8 @@ import { clientAuth } from "./auth/firebaseclientfunction.js";
 import  updateSession  from "./utils/session/updatesession.js"
 import { register } from "./auth/firebaseadminfunction.js";
 import { getSociety } from "./utils/info/society.js";
+import getSocActivity from "./utils/activity/getSocActivity.js";
+import createActivity from "./utils/activity/createActivity.js";
 const app = express()
 const port = 3001
 
@@ -153,18 +155,22 @@ app.post('/api/createproduct',async (req, res) => {
   const result = await createProduct(req);  
   res.send(result)
 })
-app.post('/api/createacticvity',async (req, res) => { //check auth checkpriviledge
-  const result = await createProduct(req);  
+app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth checkpriviledge
+  const result = await createActivity(req);  
+  res.send(result)
+})
+app.post('/api/getsocactivity',async (req, res) => { //check auth checkpriviledge
+  const result = await getSocActivity(req);  
   res.send(result)
 })
 
 //serverside login
 app.post('/api/signin',async (req, res) => {
   
-  const data = req.body
+  
  
   
-  console.log("credentials",data)
+  console.log("credentials",req.body)
   // try{
     const result = await loginfirebase(data.email,data.password); 
     const jwt =  await result.user.getIdToken() //the session token
