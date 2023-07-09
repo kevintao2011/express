@@ -3,17 +3,17 @@ import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 import activity from "../../models/activity.js";
 
-const getSocActivity = async (req)=>{
-    
+const getActivity = async (req)=>{
+    console.log("function getActivity")
     var connect;
 
 
     try {
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
-        
-        const a = await activity.find(
-            {code:req.body.id}
+        console.log("id",req.body.id)
+        const a = await activity.findById(
+            {_id:req.body.id}
         ).then(activities=>{
             if (activities){
                 console.log(activities)
@@ -38,4 +38,4 @@ const getSocActivity = async (req)=>{
     
 }
 
-export default getSocActivity;
+export default getActivity;

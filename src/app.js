@@ -21,6 +21,7 @@ import { register } from "./auth/firebaseadminfunction.js";
 import { getSociety } from "./utils/info/society.js";
 import getSocActivity from "./utils/activity/getSocActivity.js";
 import createActivity from "./utils/activity/createActivity.js";
+import getActivity from "./utils/activity/getactivity.js";
 const app = express()
 const port = 3001
 
@@ -159,8 +160,13 @@ app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth che
   const result = await createActivity(req);  
   res.send(result)
 })
-app.post('/api/getsocactivity',async (req, res) => { //check auth checkpriviledge
+app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
+  res.send(result)
+})
+
+app.post('/api/getactivity',async (req, res) => { //getsocactivity
+  const result = await getActivity(req);  
   res.send(result)
 })
 
