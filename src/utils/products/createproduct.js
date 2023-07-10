@@ -13,15 +13,16 @@ const createProduct = async (req)=>{
     try {
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
+
         const newProduct = new product({
-            society:body.data.society,
-            product_name:body.data.product_name,
-            price:parseInt(body.data.price),
-            type: body.data.type,
-            total:parseInt(body.data.total),
-            link:body.data.link,
-            delivery:body.data.delivery,
-            payment_method:body.data.payment_method
+            "society":body.data.code, //soc-code
+            "product_name":body.data.product_name,
+            "type": body.data.type,
+            "status":body.data.status, //selling//ended
+            "img_url":body.data.img_url,
+            "link":body.data.link,
+            "no_variants":body.data.has_variants,
+            "variants":body.data.variants
         })
 
         await product.create(newProduct)

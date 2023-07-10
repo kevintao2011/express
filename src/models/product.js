@@ -2,23 +2,24 @@
 import { Schema, model} from 'mongoose';
 import activity from './activity.js';
 import { ObjectId } from 'mongodb';
+const ProductVariantSchema = new Schema({ //schema
+    variant:String,
+    totalSales:Number,
+    price:Number,
+    gallery:Array,
+    inventory:Number
+});
 
 const ProductSchema = new Schema({ //schema
-    society:String,
-    activity:String,
-    activity_id:ObjectId,
-    index:String,
-    price:Number,
+    society:String, //soc-code
+    product_name:String,
     type: String,
-    inventory:Number,
-    total:Number,
-    status:String,
-    gallery:Array,
-    logo_url:String,
+    status:String, //selling//ended
+    img_url:String,
     link:Array,
     delivery_option:Array,
-    payment_method:Array,
-    
+    no_variants:Boolean,
+    variants:[ProductVariantSchema]
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
