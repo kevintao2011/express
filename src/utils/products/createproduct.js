@@ -15,14 +15,15 @@ const createProduct = async (req)=>{
         console.log(body)
 
         const newProduct = new product({
-            "society":body.data.code, //soc-code
+            "code":body.data.code, //soc-code
             "product_name":body.data.product_name,
-            "type": body.data.type,
+            // "type": body.data.type,
             "status":body.data.status, //selling//ended
             "img_url":body.data.img_url,
             "link":body.data.link,
-            "no_variants":body.data.has_variants,
-            "variants":body.data.variants
+            "variants":body.data.variants,
+            "type":body.data.type
+            
         })
 
         await product.create(newProduct)
