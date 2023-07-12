@@ -11,15 +11,15 @@ const ProductVariantSchema = new Schema({ //schema
 });
 
 const ProductSchema = new Schema({ //schema
-    society:String, //soc-code
+    code:String, //soc-code
     product_name:String,
     type: String,
     status:String, //selling//ended
     img_url:String,
     link:Array,
-    delivery_option:Array,
-    no_variants:Boolean,
-    variants:[ProductVariantSchema]
+    // delivery_option:Array,
+    // no_variants:Boolean,
+    variants:Array
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model

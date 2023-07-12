@@ -3,8 +3,8 @@ import "dotenv/config";
 import editUser from "./utils/user/editUser.js";
 import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
-import getProduct from "./utils/products/getproduct.js";
-import createProduct from "./utils/products/createproduct.js";
+import getProduct from "./utils/getproduct.js";
+import createproduct from "./utils/products/createproduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import { getUserSociety } from "./utils/info/info.js";
 import handleUserLogin from "./utils/user/handleUserLogin.js";
@@ -22,6 +22,7 @@ import { getSociety } from "./utils/info/society.js";
 import getSocActivity from "./utils/activity/getSocActivity.js";
 import createActivity from "./utils/activity/createActivity.js";
 import getActivity from "./utils/activity/getactivity.js";
+import getSocProduct from "./utils/products/getSocProduct.js";
 const app = express()
 const port = 3001
 
@@ -153,7 +154,7 @@ app.get('/api/getsocieties', async (req, res) => {
 })
 
 app.post('/api/createproduct',async (req, res) => {
-  const result = await createProduct(req);  
+  const result = await createproduct(req);  
   res.send(result)
 })
 app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth checkpriviledge
@@ -162,6 +163,11 @@ app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth che
 })
 app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
+  res.send(result)
+})
+app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
+  const result = await getSocProduct(req);  
+  console.log("result",result)
   res.send(result)
 })
 
