@@ -2,23 +2,16 @@ import mongoose, {  connect  } from "mongoose";
 import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 import activity from "../../models/activity.js";
-import product from "../../models/product.js";
-/*
-{
-  user: {
-    token: ''
-  },
-  id: 'code'
-}
-*/
-const getSocProduct = async (req)=>{
-    console.log("running getSocProduct",mongoose.connection.readyState , req.body)
+import society from "../../models/society.js";
+
+const getSocUser = async (req)=>{
+    console.log("running getSocUser",mongoose.connection.readyState , req.body)
     var connect;
 
 
     try {
         connect = await mongoose.connection.asPromise()
-        console.log("getSocActivity current connection",mongoose.connection.readyState)
+        console.log("current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
             console.log("getSocActivity connecting")
             connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
@@ -31,17 +24,20 @@ const getSocProduct = async (req)=>{
             console.log("getSocActivity added connection",mongoose.connection.readyState)
         }
         
-    
-        console.log("status before find",mongoose.connection.readyState)
-        const a = await product.find(
+
+        const a = await society.find(
             {code:req.body.id}
-        ).then(products=>{
-            if (products){
-                console.log(products)
+            ,{member:1} //,_id:0
+        ).then(async member=>{
+            console.log("document",member)
+            member = member[0].member
+            if (member){
+                console.log(member)
             }
-            // await connect.disconnect()
-            console.log("products function exe sucess")
-            return products
+            
+            await connect.disconnect()
+            console.log("getSocUser function exe sucess")
+            return member
         })
 
         return a
@@ -50,7 +46,7 @@ const getSocProduct = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        await connect.disconnect()
         return false
 
     }
@@ -59,4 +55,4 @@ const getSocProduct = async (req)=>{
     
 }
 
-export default getSocProduct;
+export default getSocUser;

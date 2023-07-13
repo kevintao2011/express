@@ -25,12 +25,12 @@ const editUser = async (req)=>{
         )
         if (DuplicateName){
             console.log("duplicated name")
-            connect.disconnect()
+            await connect.disconnect()
             return {code:"duplicated-username"}
         }
         else if (DuplicateSID){
             console.log("duplicated sid")
-            connect.disconnect()
+            await connect.disconnect()
             return {code:"duplicated-sid"}
         }else{
             //update user profile info
@@ -63,7 +63,7 @@ const editUser = async (req)=>{
             ).then(soc=>{
                 console.log("soc",soc)
             })
-            connect.disconnect()
+            await connect.disconnect()
             return {code:"success",user:dbuser}
             
             
@@ -75,7 +75,7 @@ const editUser = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return {code:"operation-error"}
 
     }

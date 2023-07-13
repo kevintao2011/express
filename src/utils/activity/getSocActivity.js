@@ -4,21 +4,32 @@ import user from "../../models/user.js";
 import activity from "../../models/activity.js";
 
 const getSocActivity = async (req)=>{
-    
+    console.log("running getSocActivity",mongoose.connection.readyState , req.body)
     var connect;
 
 
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        connect = await mongoose.connection.asPromise()
 
+        console.log("getSocActivity current connection",mongoose.connection.readyState)
+        if(mongoose.connection.readyState==0){
+            console.log("getSocActivity connecting")
+            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        }
+        else{
+            console.log("getSocActivity adding connection")
+            connect = mongoose
+            
+            console.log("getSocActivity added connection",mongoose.connection.readyState)
+        }
         
         const a = await activity.find(
             {code:req.body.id}
-        ).then(activities=>{
+        ).then(async activities=>{
             if (activities){
                 console.log(activities)
             }
-            connect.disconnect()
+            await connect.disconnect()
             console.log("function exe sucess")
             return activities
         })
@@ -29,7 +40,7 @@ const getSocActivity = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

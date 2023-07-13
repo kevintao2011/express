@@ -27,11 +27,11 @@ const getUser = async (UID)=>{
             console.log(User)
         }else{
             user.create()
-            connect.disconnect()
+            await connect.disconnect()
             console.log("no record")
             return false
         }
-        connect.disconnect()
+        await connect.disconnect()
         console.log("function exe sucess")
         return User
         
@@ -39,7 +39,7 @@ const getUser = async (UID)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

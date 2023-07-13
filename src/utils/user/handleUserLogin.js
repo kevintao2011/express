@@ -40,15 +40,15 @@ const handleUserLogin = async (req)=>{
             
             return User
         }
-        connect.disconnect()
-        console.log("function exe sucess")
+        await connect.disconnect()
+        console.log("handleUserLogin function exe sucess",mongoose.connection.readyState)
         return User
         
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

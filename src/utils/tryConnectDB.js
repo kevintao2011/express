@@ -18,7 +18,7 @@ const tryConnectDB = async ()=>{
         // );
     } catch (err) {
         console.log(err);
-        connect.disconnect();
+        await connect.disconnect();
         process.exit(1);
         
     }

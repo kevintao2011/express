@@ -29,7 +29,7 @@ const getProduct = async (req)=>{
         //         console.log("act",doc)
         //         newproductList.push(doc)
         //     }
-        //     connect.disconnect()
+        //     await connect.disconnect()
         //     return newproductList
         // }
 
@@ -39,7 +39,7 @@ const getProduct = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

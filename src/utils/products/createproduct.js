@@ -11,7 +11,8 @@ const createproduct = async (req)=>{
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         const newProduct = new product({
-            code:req.body.data.society,
+            code:req.body.data.code,
+            status:req.body.data.status[0],
             product_name:req.body.data.product_name[0],
             type: req.body.data.type[0],
             variants: req.body.data.variants
@@ -25,7 +26,7 @@ const createproduct = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

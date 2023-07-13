@@ -27,17 +27,17 @@ const getUser = async (req)=>{
         if (User){
             console.log(User)
         }else{
-            connect.disconnect()
+            await connect.disconnect()
             return false
         }
-        connect.disconnect()
+        await connect.disconnect()
         
         return User
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

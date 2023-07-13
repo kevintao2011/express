@@ -23,6 +23,8 @@ import getSocActivity from "./utils/activity/getSocActivity.js";
 import createActivity from "./utils/activity/createActivity.js";
 import getActivity from "./utils/activity/getactivity.js";
 import getSocProduct from "./utils/products/getSocProduct.js";
+import getSocUser from "./utils/user/getSocUser.js";
+import getCatOption from "./utils/products/getCatOption.js";
 const app = express()
 const port = 3001
 
@@ -56,6 +58,28 @@ app.post('/api/getuser',checkAuth, async (req, res) => {
   console.log("calling getuser",req.body)
 
   const user = await handleUserLogin(req);
+  console.log("reutrning",user)
+  res.send(JSON.stringify(user))
+  //Create user profile on mongo when first log in
+  
+  
+})
+
+app.post('/api/getsocuser',checkAuth, async (req, res) => {
+  console.log("calling socuser",req.body)
+
+  const user = await getSocUser(req);
+  console.log("reutrning",user)
+  res.send(JSON.stringify(user))
+  //Create user profile on mongo when first log in
+  
+  
+})
+
+app.post('/api/getcatoption',checkAuth, async (req, res) => {
+  console.log("calling socuser",req.body)
+
+  const user = await getCatOption(req);
   console.log("reutrning",user)
   res.send(JSON.stringify(user))
   //Create user profile on mongo when first log in

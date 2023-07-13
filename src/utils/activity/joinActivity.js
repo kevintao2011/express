@@ -21,17 +21,17 @@ const editUser = async (req)=>{
             await ExistingUser.updateOne(data)
             
         }else{
-            connect.disconnect()
+            await connect.disconnect()
             return false
         }
         
-        connect.disconnect()
+        await connect.disconnect()
         return true
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

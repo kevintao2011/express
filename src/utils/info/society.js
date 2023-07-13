@@ -27,11 +27,11 @@ export async function getSociety(){
             return(obj)
             
         })
-        console.log(a)
-        connect.disconnect()
+        // console.log(a)
+        await connect.disconnect()
         return a
     }catch{
-        connect.disconnect()
+        await connect.disconnect()
     }
     
     

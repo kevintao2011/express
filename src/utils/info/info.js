@@ -20,7 +20,7 @@ export async function getUserSociety(req){
         }
     }catch(e){
         console.log(e)
-        connect.disconnect()
+        await connect.disconnect()
     }
     
     

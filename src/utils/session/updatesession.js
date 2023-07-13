@@ -36,17 +36,17 @@ const updateSession = async (req)=>{
             })
             console.log("updated",result);
         }else{
-            connect.disconnect()
+            await connect.disconnect()
             return false
         }
         
-        connect.disconnect()
+        await connect.disconnect()
         return true
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }

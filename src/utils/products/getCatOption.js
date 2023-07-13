@@ -3,6 +3,7 @@ import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 import activity from "../../models/activity.js";
 import product from "../../models/product.js";
+import category from "../../models/category.js";
 /*
 {
   user: {
@@ -11,8 +12,8 @@ import product from "../../models/product.js";
   id: 'code'
 }
 */
-const getSocProduct = async (req)=>{
-    console.log("running getSocProduct",mongoose.connection.readyState , req.body)
+const getCatOption = async (req)=>{
+    console.log("running getCatOption",mongoose.connection.readyState , req.body)
     var connect;
 
 
@@ -33,15 +34,15 @@ const getSocProduct = async (req)=>{
         
     
         console.log("status before find",mongoose.connection.readyState)
-        const a = await product.find(
-            {code:req.body.id}
-        ).then(products=>{
-            if (products){
-                console.log(products)
+        const a = await category.find(
+            {}
+        ).then(categories=>{
+            if (categories){
+                console.log(categories)
             }
             // await connect.disconnect()
             console.log("products function exe sucess")
-            return products
+            return categories
         })
 
         return a
@@ -59,4 +60,4 @@ const getSocProduct = async (req)=>{
     
 }
 
-export default getSocProduct;
+export default getCatOption;

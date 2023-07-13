@@ -14,11 +14,11 @@ const getActivity = async (req)=>{
         console.log("id",req.body.id)
         const a = await activity.findById(
             {_id:req.body.id}
-        ).then(activities=>{
+        ).then(async activities=>{
             if (activities){
                 console.log(activities)
             }
-            connect.disconnect()
+            await connect.disconnect()
             console.log("function exe sucess")
             return activities
         })
@@ -29,7 +29,7 @@ const getActivity = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        connect.disconnect()
+        await connect.disconnect()
         return false
 
     }
