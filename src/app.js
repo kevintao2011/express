@@ -25,6 +25,7 @@ import getActivity from "./utils/activity/getactivity.js";
 import getSocProduct from "./utils/products/getSocProduct.js";
 import getSocUser from "./utils/user/getSocUser.js";
 import getCatOption from "./utils/products/getCatOption.js";
+import changePoster from "./utils/activity/changePoster.js";
 const app = express()
 const port = 3001
 
@@ -82,6 +83,17 @@ app.post('/api/getcatoption',checkAuth, async (req, res) => {
   const user = await getCatOption(req);
   console.log("reutrning",user)
   res.send(JSON.stringify(user))
+  //Create user profile on mongo when first log in
+  
+  
+})
+
+app.post('/api/changeposter',checkAuth, async (req, res) => {
+  console.log("calling changeposter",req.body)
+
+  const result = await changePoster(req);
+  console.log("reutrning state",result)
+  res.send(JSON.stringify(result))
   //Create user profile on mongo when first log in
   
   
