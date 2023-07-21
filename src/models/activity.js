@@ -15,6 +15,7 @@ const ActivitySchema = new Schema({ //schema
     packages: Array,
     payment_method: String,
     description: String,
+    posterURL:String,
     status:String,
     links:Array,
     

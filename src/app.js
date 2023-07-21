@@ -26,6 +26,7 @@ import getSocProduct from "./utils/products/getSocProduct.js";
 import getSocUser from "./utils/user/getSocUser.js";
 import getCatOption from "./utils/products/getCatOption.js";
 import changePoster from "./utils/activity/changePoster.js";
+import updateActivityProduct from "./utils/activity/updateActivityProduct.js";
 const app = express()
 const port = 3001
 
@@ -92,6 +93,16 @@ app.post('/api/changeposter',checkAuth, async (req, res) => {
   console.log("calling changeposter",req.body)
 
   const result = await changePoster(req);
+  console.log("reutrning state",result)
+  res.send(JSON.stringify(result))
+  //Create user profile on mongo when first log in
+  
+  
+})
+app.post('/api/updateActivityProduct',checkAuth, async (req, res) => {
+  console.log("calling updateActivityProduct",req.body)
+
+  const result = await updateActivityProduct(req);
   console.log("reutrning state",result)
   res.send(JSON.stringify(result))
   //Create user profile on mongo when first log in
