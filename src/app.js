@@ -3,7 +3,7 @@ import "dotenv/config";
 import editUser from "./utils/user/editUser.js";
 import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
-import getProduct from "./utils/getproduct.js";
+import getProduct from "./utils/products/getProduct.js";
 import createproduct from "./utils/products/createproduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import { getUserSociety } from "./utils/info/info.js";
@@ -103,7 +103,7 @@ app.post('/api/changeposter',checkAuth, async (req, res) => {
 })
 
 app.post('/api/changeproducticon',checkAuth, async (req, res) => {
-  console.log("calling changeposteicon",req.body)
+  console.log("calling changeproducticon",req.body)
 
   const result = await changeProductIcon(req);
   console.log("reutrning state",result)
@@ -184,9 +184,10 @@ app.post('/api/checkauth',checkAuth, async (req, res) => {
   
 })
 
-app.post('/api/product', async (req, res) => {
+app.post('/api/product',checkAuth, async (req, res) => {
+  console.log("calling /api/product")
   const product = await getProduct(req);
-  res.send(product);
+  res.status(200).send(JSON.stringify({product}))
 })
 
 app.post('/api/getusersocieties',checkAuth, async (req, res) => {

@@ -11,36 +11,36 @@ import product from "../../models/product.js";
   id: 'code'
 }
 */
-const getSocProduct = async (req)=>{
+const getProduct = async (req)=>{
     console.log("running getSocProduct",mongoose.connection.readyState , req.body)
     var connect;
 
 
     try {
         connect = await mongoose.connection.asPromise()
-        console.log("getSocActivity current connection",mongoose.connection.readyState)
+        console.log("getSocProduct current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
-            console.log("getSocActivity connecting")
+            console.log("getSocProduct connecting")
             connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
-            console.log("getSocActivity adding connection")
+            console.log("getSocProduct adding connection")
             
             connect = mongoose
             
-            console.log("getSocActivity added connection",mongoose.connection.readyState)
+            console.log("getSocProduct added connection",mongoose.connection.readyState)
         }
         
     
         console.log("status before find",mongoose.connection.readyState)
-        const a = await product.find(
-            {code:req.body.data.major}
+        const a = await product.findOne(
+            {_id:req.body.id}
         ).then(products=>{
             if (products){
                 console.log(products)
             }
             // await connect.disconnect()
-            console.log("products function exe sucess")
+            console.log("products found")
             return products
         })
 
@@ -59,4 +59,4 @@ const getSocProduct = async (req)=>{
     
 }
 
-export default getSocProduct;
+export default getProduct;

@@ -18,17 +18,17 @@ const getSocProduct = async (req)=>{
 
     try {
         connect = await mongoose.connection.asPromise()
-        console.log("getSocActivity current connection",mongoose.connection.readyState)
+        console.log("getSocProduct current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
-            console.log("getSocActivity connecting")
+            console.log("getSocProduct connecting")
             connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
-            console.log("getSocActivity adding connection")
+            console.log("getSocProduct adding connection")
             
             connect = mongoose
             
-            console.log("getSocActivity added connection",mongoose.connection.readyState)
+            console.log("getSocProduct added connection",mongoose.connection.readyState)
         }
         
     
@@ -40,7 +40,7 @@ const getSocProduct = async (req)=>{
                 console.log(products)
             }
             // await connect.disconnect()
-            console.log("products function exe sucess")
+            console.log("soc products function exe sucess")
             return products
         })
 

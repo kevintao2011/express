@@ -13,15 +13,18 @@ const changeProductIcon = async (req)=>{
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(req.body.data.product_id)
         await product.findOne({"_id":req.body.data.product_id}).then(async doc=>{  
-            console.log(doc,req.body.data.iconURL)
-            varList = doc.variants.map((v=>{
+            console.log("doc exists",req.body.data.iconURL)
+            const varList = doc.variants.map((v=>{
                 if (v.name===req.body.data.option_name){
                     v.icon_url = req.body.data.iconURL
+                    console.log("v",v)
+                    return v
+                }else{
                     return v
                 }
             }))
             await doc.updateOne({
-                variants:req.body.data.iconURL
+                variants:varList
             })
         })
     
