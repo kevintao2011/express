@@ -21,7 +21,9 @@ import { register } from "./auth/firebaseadminfunction.js";
 import { getSociety } from "./utils/info/society.js";
 import getSocActivity from "./utils/activity/getSocActivity.js";
 import createActivity from "./utils/activity/createActivity.js";
+import updateActivity from "./utils/activity/updateActivity.js";
 import getActivity from "./utils/activity/getactivity.js";
+import removeActivity from "./utils/activity/removeActivity.js";
 import getSocProduct from "./utils/products/getSocProduct.js";
 import getSocUser from "./utils/user/getSocUser.js";
 import getCatOption from "./utils/products/getCatOption.js";
@@ -29,6 +31,10 @@ import changePoster from "./utils/activity/changePoster.js";
 import updateActivityProduct from "./utils/activity/updateActivityProduct.js";
 import updateProduct from "./utils/products/editProdct.js";
 import changeProductIcon from "./utils/products/changeProductIcon.js";
+import updateProductInfo from "./utils/products/updateproductinfo.js";
+import updateProductOption from "./utils/products/updateproductoption.js";
+import removeProductOption from "./utils/products/removeproductoption.js";
+import addProductOption from "./utils/products/addProductOption.js";
 const app = express()
 const port = 3001
 
@@ -57,6 +63,8 @@ app.post('/api/edituser',checkAuth, async (req, res) => {
   
   
 })
+
+
 
 app.post('/api/getuser',checkAuth, async (req, res) => {
   console.log("calling getuser",req.body)
@@ -132,6 +140,65 @@ app.post('/api/updateproduct',checkAuth, async (req, res) => {
   
   
 })
+
+app.post('/api/updateproductinfo',checkAuth, async (req, res) => {
+  await updateProductInfo(req).then(result=>{
+    console.log("updated product info",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
+  
+})
+app.post('/api/updateoptioninfo',checkAuth, async (req, res) => {
+  await updateProductOption(req).then(result=>{
+    console.log("updated Product Option",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
+  
+})
+
+app.post('/api/removeproductoption',checkAuth, async (req, res) => {
+  await removeProductOption(req).then(result=>{
+    console.log("removeproductiotuin",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
+  
+})
+
+app.post('/api/addproductoption',checkAuth, async (req, res) => {
+  await addProductOption(req).then(result=>{
+    console.log("addProductOption",result)
+    if(result.index){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
+  
+})
+
+
+
+
 
 function checkAuth  (req, res, next) {
   console.log('middleware - checkauth')
@@ -232,6 +299,18 @@ app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth che
   const result = await createActivity(req);  
   res.send(result)
 })
+
+app.post('/api/updateactivity',checkAuth,async (req, res) => { //check auth checkpriviledge
+  const result = await updateActivity(req);  
+  res.send(result)
+})
+
+app.post('/api/removeactivity',checkAuth,async (req, res) => { //check auth checkpriviledge
+  const result = await removeActivity(req);  
+  res.send(result)
+})
+
+
 app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
   res.send(result)
