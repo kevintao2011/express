@@ -43,7 +43,7 @@ const getProduct = async (req)=>{
             console.log("products found")
             return products
         })
-
+        
         return a
         
 

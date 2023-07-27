@@ -19,17 +19,17 @@ const getCatOption = async (req)=>{
 
     try {
         connect = await mongoose.connection.asPromise()
-        console.log("getSocActivity current connection",mongoose.connection.readyState)
+        console.log("getCatOption current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
-            console.log("getSocActivity connecting")
+            console.log("getCatOption connecting")
             connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
-            console.log("getSocActivity adding connection")
+            console.log("getCatOption adding connection")
             
             connect = mongoose
             
-            console.log("getSocActivity added connection",mongoose.connection.readyState)
+            console.log("getCatOption added connection",mongoose.connection.readyState)
         }
         
     
@@ -41,7 +41,7 @@ const getCatOption = async (req)=>{
                 console.log(categories)
             }
             // await connect.disconnect()
-            console.log("products function exe sucess")
+            console.log("getCatOption sucess")
             return categories
         })
 
