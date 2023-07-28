@@ -16,6 +16,7 @@ const ProductSchema = new Schema({ //schema
     type: String,
     status:String, //selling//ended
     img_url:String,
+    product_icon:String,
     link:Array,
     // delivery_option:Array,
     // no_variants:Boolean,

@@ -31,10 +31,12 @@ import changePoster from "./utils/activity/changePoster.js";
 import updateActivityProduct from "./utils/activity/updateActivityProduct.js";
 import updateProduct from "./utils/products/editProdct.js";
 import changeProductIcon from "./utils/products/changeProductIcon.js";
+import changeProductMainIcon from "./utils/products/changeProductMainIcon.js";
 import updateProductInfo from "./utils/products/updateproductinfo.js";
 import updateProductOption from "./utils/products/updateproductoption.js";
 import removeProductOption from "./utils/products/removeproductoption.js";
 import addProductOption from "./utils/products/addProductOption.js";
+import getProducts from "./utils/products/getProducts.js";
 const app = express()
 const port = 3001
 
@@ -114,6 +116,17 @@ app.post('/api/changeproducticon',checkAuth, async (req, res) => {
   console.log("calling changeproducticon",req.body)
 
   const result = await changeProductIcon(req);
+  console.log("reutrning state",result)
+  res.send(JSON.stringify(result))
+  //Create user profile on mongo when first log in
+  
+  
+})
+
+app.post('/api/changeproductmainicon',checkAuth, async (req, res) => {
+  console.log("calling changeproducticon",req.body)
+
+  const result = await changeProductMainIcon(req);
   console.log("reutrning state",result)
   res.send(JSON.stringify(result))
   //Create user profile on mongo when first log in
@@ -251,11 +264,7 @@ app.post('/api/checkauth',checkAuth, async (req, res) => {
   
 })
 
-app.post('/api/product',checkAuth, async (req, res) => {
-  console.log("calling /api/product")
-  const product = await getProduct(req);
-  res.status(200).send(JSON.stringify({product}))
-})
+
 
 app.post('/api/getusersocieties',checkAuth, async (req, res) => {
   const societies = await getUserSociety(req);
@@ -291,10 +300,7 @@ app.get('/api/getsocieties', async (req, res) => {
   
 })
 
-app.post('/api/createproduct',async (req, res) => {
-  const result = await createproduct(req);  
-  res.send(result)
-})
+
 app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth checkpriviledge
   const result = await createActivity(req);  
   res.send(result)
@@ -315,10 +321,29 @@ app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
   res.send(result)
 })
+
+app.post('/api/getproduct',checkAuth, async (req, res) => { // get single product
+  console.log("calling /api/product")
+  const product = await getProduct(req);
+  res.status(200).send(JSON.stringify({product}))
+})
+
+app.post('/api/createproduct',async (req, res) => {
+  const result = await createproduct(req);  
+  res.send(result)
+})
+
+
 app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
   const result = await getSocProduct(req);  
   console.log("result",result)
   res.send(result)
+})
+
+app.post('/api/getproducts',async (req, res) => { //getsocactivity
+  const result = await getProducts(req);  
+  console.log("result",result)
+  res.json({products:result})
 })
 
 app.post('/api/getactivity',async (req, res) => { //getsocactivity
@@ -399,6 +424,7 @@ app.post('/api/signup',async (req, res) => {
       
   }
 })
+
 
 
 // https
