@@ -35,13 +35,14 @@ const getProduct = async (req)=>{
         console.log("status before find",mongoose.connection.readyState)
         const a = await product.findOne(
             {_id:req.body.id}
-        ).then(products=>{
-            if (products){
-                console.log(products)
+        ).then(product=>{
+            if (product){
+                console.log("products found")
+                console.log(product)
             }
             // await connect.disconnect()
-            console.log("products found")
-            return products
+            
+            return product
         })
         
         return a
