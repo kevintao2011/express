@@ -18,6 +18,8 @@ const findUser = async (req)=>{
             gender:data.gender,
             contact:data.contact,
             username:data.username,
+            cart:[],
+            orders:[]
         })
         await user.create(newUser);
         

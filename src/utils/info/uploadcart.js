@@ -1,19 +1,17 @@
+import user from "../../models/user.js";
 import mongoose, {  connect, set  } from "mongoose";
-import connectDB from "../connectDB.js";
-import product from "../../models/product.js";
-import activity from "../../models/activity.js";
+
 
 
 
 // for show product in carousell 
-const updateActivity = async (req)=>{
+const uploadCart = async (req)=>{
     var connect;
-    var newActivity
     const body = req.body;
     try {
         connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
-        await activity.updateOne({"_id":req.body.data.id},req.body.data).then(async doc=>{  
+        await user.updateOne({"uid":req.body.tokeninfo.uid},{"cart":req.body.cart}).then(async doc=>{  
             console.log(doc)
             
         })
@@ -33,4 +31,4 @@ const updateActivity = async (req)=>{
     
 }
 
-export default updateActivity;
+export default uploadCart;

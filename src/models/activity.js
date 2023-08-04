@@ -16,6 +16,8 @@ const ActivitySchema = new Schema({ //schema
     payment_method: String,
     description: String,
     posterURL:String,
+    description_chi:String,
+    description_eng:String,
     status:String,
     links:Array,
     

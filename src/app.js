@@ -37,6 +37,7 @@ import updateProductOption from "./utils/products/updateproductoption.js";
 import removeProductOption from "./utils/products/removeproductoption.js";
 import addProductOption from "./utils/products/addProductOption.js";
 import getProducts from "./utils/products/getProducts.js";
+import uploadCart from "./utils/info/uploadcart.js";
 const app = express()
 const port = 3001
 
@@ -99,6 +100,12 @@ app.post('/api/getcatoption',checkAuth, async (req, res) => {
   //Create user profile on mongo when first log in
   
   
+})
+
+app.post('/api/uploadcart',checkAuth, async (req, res) => {
+  console.log("calling uploadcart",req.body)
+  const cart = await uploadCart(req);
+  res.send(cart)
 })
 
 app.post('/api/changeposter',checkAuth, async (req, res) => {

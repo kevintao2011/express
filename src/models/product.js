@@ -13,11 +13,14 @@ const ProductVariantSchema = new Schema({ //schema
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
     product_name:String,
+    product_name_eng:String,
     type: String,
     status:String, //selling//ended
     img_url:String,
     product_icon:String,
     link:Array,
+    description_chi:String,
+    description_eng:String,
     // delivery_option:Array,
     // no_variants:Boolean,
     variants:Array

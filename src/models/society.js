@@ -7,6 +7,7 @@ const SocietySchema = new Schema({ //schema
    
     society_chinese:String,
     society_eng:String,
+    payme_link:String,
     college:String,
     session:String,
     exco_name_chinese:String,

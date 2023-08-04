@@ -11,7 +11,10 @@ const updateProductInfo = async (req)=>{
             await doc.updateOne({
                 product_name:req.body.data.product_name,
                 type:req.body.data.type,
-                status:req.body.data.status
+                status:req.body.data.status,
+                description_chi:req.body.data.description_chi,
+                description_eng:req.body.data.description_eng,
+
             })
         })
         await connect.disconnect()

@@ -22,7 +22,9 @@ const createActivity = async (req)=>{
                 start_time:body.data.start_time,
                 end_time:body.data.end_time,
                 payment_method:body.data.payment_method,
-                status:body.data.status
+                status:body.data.status,
+                description_chi:body.data.description_chi,
+                description_eng:body.data.description_eng
 
             })
             
@@ -36,6 +38,8 @@ const createActivity = async (req)=>{
                 end_date:body.data.end_date,
                 payment_method:body.data.payment_method,
                 status:body.data.status,
+                description_chi:body.data.description_chi,
+                description_eng:body.data.description_eng
                 //create product ticket at the same time
                 
                 

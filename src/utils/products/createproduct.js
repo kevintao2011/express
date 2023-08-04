@@ -15,7 +15,9 @@ const createproduct = async (req)=>{
             status:req.body.data.status[0],
             product_name:req.body.data.product_name[0],
             type: req.body.data.type[0],
-            variants: req.body.data.variants
+            variants: req.body.data.variants,
+            description_chi:req.body.data.description_chi[0],
+            description_eng:req.body.data.description_eng[0]
             
         })
         console.log(newProduct)
