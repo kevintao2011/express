@@ -38,6 +38,10 @@ import removeProductOption from "./utils/products/removeproductoption.js";
 import addProductOption from "./utils/products/addProductOption.js";
 import getProducts from "./utils/products/getProducts.js";
 import uploadCart from "./utils/info/uploadcart.js";
+import createOrder from "./utils/order/createOrder.js";
+import uploadPaymentProof from "./utils/order/uploadPaymentProof.js";
+import getOrder from "./utils/order/getOrder.js";
+
 const app = express()
 const port = 3001
 
@@ -216,9 +220,40 @@ app.post('/api/addproductoption',checkAuth, async (req, res) => {
   
 })
 
+app.post('/api/placeorder',checkAuth, async (req, res) => {
+  await createOrder(req).then(result=>{
+    console.log("createOrder",result)
+    if(result.code==="success"){
+      res.status(200).json(result)
+    }else{
+      res.status(500).json(result)
+    }
+  })
 
+})
 
+app.post('/api/uploadpaymentproof',checkAuth, async (req, res) => {
+  await uploadPaymentProof(req).then(result=>{
+    console.log("uploadpaymentproof",result)
+    if(result.code==="success"){
+      res.status(200).json(result)
+    }else{
+      res.status(500).json(result)
+    }
+  })
+})
 
+app.post('/api/getorder',checkAuth, async (req, res) => {
+  await getOrder(req).then(result=>{
+    console.log("getorder",result)
+    if(result){
+      console.log("success")
+      res.status(200).json(result)
+    }else{
+      res.status(500).json({"code":"error"})
+    }
+  })
+})
 
 function checkAuth  (req, res, next) {
   console.log('middleware - checkauth')
@@ -244,6 +279,7 @@ function checkAuth  (req, res, next) {
           res.status(403).send(JSON.stringify({'status':'expired'}))
         } else {
           res.status(403).send(JSON.stringify({'status':'revoked'}))
+          console.log("check Auth failed")
         }
     
         

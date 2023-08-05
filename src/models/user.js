@@ -9,7 +9,7 @@ const UserSchema = new Schema({ //schema
     gender:String,
     contact:Number,
     username: String,
-    order:String,
+    order:Array,
     uid: String, // String is shorthand for {type: String}
     identifier: String,
     imgurl: String,
