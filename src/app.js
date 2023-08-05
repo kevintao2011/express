@@ -191,7 +191,7 @@ app.post('/api/updateoptioninfo',checkAuth, async (req, res) => {
   
   
 })
-
+//comment
 app.post('/api/removeproductoption',checkAuth, async (req, res) => {
   await removeProductOption(req).then(result=>{
     console.log("removeproductiotuin",result)
