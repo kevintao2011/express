@@ -41,6 +41,7 @@ import uploadCart from "./utils/info/uploadcart.js";
 import createOrder from "./utils/order/createOrder.js";
 import uploadPaymentProof from "./utils/order/uploadPaymentProof.js";
 import getOrder from "./utils/order/getOrder.js";
+import getOrders from "./utils/order/getOrders.js";
 
 const app = express()
 const port = 3001
@@ -245,6 +246,18 @@ app.post('/api/uploadpaymentproof',checkAuth, async (req, res) => {
 
 app.post('/api/getorder',checkAuth, async (req, res) => {
   await getOrder(req).then(result=>{
+    console.log("getorder",result)
+    if(result){
+      console.log("success")
+      res.status(200).json(result)
+    }else{
+      res.status(500).json({"code":"error"})
+    }
+  })
+})
+
+app.post('/api/getorders',checkAuth, async (req, res) => {
+  await getOrders(req).then(result=>{
     console.log("getorder",result)
     if(result){
       console.log("success")
