@@ -42,6 +42,8 @@ import createOrder from "./utils/order/createOrder.js";
 import uploadPaymentProof from "./utils/order/uploadPaymentProof.js";
 import getOrder from "./utils/order/getOrder.js";
 import getOrders from "./utils/order/getOrders.js";
+import getOrdersBySoc from "./utils/order/getOrdersBySoc.js";
+import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 
 const app = express()
 const port = 3001
@@ -68,8 +70,6 @@ app.post('/api/edituser',checkAuth, async (req, res) => {
       res.status(500).json(result)
     }
   })
-  
-  
 })
 
 
@@ -258,6 +258,30 @@ app.post('/api/getorder',checkAuth, async (req, res) => {
 
 app.post('/api/getorders',checkAuth, async (req, res) => {
   await getOrders(req).then(result=>{
+    console.log("getorder",result)
+    if(result){
+      console.log("success")
+      res.status(200).json(result)
+    }else{
+      res.status(500).json({"code":"error"})
+    }
+  })
+})
+
+app.post('/api/getordersbysoc',checkAuth, async (req, res) => {
+  await getOrdersBySoc(req).then(result=>{
+    console.log("getorder",result)
+    if(result){
+      console.log("success")
+      res.status(200).json(result)
+    }else{
+      res.status(500).json({"code":"error"})
+    }
+  })
+})
+
+app.post('/api/updateorderstatus',checkAuth, async (req, res) => {
+  await updateOrderStatus(req).then(result=>{
     console.log("getorder",result)
     if(result){
       console.log("success")

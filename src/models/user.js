@@ -9,6 +9,8 @@ const UserSchema = new Schema({ //schema
     gender:String,
     contact:Number,
     username: String,
+    chi_name: String,
+    eng_name: String,
     order:Array,
     uid: String, // String is shorthand for {type: String}
     identifier: String,

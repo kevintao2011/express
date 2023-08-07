@@ -18,6 +18,8 @@ const createOrder = async (req)=>{
             productIds:req.body.data.productIds,
             products:req.body.data.products,
             sid:req.body.data.sid,
+            chi_name:req.body.data.chi_name,
+            eng_name:req.body.data.eng_name,
             email:req.body.data.email,
             contact:req.body.data.contact,
             code:req.body.data.code,
@@ -31,6 +33,16 @@ const createOrder = async (req)=>{
             return await user.findOne(
                 {uid:req.body.tokeninfo.uid},
             ).then(async Udoc=>{
+                req.body.data.products.forEach(product=>{
+                    if(product.type==="membership"){
+                        const s = Object.keys(Udoc.societies)
+                        if (s.includes(req.body.data.code)){
+
+                        }else{
+                            Udoc.societies.push({[req.body.data.code]:"pending"})
+                        }
+                    }
+                })
                 console.log("Udoc",Udoc)
                 const Mdoc = Udoc
                 const newCart = Mdoc.cart.filter(o=>

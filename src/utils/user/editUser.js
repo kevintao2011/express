@@ -12,7 +12,8 @@ const editUser = async (req)=>{
         
         
         console.log("editUser data: ",req.body.data);
-
+        req.body.data.societies=[]
+        
         req.body.data.first_login=false
         req.body.data.cohort = new Date(req.body.data.cohort)
         // req.body.data.societies = req.body.data.societies
@@ -52,6 +53,9 @@ const editUser = async (req)=>{
                     }
                 }
             ).then(async updatedUser=>{
+                updatedUser.societies=[]
+                updatedUser.cart=[]
+                updatedUser.order=[]
                 console.log("updatedUser",updatedUser)
                 return updatedUser
                 
