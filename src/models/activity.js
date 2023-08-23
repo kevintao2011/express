@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { Schema, model} from 'mongoose';
-
+import user from './user.js';
 
 const ActivitySchema = new Schema({ //schema
 
@@ -11,8 +11,8 @@ const ActivitySchema = new Schema({ //schema
     single_date:Boolean,
     end_time: String,
     activity_name: String,
-    participants: Array,
-    packages: Array,
+    participants: [{type:Schema.Types.ObjectId, ref:'users'}],
+    packages: [{type:Schema.Types.ObjectId, ref:'products'}],
     payment_method: String,
     description: String,
     posterURL:String,
@@ -20,6 +20,12 @@ const ActivitySchema = new Schema({ //schema
     description_eng:String,
     status:String,
     links:Array,
+    createdAt:{
+        type:Date,
+        immutable:true,
+        default:()=>Date.now(),
+    },
+    updatedAt:Date,
     
 });
 const activity = model("activities", ActivitySchema);  //Creating a model
