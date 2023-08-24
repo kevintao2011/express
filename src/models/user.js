@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 const UserSchema = new Schema({ //schema
     
     email:String,
-    cohort:Date,
+    cohort:Number,
     major:String,
     gender:String,
     contact:Number,
@@ -20,7 +20,7 @@ const UserSchema = new Schema({ //schema
     exp:Date,
     createdAt:{type:Date,default:Date.now(),immutable:true},
     societies:Object,
-    cart:{type:Schema.Types.ObjectId,ref:'products.variants',default:[]},
+    cart:{type:[Schema.Types.ObjectId],default:[]},
     last_sign_in:{ type: Date,default:Date.now() },
     first_login:{ type: Boolean,default:false },
 });

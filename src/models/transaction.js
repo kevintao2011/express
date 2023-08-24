@@ -1,7 +1,7 @@
 
 import { Schema, model} from 'mongoose';
 import mongoose from 'mongoose';
-import {product,vari} from './product.js';
+import product from './product.js';
 
 
 const TransactionSchema = new Schema({ //schema
