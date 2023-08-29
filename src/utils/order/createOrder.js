@@ -2,7 +2,7 @@
 import mongoose, { connect } from "mongoose";
 import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
-import transaction from "../../models/transaction.js";
+import {transaction} from "../../models/transaction.js";
 
 const createOrder = async (req)=>{
     var connect;

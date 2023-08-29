@@ -2,6 +2,7 @@ import { Schema, SchemaType, model} from 'mongoose';
 import mongoose from 'mongoose';
 import product from './product.js';
 import { ObjectId } from 'mongodb';
+import { TransactionSchema } from './transaction.js';
 const UserSchema = new Schema({ //schema
     
     email:String,
@@ -12,7 +13,7 @@ const UserSchema = new Schema({ //schema
     username: String,
     chi_name: String,
     eng_name: String,
-    order:Array,
+    order:[TransactionSchema], 
     uid: String, // String is shorthand for {type: String}
     identifier: String,
     imgurl: String,
@@ -26,4 +27,5 @@ const UserSchema = new Schema({ //schema
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
 
+export {UserSchema};
 export default user ;

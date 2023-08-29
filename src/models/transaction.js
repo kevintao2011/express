@@ -24,4 +24,5 @@ const TransactionSchema = new Schema({ //schema
 // ProductSchema.path('activity').ref(activity)
 const transaction = model("transactions", TransactionSchema);  //Creating a model
 
+export {transaction,TransactionSchema};
 export default transaction;

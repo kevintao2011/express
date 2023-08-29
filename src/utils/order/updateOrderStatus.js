@@ -1,6 +1,6 @@
 import mongoose, {  connect, set  } from "mongoose";
 
-import transaction from "../../models/transaction.js";
+import {transaction} from "../../models/transaction.js";
 // for show product in carousell 
 const updateOrderStatus = async (req)=>{
     var connect;

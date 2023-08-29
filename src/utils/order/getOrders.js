@@ -1,5 +1,5 @@
 import mongoose, {  connect  } from "mongoose";
-import transaction from "../../models/transaction.js";
+import {transaction} from "../../models/transaction.js";
 
 const getOrders = async (req)=>{
     console.log("running getOrder",mongoose.connection.readyState , req.body)
