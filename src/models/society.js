@@ -4,9 +4,11 @@ import { Schema, model} from 'mongoose';
 import { ObjectId } from 'mongodb';
 
 const SocietySchema = new Schema({ //schema
-   
+    // chinese name of society
     society_chinese:String,
+    // Eng name of society
     society_eng:String,
+    // paymelink of socity
     payme_link:String,
     college:String,
     session:String,
