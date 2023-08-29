@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb';
 import { Schema, model} from 'mongoose';
-import user from './user.js';
 
 const ActivitySchema = new Schema({ //schema
 
