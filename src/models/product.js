@@ -37,4 +37,4 @@ const product = model("products", ProductSchema);  //Creating a model
 
 const vSchema = Schema(ProductVariantSchema)
 
-export default product;
+export default {product};
