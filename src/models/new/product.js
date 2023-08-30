@@ -16,9 +16,9 @@ const ModificationSchema = new Schema({ //schema
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
     ref_society:{Type:mongoose.Schema.Types.ObjectId,ref:society},
-    product_name:String, //product chinese name
+    product_name_chi:String, //product chinese name
     product_name_eng:String, //product eng name
-    type: String,   //membership, ticket , virtual , real
+    product_type: String,   //membership, ticket , virtual , real
     status:String, //selling//ended
     img_url:[String], //product url
     link:{Type:[String],default:[]}, // link of form/post
@@ -29,15 +29,17 @@ const ProductSchema = new Schema({ //schema
         immutable:true,
         default:()=>Date.now(),
     },
-    isLimited:Boolean,// some is unlimited, such as membership
-    Inventory:Number,
-    Totalsales:Number,
+    is_limited:Boolean,// some is unlimited, such as membership
+    inventory:Number,
+    total_sales:{Type:Number,default:0},
     parent:{ObjectId}, // check 
+    unit_price:Number,
     modification:[ModificationSchema], // record user
     tags:[String], //for searching
     allowed_coupon:[{Type:mongoose.Schema.Types.ObjectId,ref:coupon}],
     is_bundle:{Type:Boolean },
     bundle_list:[]
+    
 });
 ProductSchema.pre(
     'init', async function(next){
