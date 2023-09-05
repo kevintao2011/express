@@ -5,11 +5,11 @@ import { ObjectId } from 'mongodb';
 
 const websiteInfoSchema = new Schema({ //schema
     name:String,
-    content:[]
+    content:[],
+    content_type:String,
 });
 // ProductSchema.path('activity').ref(activity)
-const websiteInfo = model("website_info", websiteInfoSchema);  //Creating a model
+const websiteInfo = model("website_infos", websiteInfoSchema);  //Creating a model
 
-const vSchema = Schema(websiteInfoSchema)
-
-export default {websiteInfo};
+export {websiteInfoSchema};
+export default websiteInfo ;

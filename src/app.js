@@ -45,6 +45,7 @@ import getOrders from "./utils/order/getOrders.js";
 import getOrdersBySoc from "./utils/order/getOrdersBySoc.js";
 import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
+import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 
 const app = express()
 const port = 3001
@@ -135,6 +136,7 @@ app.post('/api/changeposter',checkAuth, async (req, res) => {
   
   
 })
+
 
 app.post('/api/changeproducticon',checkAuth, async (req, res) => {
   console.log("calling changeproducticon",req.body)
@@ -390,6 +392,13 @@ app.get('/api/getsocieties', async (req, res) => {
   })
  
   
+})
+
+app.post('/api/websitestaticinfo', async (req, res) => {
+  console.log("calling getStaticInfo",req.body)
+  const result = await getStaticInfo();
+  res.send(JSON.stringify(result))
+  //Create user profile on mongo when first log in
 })
 
 
