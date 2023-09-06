@@ -46,7 +46,7 @@ import getOrdersBySoc from "./utils/order/getOrdersBySoc.js";
 import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
 import { getStaticInfo } from "./utils/info/getStaticInfo.js";
-
+import setStaticInfo from "./utils/info/setStaticInfo.js";
 const app = express()
 const port = 3001
 
@@ -109,11 +109,11 @@ app.post('/api/soclist', async (req, res) => {
   
 })
 
-app.post('/api/getcatoption',checkAuth, async (req, res) => {
+app.post('/api/getcatoption', async (req, res) => {
   console.log("calling socuser",req.body)
 
   const user = await getCatOption(req);
-  console.log("reutrning",user)
+  console.log("returning",user)
   res.send(JSON.stringify(user))
   //Create user profile on mongo when first log in
   
@@ -397,6 +397,13 @@ app.get('/api/getsocieties', async (req, res) => {
 app.post('/api/websitestaticinfo', async (req, res) => {
   console.log("calling getStaticInfo",req.body)
   const result = await getStaticInfo();
+  res.send(JSON.stringify(result))
+  //Create user profile on mongo when first log in
+})
+
+app.post('/api/setwebsitestaticinfo', checkAuth,async (req, res) => {
+  console.log("calling setStaticInfo",req.body)
+  const result = await setStaticInfo(req);
   res.send(JSON.stringify(result))
   //Create user profile on mongo when first log in
 })

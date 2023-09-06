@@ -12,7 +12,7 @@ const handleUserLogin = async (req)=>{
         User = await user.findOne(
             {uid:req.body.tokeninfo.uid},
             {
-                "_id": 0,
+                
                 "exp": 0,
                 "last_sign_in": 0,
                 "__v": 0,
