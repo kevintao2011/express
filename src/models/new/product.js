@@ -19,16 +19,17 @@ const ProductSchema = new Schema({ //schema
     product_name_chi:String, //product chinese name
     product_name_eng:String, //product eng name
     product_type: String,   //membership, ticket , virtual , real
-    status:String, //selling//ended
-    img_url:[String], //product url
-    link:{Type:[String],default:[]}, // link of form/post
-    description_chi:String, // product description in chinese
-    description_eng:String, // product description in english
+    product_status:String, //selling//ended
+    product_img_url:[String], //product url
+    product_link:[{Type:[String],default:[]}], // link of form/post
+    product_description_chi:String, // product description in chinese
+    product_description_eng:String, // product description in english
     created_at:{ 
         type:Date,
         immutable:true,
         default:()=>Date.now(),
     },
+    has_variant:Boolean,
     is_limited:Boolean,// some is unlimited, such as membership
     inventory:Number,
     total_sales:{Type:Number,default:0},
@@ -37,8 +38,11 @@ const ProductSchema = new Schema({ //schema
     modification:[ModificationSchema], // record user
     tags:[String], //for searching
     allowed_coupon:[{Type:mongoose.Schema.Types.ObjectId,ref:coupon}],
+    sku:String,
+
     is_bundle:{Type:Boolean },
     bundle_list:[]
+    
     
 });
 ProductSchema.pre(
