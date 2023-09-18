@@ -2,17 +2,19 @@
 import { Schema, model} from 'mongoose';
 import mongoose from 'mongoose';
 import product from './product.js';
-import user from '../user.js';
+import user, { UserSchema } from '../user.js';
+
+
 
 const deliveryRemarkSchema = new Schema({
-    created_by:{Type:mongoose.Schema.Types.ObjectId,ref:user}
+    created_by:{type:mongoose.Schema.Types.ObjectId,ref:"users"}
 })
 const deliverySchema = new Schema({ //schema
     delivery_remark:[],
     delivered:Boolean,
 });
 // ProductSchema.path('activity').ref(activity)
-const delivery = model("deliveries", coupon);  //Creating a model
+const delivery = model("deliveries", deliverySchema);  //Creating a model
 
 export {delivery,deliverySchema };
 export default delivery;

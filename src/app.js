@@ -5,6 +5,7 @@ import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
 import getProduct from "./utils/products/getProduct.js";
 import createproduct from "./utils/products/createproduct.js";
+import newCreateProduct from "./utils/products/new/newCreateProduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import { getUserSociety } from "./utils/info/info.js";
 import handleUserLogin from "./utils/user/handleUserLogin.js";
@@ -49,6 +50,8 @@ import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
 const app = express()
 const port = 3001
+
+
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -439,6 +442,15 @@ app.post('/api/getproduct',checkAuth, async (req, res) => { // get single produc
 app.post('/api/createproduct',async (req, res) => {
   const result = await createproduct(req);  
   res.send(result)
+})
+
+app.post('/api/newcreateproduct',async (req, res) => {
+  const result = await newCreateProduct(req)
+  const successmsg = JSON.stringify({
+    msg:"success"
+  })
+  console.log("sent ",successmsg)
+  res.send(successmsg)
 })
 
 

@@ -5,11 +5,11 @@ import allProducts from './allProducts.js';
 import product,{ProductSchema} from './product.js';
 
 const requirementSchema = new Schema({
-    parent_product:{Type:mongoose.Schema.Types.ObjectId,ref:product},
+    parent_product:{type:mongoose.Schema.Types.ObjectId,ref:'products'},
     quantity:Number
 })
 const deductionSchema = new Schema({
-    parent_product:{Type:mongoose.Schema.Types.ObjectId,ref:product},
+    parent_product:{type:mongoose.Types.ObjectId,ref:'products'},
     amount:Number
 })
 const couponSchema = new Schema({ //schema

@@ -1,6 +1,5 @@
 
 import mongoose, { Mongoose, Schema, model} from 'mongoose';
-import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 import { UserSchema } from '../user.js';
 import coupon,{ couponSchema } from './coupon.js';
@@ -15,13 +14,13 @@ const ModificationSchema = new Schema({ //schema
 
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
-    ref_society:{Type:mongoose.Schema.Types.ObjectId,ref:society},
+    ref_society:{type:mongoose.Schema.Types.ObjectId,ref:'societies'},
     product_name_chi:String, //product chinese name
     product_name_eng:String, //product eng name
     product_type: String,   //membership, ticket , virtual , real
     product_status:String, //selling//ended
     product_img_url:[String], //product url
-    product_link:[{Type:[String],default:[]}], // link of form/post
+    product_link:[{type:[String],default:[]}], // link of form/post
     product_description_chi:String, // product description in chinese
     product_description_eng:String, // product description in english
     created_at:{ 
@@ -32,16 +31,17 @@ const ProductSchema = new Schema({ //schema
     has_variant:Boolean,
     is_limited:Boolean,// some is unlimited, such as membership
     inventory:Number,
-    total_sales:{Type:Number,default:0},
-    parent:{ObjectId}, // check 
+    total_sales:{type:Number,default:0},
+    parent:{type:mongoose.Types.ObjectId,ref:"new_products"}, // check 
     unit_price:Number,
     modification:[ModificationSchema], // record user
     tags:[String], //for searching
-    allowed_coupon:[{Type:mongoose.Schema.Types.ObjectId,ref:coupon}],
+    allowed_coupon:[{type:mongoose.Schema.Types.ObjectId,ref:coupon}],
     sku:String,
 
-    is_bundle:{Type:Boolean },
-    bundle_list:[]
+    is_bundle:{type:Boolean },
+    bundle_list:[],
+    child_products:[{type:mongoose.Types.ObjectId,ref:"new_products"}]
     
     
 });
@@ -55,9 +55,7 @@ ProductSchema.pre(
                 sku:this.ObjectId+String(index),
               }
             )
-            
         }
-        
     }
 )
 // ProductSchema.path('activity').ref(activity)

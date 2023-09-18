@@ -1,17 +1,16 @@
 import mongoose, { Mongoose, Schema, model} from 'mongoose';
-import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 import { UserSchema } from '../user.js';
 import { allProductsSchema } from './allProducts.js';
 
 const paymentSchema = new Schema({
     type: String,
-    paid:Boolean,
-    ref_product:[allProductsSchema],
+    paid: Boolean,
+    ref_product:[{type:Schema.Types.ObjectId,ref:"products"}],
     payment_proof:String,
-    buyer:UserSchema,
-    remark:[remarkSchema],
-})
+    buyer:{type:Schema.Types.ObjectId,ref:"users"},
+    // remark:[remarkSchema],
+});
 
 
 // ProductSchema.path('activity').ref(activity)

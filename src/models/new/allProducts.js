@@ -1,6 +1,5 @@
 
 import mongoose, { Mongoose, Schema, model} from 'mongoose';
-import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 import { UserSchema } from '../user.js';
 import coupon,{ couponSchema } from './coupon.js';
@@ -17,7 +16,7 @@ const allProductsSchema = new Schema({
     used_coupon:{Type:mongoose.Schema.Types.ObjectId,ref:coupon,default:[couponSchema]},
     buyer:{Type:mongoose.Schema.Types.ObjectId,ref:user},
     delivery:mongoose.Schema.ObjectId,
-    remark:{Type:[remarkSchema],default:[remarkSchema]},
+    remark:ObjectId, //{Type:[remarkSchema],default:[remarkSchema]},
     payment:{Type:mongoose.Schema.Types.ObjectId,ref:payment},
     sku:String
 })
@@ -26,5 +25,6 @@ const allProductsSchema = new Schema({
 // ProductSchema.path('activity').ref(activity)
 const allProducts = model("soldProducts", allProductsSchema);  //Creating a model
 
-export default allProducts;
 export {allProductsSchema}
+export default allProducts;
+
