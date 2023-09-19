@@ -11,13 +11,13 @@ import user from '../user.js';
 
 const allProductsSchema = new Schema({
     type: String,
-    sold: {Type:Boolean,default:false},
-    ref_product:{Type:mongoose.Schema.Types.ObjectId,ref:product},
-    used_coupon:{Type:mongoose.Schema.Types.ObjectId,ref:coupon,default:[couponSchema]},
-    buyer:{Type:mongoose.Schema.Types.ObjectId,ref:user},
+    sold: {type:Boolean,default:false},
+    ref_product:{type:mongoose.Schema.Types.ObjectId,ref:'new_product'},
+    used_coupon:{type:mongoose.Schema.Types.ObjectId,ref:'coupons',default:[]},
+    buyer:{type:mongoose.Schema.Types.ObjectId,ref:user},
     delivery:mongoose.Schema.ObjectId,
     remark:ObjectId, //{Type:[remarkSchema],default:[remarkSchema]},
-    payment:{Type:mongoose.Schema.Types.ObjectId,ref:payment},
+    payment:{type:mongoose.Schema.Types.ObjectId,ref:payment},
     sku:String
 })
 

@@ -48,6 +48,8 @@ import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
 import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
+import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
+import pGetSocProductsByTree from "./utils/products/new/pGetSocProductByTree.js";
 const app = express()
 const port = 3001
 
@@ -444,7 +446,7 @@ app.post('/api/createproduct',async (req, res) => {
   res.send(result)
 })
 
-app.post('/api/newcreateproduct',async (req, res) => {
+app.post('/api/newcreateproduct',checkAuth,async (req, res) => {
   const result = await newCreateProduct(req)
   const successmsg = JSON.stringify({
     msg:"success"
@@ -454,11 +456,19 @@ app.post('/api/newcreateproduct',async (req, res) => {
 })
 
 
+// app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
+//   const result = await getSocProduct(req);  
+//   console.log("result",result)
+//   res.send(result)
+// })
+
 app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
-  const result = await getSocProduct(req);  
+  // const result = await priviledgedGetSocProducts(req);  
+  const result = await pGetSocProductsByTree(req);  
   console.log("result",result)
   res.send(result)
 })
+
 
 app.post('/api/getproducts',async (req, res) => { //getsocactivity
   const result = await getProducts(req);  

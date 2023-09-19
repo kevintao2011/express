@@ -14,7 +14,7 @@ const ModificationSchema = new Schema({ //schema
 
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
-    ref_society:{type:mongoose.Schema.Types.ObjectId,ref:'societies'},
+    ref_society:{type:mongoose.Types.ObjectId,ref:'societies'},
     product_name_chi:String, //product chinese name
     product_name_eng:String, //product eng name
     product_type: String,   //membership, ticket , virtual , real
@@ -28,20 +28,24 @@ const ProductSchema = new Schema({ //schema
         immutable:true,
         default:()=>Date.now(),
     },
+    created_by:{type:mongoose.Types.ObjectId,ref:"users"},
     has_variant:Boolean,
     is_limited:Boolean,// some is unlimited, such as membership
     inventory:Number,
     total_sales:{type:Number,default:0},
-    parent:{type:mongoose.Types.ObjectId,ref:"new_products"}, // check 
+     // check 
     unit_price:Number,
-    modification:[ModificationSchema], // record user
-    tags:[String], //for searching
-    allowed_coupon:[{type:mongoose.Schema.Types.ObjectId,ref:coupon}],
+    modification:{type:[ModificationSchema],default:[]}, // record user
+    tags:{type:[String],default:[]}, //for searching
+    allowed_coupon:[{type:mongoose.Types.ObjectId,ref:'coupons',default:[]}],
     sku:String,
 
     is_bundle:{type:Boolean },
     bundle_list:[],
+
+    parent:{type:mongoose.Types.ObjectId,ref:"new_products"},
     child_products:[{type:mongoose.Types.ObjectId,ref:"new_products"}]
+    
     
     
 });
