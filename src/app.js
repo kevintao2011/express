@@ -49,7 +49,7 @@ import getSocList from "./utils/info/getSocList.js";
 import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
 import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
-import pGetSocProductsByTree from "./utils/products/new/pGetSocProductByTree.js";
+import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
 const app = express()
 const port = 3001
 
@@ -464,9 +464,23 @@ app.post('/api/newcreateproduct',checkAuth,async (req, res) => {
 
 app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
   // const result = await priviledgedGetSocProducts(req);  
-  const result = await pGetSocProductsByTree(req);  
-  console.log("result",result)
-  res.send(result)
+  await pGetSocProductsByTree(req).then(
+    r =>{
+      console.log("r",r)
+      if(r){
+        res.send(JSON.stringify({
+          state:"success",
+          data:r
+        }))
+      }else{
+        res.send(JSON.stringify({
+          state:"failed",
+          data:[]
+        }))
+      }
+    }
+  );  
+  
 })
 
 

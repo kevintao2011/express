@@ -9,7 +9,9 @@ import getoidbycode from "../../serverFunction/getoidbycode.js";
   id: 'code'
 }
 */
-const pGetSocProductsByTree = async (req)=>{
+
+
+const priviledgedGetSocProducts = async (req)=>{
     console.log("running getSocProduct",mongoose.connection.readyState , req.body)
     var connect;
     try {
@@ -27,60 +29,101 @@ const pGetSocProductsByTree = async (req)=>{
         
     
         console.log("status before find",mongoose.connection.readyState)
-        await product.find(
+        const a = await product.find(
             {ref_society:await getoidbycode(req.body.id)}
+        ).then(products=>{
+            if (products){
+                console.log(products)
+            }
+            // await connect.disconnect()
+            console.log("soc products function exe sucess")
+            return products
+        })
+
+        return a
+        
+
+    } catch (err) {
+        console.log("error",err);
+        console.log("failed");
+        // await connect.disconnect()
+        return false
+
+    }
+    
+
+    
+}
+
+
+const pGetSocProductsByTree = async (req)=>{
+    console.log("running getSocProduct",mongoose.connection.readyState , req.body)
+    var connect;
+    try {
+        connect = await mongoose.connection.asPromise()
+        console.log("getSocProduct current connection",mongoose.connection.readyState)
+        if(mongoose.connection.readyState==0){
+            console.log("getSocProduct connecting")
+            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        }
+        else{
+            console.log("getSocProduct adding connection")
+            connect = mongoose
+            console.log("getSocProduct added connection",mongoose.connection.readyState)
+        }
+        console.log("status before find",mongoose.connection.readyState)
+        return await product.find(
+            {
+                ref_society:await getoidbycode(req.body.id),
+                parent:undefined,
+            }
         ).then(async products=>{
-            var rootProducts =  products.filter(prod=>!prod.parent)
             async function recursivePopulate(doc,fieldname){
-                console.log("populating doc :",doc._id,doc[fieldname])
-                if (doc[fieldname].length<1){
+                console.log(`populating doc with field ${fieldname} :`,doc._id,doc[fieldname])
+                if (doc[fieldname].length<1){ // no child_products 0
                     console.log("returning",doc)
                     return doc
-                }else{
+                }else{// have child_products >1
+                    
                     return await doc.populate(fieldname).then(
                         async doc =>{
-                            if(doc[fieldname].length>1){
-                                await Promise.all(
-                                     doc[fieldname].map(async prod=>{
+                            if(doc[fieldname].length>1){// have more than 1 child_products
+                                return await Promise.all(
+                                    doc[fieldname].map(async prod=>{
+                                        // resturn for list
                                         return await recursivePopulate(prod,'child_products')
                                     }
-                                )).then(
+                                ))
+                                .then(
                                     docs=>{
                                         doc[fieldname] = docs
-                                        console.log("parent doc",doc) //this corr
+                                        console.log("parent doc with sub >1",doc) //this corr
                                         return doc
                                         
                                     }
                                 )
-                            }else{
-                                await recursivePopulate(doc[fieldname],'child_products').then(
+                            }else{// single child_products 1
+                                return await recursivePopulate(doc[fieldname],'child_products').then(
                                     d=>{
+                                        console.log("parent doc single child_products",d) //this corr
                                         doc[fieldname] = d
                                         return doc
                                     }
                                 )
-                                return 
+                               
                             }
                             
                         }
                     )
+                    
                 }
                 
             }
-            console.log("roots:",rootProducts)
-            await Promise.all(
-                rootProducts.map(async prod=>{
+            return await Promise.all(
+                products.map(async prod=>{
                     return await recursivePopulate(prod,'child_products')
                 })
             )
-            .then(Products =>{
-                console.log("rootProducts",Products)
-                return Products
-            }
-        )
-            
-                
-            
         })
 
         
@@ -98,4 +141,5 @@ const pGetSocProductsByTree = async (req)=>{
     
 }
 
-export default pGetSocProductsByTree;
+export default priviledgedGetSocProducts;
+export {pGetSocProductsByTree};

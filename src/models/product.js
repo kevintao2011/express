@@ -30,7 +30,8 @@ const ProductSchema = new Schema({ //schema
     updatedAt:Date,
     // delivery_option:Array,
     // no_variants:Boolean,
-    variants:[ProductVariantSchema]
+    variants:[ProductVariantSchema],
+    
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
