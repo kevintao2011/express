@@ -46,6 +46,7 @@ const ProductSchema = new Schema({ //schema
 
     parent:{type:mongoose.Types.ObjectId,ref:"new_products"},
     child_products:[{type:mongoose.Types.ObjectId,ref:"new_products"}],
+    published:{type:Boolean }
     
     
 });
