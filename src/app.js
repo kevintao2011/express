@@ -50,6 +50,7 @@ import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
 import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
 import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
+import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
 const app = express()
 const port = 3001
 
@@ -453,6 +454,26 @@ app.post('/api/newcreateproduct',checkAuth,async (req, res) => {
   })
   console.log("sent ",successmsg)
   res.send(successmsg)
+})
+
+app.post('/api/updatesocietyInfo',async (req, res) => {
+  await updateSocietyInfo(req).then(
+    result=>{
+      if(result){
+        res.send(JSON.stringify({
+          msg:"success"
+        }))
+      }else{
+        if(result){
+          res.send(JSON.stringify({
+            msg:"failed"
+          }))
+        }
+      }
+    }
+  )
+  
+  
 })
 
 
