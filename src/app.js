@@ -51,6 +51,7 @@ import setStaticInfo from "./utils/info/setStaticInfo.js";
 import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
 import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
 import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
+import getMemberList from "./utils/society/member/getMemberList.js";
 const app = express()
 const port = 3001
 
@@ -81,12 +82,12 @@ app.post('/api/edituser',checkAuth, async (req, res) => {
 })
 
 
-
+// /api/getmemberlist
 app.post('/api/getuser',checkAuth, async (req, res) => {
   console.log("calling getuser",req.body)
 
   const user = await handleUserLogin(req);
-  console.log("reutrning",user)
+  console.log("reutrning user",user)
   res.send(JSON.stringify(user))
   //Create user profile on mongo when first log in
   
@@ -447,6 +448,11 @@ app.post('/api/createproduct',async (req, res) => {
   res.send(result)
 })
 
+app.post('/api/addmembership',async (req, res) => {
+  const result = await createproduct(req);  
+  res.send(result)
+})
+
 app.post('/api/newcreateproduct',checkAuth,async (req, res) => {
   const result = await newCreateProduct(req)
   const successmsg = JSON.stringify({
@@ -461,12 +467,38 @@ app.post('/api/updatesocietyInfo',async (req, res) => {
     result=>{
       if(result){
         res.send(JSON.stringify({
-          msg:"success"
+          success:true,
+          message:"success",
+          data:result
         }))
       }else{
         if(result){
           res.send(JSON.stringify({
             msg:"failed"
+          }))
+        }
+      }
+    }
+  )
+  
+  
+})
+
+app.post('/api/getmemberlist',async (req, res) => {
+  await getMemberList(req).then(
+    result=>{
+      if(result){
+        res.send(JSON.stringify({
+          success:true,
+          message:"success",
+          data:result
+        }))
+      }else{
+        if(result){
+          res.send(JSON.stringify({
+            success:false,
+            message:"failed",
+            data:{}
           }))
         }
       }
@@ -487,7 +519,7 @@ app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
   // const result = await priviledgedGetSocProducts(req);  
   await pGetSocProductsByTree(req).then(
     r =>{
-      console.log("r",r)
+      // console.log("r",r)
       if(r){
         res.send(JSON.stringify({
           state:"success",
@@ -518,10 +550,6 @@ app.post('/api/getactivity',async (req, res) => { //getsocactivity
 
 //serverside login
 app.post('/api/signin',async (req, res) => {
-  
-  
- 
-  
   console.log("credentials",req.body)
   // try{
     const result = await loginfirebase(data.email,data.password); 

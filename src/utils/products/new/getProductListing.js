@@ -75,7 +75,7 @@ const pGetSocProductsByTree = async (req)=>{
             }
         ).then(async products=>{
             async function recursivePopulate(doc,fieldname){
-                console.log(`populating doc with field ${fieldname} :`,doc._id,doc[fieldname])
+                // console.log(`populating doc with field ${fieldname} :`,doc._id,doc[fieldname])
                 if (doc[fieldname].length<1){ // no child_products 0
                     console.log("returning",doc)
                     return doc
@@ -93,7 +93,7 @@ const pGetSocProductsByTree = async (req)=>{
                                 .then(
                                     docs=>{
                                         doc[fieldname] = docs
-                                        console.log("parent doc with sub >1",doc) //this corr
+                                        // console.log("parent doc with sub >1",doc) //this corr
                                         return doc
                                         
                                     }
@@ -101,7 +101,7 @@ const pGetSocProductsByTree = async (req)=>{
                             }else{// single child_products 1
                                 return await recursivePopulate(doc[fieldname],'child_products').then(
                                     d=>{
-                                        console.log("parent doc single child_products",d) //this corr
+                                        // console.log("parent doc single child_products",d) //this corr
                                         doc[fieldname] = d
                                         return doc
                                     }

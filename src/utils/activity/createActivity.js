@@ -17,14 +17,15 @@ const createActivity = async (req)=>{
             newActivity = new activity({
                 code:body.data.code,
                 activity_name:body.data.activity_name,
-                single_date:body.data.single_date,
-                start_date:body.data.start_date,
+                // single_date:body.data.single_date,
+                // start_date:body.data.start_date,
                 start_time:body.data.start_time,
                 end_time:body.data.end_time,
-                payment_method:body.data.payment_method,
                 status:body.data.status,
                 description_chi:body.data.description_chi,
-                description_eng:body.data.description_eng
+                description_eng:body.data.description_eng,
+                poster_url: string,
+                published:Boolean
 
             })
             
