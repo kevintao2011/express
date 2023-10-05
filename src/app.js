@@ -52,6 +52,7 @@ import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocPro
 import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
 import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
 import getMemberList from "./utils/society/member/getMemberList.js";
+import getUserMembership from "./utils/membership/getUserMembership.js";
 const app = express()
 const port = 3001
 
@@ -435,6 +436,25 @@ app.post('/api/removeactivity',checkAuth,async (req, res) => { //check auth chec
 app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
   res.send(result)
+})
+
+app.post('/api/getusermembership',checkAuth,async (req, res) => { //getsocactivity
+  await getUserMembership(req).then(result=>{
+    if(result){
+      res.send(JSON.stringify({
+        success:true,
+        message:"success",
+        data:result
+      }))
+    }else{
+      if(result){
+        res.send(JSON.stringify({
+          msg:"failed"
+        }))
+      }
+    }
+  });  
+  
 })
 
 app.post('/api/getproduct',checkAuth, async (req, res) => { // get single product
