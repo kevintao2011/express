@@ -10,7 +10,7 @@ const changeProductIcon = async (req)=>{
     var connect;
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(req.body.data.product_id)
         await product.findOne({"_id":req.body.data.product_id}).then(async doc=>{  
             console.log("doc exists",doc)
@@ -63,13 +63,13 @@ const changeProductIcon = async (req)=>{
 
         // await activity.create(newActivity)
         // console.log("created activity")
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:"success"})
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

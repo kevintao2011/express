@@ -7,7 +7,7 @@ const findUser = async (req)=>{
     var connect;
     var data;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         data = req.body;
         console.log(data);
 
@@ -26,7 +26,7 @@ const findUser = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect();
+        //await connect.disconnect();
 
     }
     

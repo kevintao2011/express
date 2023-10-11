@@ -5,7 +5,7 @@ const getoidbycode = async (code)=>{
     console.log("find SocietyOid",code)
     var connect;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
         var SocietyOid
         SocietyOid = await society.findOne(
@@ -21,7 +21,7 @@ const getoidbycode = async (code)=>{
         }else{
            console.log("no such SocietyOid")
         }
-        // await connect.disconnect()
+        // //await connect.disconnect()
         console.log("handleSocietyOidLogin function exe sucess",mongoose.connection.readyState)
         
         return SocietyOid
@@ -30,7 +30,7 @@ const getoidbycode = async (code)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return false
 
     }

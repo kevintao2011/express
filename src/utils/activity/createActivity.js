@@ -11,7 +11,7 @@ const createActivity = async (req)=>{
     var newActivity
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         if(body.data.single_date){
             newActivity = new activity({
@@ -55,7 +55,7 @@ const createActivity = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

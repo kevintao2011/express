@@ -6,7 +6,7 @@ const removeActivity = async (req)=>{
     var connect;
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         await activity.deleteOne({"_id":req.body.data._id}).then(
             (resolve)=>{
@@ -16,13 +16,13 @@ const removeActivity = async (req)=>{
                 console.log("cannot delete!")
             }
         )
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:"success"})
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

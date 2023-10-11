@@ -6,7 +6,7 @@ const uploadPaymentProof = async (req)=>{
     var connect;
     console.log("req",req.body)
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
         await transaction.updateOne(
                 {"_id":req.body.data._id},      
@@ -14,13 +14,13 @@ const uploadPaymentProof = async (req)=>{
             ).then(doc=>{  
             console.log(doc)
         })
-        await connect.disconnect()
+        //await connect.disconnect()
         return {code:"success"}
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return {code:err}
 
     }

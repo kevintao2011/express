@@ -53,6 +53,7 @@ import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.j
 import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
 import getMemberList from "./utils/society/member/getMemberList.js";
 import getUserMembership from "./utils/membership/getUserMembership.js";
+import mongoose from "mongoose";
 const app = express()
 const port = 3001
 
@@ -68,6 +69,25 @@ var corsOptions = {
 
 app.use(cors(corsOptions))
 // app.use(()=>{"get req"})
+
+
+var connect
+try {
+    connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/website?retryWrites=true&w=majority");
+    console.log(
+        "Database connected: ",
+        connect.connection.host,
+        connect.connection.name
+    );
+  
+} catch (err) {
+    console.log(err);
+    await connect.disconnect();
+    process.exit(1);
+    
+}
+
+
 
 
 app.post('/api/edituser',checkAuth, async (req, res) => {
@@ -448,7 +468,7 @@ app.post('/api/getusermembership',checkAuth,async (req, res) => { //getsocactivi
       }))
     }else{
       if(result){
-        res.send(JSON.stringify({
+        res.status(501).send(JSON.stringify({
           msg:"failed"
         }))
       }

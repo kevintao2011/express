@@ -14,7 +14,7 @@ const getSocActivity = async (req)=>{
         console.log("getSocActivity current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
             console.log("getSocActivity connecting")
-            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+            //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
             console.log("getSocActivity adding connection")
@@ -29,7 +29,7 @@ const getSocActivity = async (req)=>{
             if (activities){
                 console.log(activities)
             }
-            await connect.disconnect()
+            //await connect.disconnect()
             console.log("function exe sucess")
             return activities
         })
@@ -40,7 +40,7 @@ const getSocActivity = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

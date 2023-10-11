@@ -10,19 +10,19 @@ const changeProductMainIcon = async (req)=>{
     var connect;
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(req.body.data.product_id)
         await product.updateOne({"_id":req.body.data.product_id},{"product_icon":req.body.data.product_icon}).then(async doc=>{  
            console.log("updated",doc)
         })
 
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:"success"})
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

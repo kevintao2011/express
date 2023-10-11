@@ -4,7 +4,7 @@ import mongoose, { connect } from "mongoose";
 export async function getUserSociety(req){
     var connect
     try{
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log("get user society",req.body.tokeninfo.uid)
         const soc = await user.findOne(
             {uid:req.body.tokeninfo.uid}
@@ -20,7 +20,7 @@ export async function getUserSociety(req){
         }
     }catch(e){
         console.log(e)
-        await connect.disconnect()
+        //await connect.disconnect()
     }
     
     

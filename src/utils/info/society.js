@@ -5,7 +5,7 @@ import mongoose, { connect } from "mongoose";
 export async function getSociety(){
     var connect
     try{
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log("get society")
         const a = await society.find(
             {}
@@ -28,10 +28,10 @@ export async function getSociety(){
             
         })
         // console.log(a)
-        await connect.disconnect()
+        //await connect.disconnect()
         return a
     }catch{
-        await connect.disconnect()
+        //await connect.disconnect()
     }
     
     

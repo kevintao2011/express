@@ -7,7 +7,7 @@ const getUser = async (req)=>{
     var jwt;
 
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         jwt = req.body.jwt;
         console.log(jwt);
 
@@ -27,17 +27,17 @@ const getUser = async (req)=>{
         if (User){
             console.log(User)
         }else{
-            await connect.disconnect()
+            //await connect.disconnect()
             return false
         }
-        await connect.disconnect()
+        //await connect.disconnect()
         
         return User
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

@@ -9,7 +9,7 @@ const getActivity = async (req)=>{
 
 
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
         console.log("id",req.body.id)
         const a = await activity.findById(
@@ -18,7 +18,7 @@ const getActivity = async (req)=>{
             if (activities){
                 console.log(activities)
             }
-            await connect.disconnect()
+            //await connect.disconnect()
             console.log("function exe sucess")
             return activities
         })
@@ -29,7 +29,7 @@ const getActivity = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

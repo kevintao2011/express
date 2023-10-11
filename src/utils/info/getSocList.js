@@ -7,19 +7,19 @@ const getSocList = async (req)=>{
 
 
     try {
-        connect = await mongoose.connection.asPromise()
-        console.log("current connection",mongoose.connection.readyState)
-        if(mongoose.connection.readyState==0){
-            console.log("getSocActivity connecting")
-            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
-        }
-        else{
-            console.log("getSocActivity adding connection")
+        // connect = await mongoose.connection.asPromise()
+        // console.log("current connection",mongoose.connection.readyState)
+        // if(mongoose.connection.readyState==0){
+        //     console.log("getSocActivity connecting")
+        //     //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        // }
+        // else{
+        //     console.log("getSocActivity adding connection")
             
-            connect = mongoose
+        //     connect = mongoose
             
-            console.log("getSocActivity added connection",mongoose.connection.readyState)
-        }
+        //     console.log("getSocActivity added connection",mongoose.connection.readyState)
+        // }
         
 
         const a = await society.find(
@@ -40,7 +40,7 @@ const getSocList = async (req)=>{
         ).then(async soc=>{
             
             
-            await connect.disconnect()
+            //await connect.disconnect()
             console.log("getSocList function exe sucess")
             return soc
         })
@@ -51,7 +51,7 @@ const getSocList = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

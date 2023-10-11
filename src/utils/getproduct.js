@@ -11,7 +11,7 @@ const getProduct = async (req)=>{
     var jwt;
 
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
                 
         
         const productList = await product.find({},{"_id":0 , "activity_id":0})
@@ -29,7 +29,7 @@ const getProduct = async (req)=>{
         //         console.log("act",doc)
         //         newproductList.push(doc)
         //     }
-        //     await connect.disconnect()
+        //     //await connect.disconnect()
         //     return newproductList
         // }
 
@@ -39,7 +39,7 @@ const getProduct = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

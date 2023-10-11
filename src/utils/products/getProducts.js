@@ -21,7 +21,7 @@ const getProducts = async (req)=>{
         console.log("getSocProduct current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
             console.log("getSocProduct connecting")
-            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+            //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
             console.log("getSocProduct adding connection")
@@ -50,7 +50,7 @@ const getProducts = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return []
 
     }

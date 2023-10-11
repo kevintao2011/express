@@ -25,7 +25,7 @@ const getMemberList = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return false
 
     }

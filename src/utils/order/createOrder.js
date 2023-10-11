@@ -8,7 +8,7 @@ const createOrder = async (req)=>{
     var connect;
     var data;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         data = req.body;
         console.log(data);
 
@@ -68,7 +68,7 @@ const createOrder = async (req)=>{
         console.log("error",err);
         console.log("failed");
         return {code:"error"}
-        // await connect.disconnect();
+        // //await connect.disconnect();
 
     }
     

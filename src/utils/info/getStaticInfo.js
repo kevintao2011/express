@@ -6,7 +6,7 @@ export async function getStaticInfo(req){
 
     var connect
     try{
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         return await website_info.find(
             {},
         ).then(info=>{
@@ -16,7 +16,7 @@ export async function getStaticInfo(req){
         
     }catch(e){
         console.log(e)
-        await connect.disconnect()
+        //await connect.disconnect()
     }
     
 }

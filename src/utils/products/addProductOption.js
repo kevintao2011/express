@@ -11,7 +11,7 @@ const addProductOption = async (req)=>{
     var newActivity
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         const option = await product.findOne({"_id":req.body.data._id}).then(async doc=>{  
             
@@ -46,13 +46,13 @@ const addProductOption = async (req)=>{
             return newOption
         })
 
-        await connect.disconnect()
+        //await connect.disconnect()
         return option
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return {code:err}
 
     }

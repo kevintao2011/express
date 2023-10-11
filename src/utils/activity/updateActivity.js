@@ -11,20 +11,20 @@ const updateActivity = async (req)=>{
     var newActivity
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         await activity.updateOne({"_id":req.body.data.id},req.body.data).then(async doc=>{  
             console.log(doc)
             
         })
     
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:"success"})
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

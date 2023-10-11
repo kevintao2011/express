@@ -10,7 +10,7 @@ const uploadProductIcon = async (req)=>{
     var connect;
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         await product.findOne({"_id":req.body.data.id}).then(async doc=>{  
             console.log(doc,req.body.data.posterURL)
@@ -51,13 +51,13 @@ const uploadProductIcon = async (req)=>{
 
         // await activity.create(newActivity)
         // console.log("created activity")
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:"success"})
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return JSON.stringify({code:err})
 
     }

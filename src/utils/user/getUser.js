@@ -8,7 +8,7 @@ const getUser = async (UID)=>{
 
 
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
         
         const User = await user.findOne(
@@ -27,11 +27,11 @@ const getUser = async (UID)=>{
             console.log(User)
         }else{
             user.create()
-            await connect.disconnect()
+            //await connect.disconnect()
             console.log("no record")
             return false
         }
-        await connect.disconnect()
+        //await connect.disconnect()
         console.log("function exe sucess")
         return User
         
@@ -39,7 +39,7 @@ const getUser = async (UID)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

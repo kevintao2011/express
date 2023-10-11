@@ -19,7 +19,7 @@ const priviledgedGetSocProducts = async (req)=>{
         console.log("getSocProduct current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
             console.log("getSocProduct connecting")
-            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+            //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
             console.log("getSocProduct adding connection")
@@ -35,7 +35,7 @@ const priviledgedGetSocProducts = async (req)=>{
             if (products){
                 console.log(products)
             }
-            // await connect.disconnect()
+            // //await connect.disconnect()
             console.log("soc products function exe sucess")
             return products
         })
@@ -46,7 +46,7 @@ const priviledgedGetSocProducts = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return false
 
     }
@@ -64,7 +64,7 @@ const pGetSocProductsByTree = async (req)=>{
         console.log("getSocProduct current connection",mongoose.connection.readyState)
         if(mongoose.connection.readyState==0){
             console.log("getSocProduct connecting")
-            connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+            //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         }
         else{
             console.log("getSocProduct adding connection")
@@ -132,7 +132,7 @@ const pGetSocProductsByTree = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return false
 
     }

@@ -6,7 +6,7 @@ const getUserOID = async (uid)=>{
     console.log("find user",uid)
     var connect;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
 
         var User
         User = await user.findOne(
@@ -20,12 +20,12 @@ const getUserOID = async (uid)=>{
         )
 
         if (User){
-            console.log(User)
+            console.log("getUserOID:",User)
             
         }else{
            console.log("no such user")
         }
-        await connect.disconnect()
+        //await connect.disconnect()
         console.log("handleUserLogin function exe sucess",mongoose.connection.readyState)
         return User._id
         
@@ -33,7 +33,7 @@ const getUserOID = async (uid)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

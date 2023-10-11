@@ -9,16 +9,16 @@ const tryConnectDB = async ()=>{
             connect.connection.name
             
         );
-        await connect.disconnect()
+        //await connect.disconnect()
         return true;
-        // await connect.disconnect();
+        // //await connect.disconnect();
         // console.log(
         //     "Database disconnected: ",
             
         // );
     } catch (err) {
         console.log(err);
-        await connect.disconnect();
+        //await connect.disconnect();
         process.exit(1);
         
     }

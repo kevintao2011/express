@@ -7,7 +7,7 @@ const editUser = async (req)=>{
     var jwt;
     var data;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         jwt = req.body.jwt;
         data = req.body.data;
         console.log("jwt: ",jwt);
@@ -21,17 +21,17 @@ const editUser = async (req)=>{
             await ExistingUser.updateOne(data)
             
         }else{
-            await connect.disconnect()
+            //await connect.disconnect()
             return false
         }
         
-        await connect.disconnect()
+        //await connect.disconnect()
         return true
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

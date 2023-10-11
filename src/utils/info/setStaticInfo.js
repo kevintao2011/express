@@ -7,7 +7,7 @@ export  default async function setStaticInfo(req){
     var connect
     try{
         console.log("setStaticInfo")
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         const userid = await user.find(
             {}
         )
@@ -29,7 +29,7 @@ export  default async function setStaticInfo(req){
         
     }catch(e){
         console.log(e)
-        await connect.disconnect()
+        //await connect.disconnect()
     }
     
 }

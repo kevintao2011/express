@@ -12,7 +12,7 @@ const createProduct = async (req)=>{
     console.log(req.body)
     const body = req.body;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         const newProduct = new product({
             society:req.body.data.society,
@@ -30,7 +30,7 @@ const createProduct = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

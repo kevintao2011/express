@@ -7,29 +7,38 @@ const getUserMembership = async (req)=>{
     var connect;
     console.log("calling memeber list",req.body)
     try {
+        // return await mongoose.connect(String(process.env.CONNECTION_STRING)).then(async ()=>{
+        //     return await getUserOID(req.body.tokeninfo.user_id).then(async id=>{
+        //         return await membership.find(
+        //             {user:id},
+        //             {}
+        //         ).then( async docs=>{
+        //             return docs
+        //         })
+        //     })
+        // })
         return await getUserOID(req.body.tokeninfo.user_id).then(async id=>{
             return await membership.find(
                 {user:id},
-                {}
-            ).then( async docs=>{
+                {update_record:0}
+            ).populate( [{
+                path: 'society', //field 
+                // match: { society: doc._id },
+                model: "societies", 
+                select: 'college society_chinese society_eng code session  -_id',
+                options: { lean: true },
+                
+            },])
+            .then( async docs=>{
+                console.log(`found memberships${docs}`)
                 return docs
-                // return await membership.findOne(
-                //     {society:doc._id ,expiry_date:{$gt:Date.now()}},
-                //     {_id:0}
-                // ).then(doc=>{
-                //     if (doc){
-                        
-                //     }else{
-                //         return false
-                //     }
-                // })
             })
         })
         
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        // await connect.disconnect()
+        // //await connect.disconnect()
         return false
 
     }

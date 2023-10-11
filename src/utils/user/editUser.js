@@ -8,7 +8,7 @@ const editUser = async (req)=>{
     var connect;
   
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        // //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         
         
         console.log("editUser data: ",req.body.data);
@@ -26,12 +26,12 @@ const editUser = async (req)=>{
         )
         if (DuplicateName){
             console.log("duplicated name")
-            await connect.disconnect()
+            // //await connect.disconnect()
             return {code:"duplicated-username"}
         }
         else if (DuplicateSID){
             console.log("duplicated sid")
-            await connect.disconnect()
+            // //await connect.disconnect()
             return {code:"duplicated-sid"}
         }else{
             //update user profile info
@@ -67,7 +67,7 @@ const editUser = async (req)=>{
             ).then(soc=>{
                 console.log("soc",soc)
             })
-            await connect.disconnect()
+            // //await connect.disconnect()
             return {code:"success",user:dbuser}
             
             
@@ -79,7 +79,7 @@ const editUser = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        // //await connect.disconnect()
         return {code:"operation-error"}
 
     }

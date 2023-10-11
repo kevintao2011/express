@@ -6,7 +6,7 @@ const updateSession = async (req)=>{
     var jwt;
     var data;
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         const jwt = req.body.user.jwt;
 
         const tokeninfo = req.body.tokeninfo
@@ -36,17 +36,17 @@ const updateSession = async (req)=>{
             })
             console.log("updated",result);
         }else{
-            await connect.disconnect()
+            //await connect.disconnect()
             return false
         }
         
-        await connect.disconnect()
+        //await connect.disconnect()
         return true
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }

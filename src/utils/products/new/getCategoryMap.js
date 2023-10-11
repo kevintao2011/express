@@ -11,7 +11,7 @@ const getCategoryMap = async (req)=>{
     const oid = await getUserOID(req.body.tokeninfo.user_id)
     const socoid = await getoidbycode(req.body.data.code)
     try {
-        connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
         console.log(body)
         console.log("product Tree",body.data.productTree)
         IterateTree(body.data.productTree,oid,socoid)
@@ -32,7 +32,7 @@ const getCategoryMap = async (req)=>{
     } catch (err) {
         console.log("error",err);
         console.log("failed");
-        await connect.disconnect()
+        //await connect.disconnect()
         return false
 
     }
