@@ -312,12 +312,19 @@ app.post('/api/getorders',checkAuth, async (req, res) => {
 
 app.post('/api/getordersbysoc',checkAuth, async (req, res) => {
   await getOrdersBySoc(req).then(result=>{
-    console.log("getorder",result)
     if(result){
-      console.log("success")
-      res.status(200).json(result)
+      res.send(JSON.stringify({
+        success:true,
+        message:"success",
+        data:result
+      }))
     }else{
-      res.status(500).json({"code":"error"})
+      if(result){
+        res.status(501).send(JSON.stringify({
+          success:false,
+          msg:"failed"
+        }))
+      }
     }
   })
 })
@@ -424,8 +431,21 @@ app.get('/api/getsocieties', async (req, res) => {
 
 app.post('/api/websitestaticinfo', async (req, res) => {
   console.log("calling getStaticInfo",req.body)
-  const result = await getStaticInfo();
-  res.send(JSON.stringify(result))
+  await getStaticInfo().then(result=>{
+    if(result){
+      res.send(JSON.stringify({
+        success:true,
+        message:"success",
+        data:result
+      }))
+    }else{
+      if(result){
+        res.status(501).send(JSON.stringify({
+          msg:"failed"
+        }))
+      }
+    }
+  });
   //Create user profile on mongo when first log in
 })
 
@@ -441,6 +461,12 @@ app.post('/api/createacticvity',checkAuth,async (req, res) => { //check auth che
   const result = await createActivity(req);  
   res.send(result)
 })
+
+app.get('/api/socmap',async (req, res) => { //check auth checkpriviledge
+  const result = await createActivity(req);  
+  res.send(result)
+})
+
 
 app.post('/api/updateactivity',checkAuth,async (req, res) => { //check auth checkpriviledge
   const result = await updateActivity(req);  

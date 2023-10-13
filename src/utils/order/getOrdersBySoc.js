@@ -23,7 +23,7 @@ const getOrdersBySoc = async (req)=>{
     
         console.log("status before find",mongoose.connection.readyState)
         return await transaction.find(
-            {code:req.body.code}
+            {code:req.body.data.code}
         ).then(transaction=>{
             if (transaction){
                 console.log("transaction found")
