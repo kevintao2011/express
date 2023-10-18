@@ -30,10 +30,7 @@ const ProductSchema = new Schema({ //schema
     },
     created_by:{type:mongoose.Types.ObjectId,ref:"users"},
     modification:{type:[ModificationSchema],default:[]}, // record user
-    has_variant:Boolean,
     is_limited:Boolean,// some is unlimited, such as membership
-    inventory:Number,
-    total_sales:{type:Number,default:0},
     tags:{type:[String],default:[]}, //for searching
     allowed_coupon:[{type:mongoose.Types.ObjectId,ref:'coupons',default:[]}],
     sku:String,

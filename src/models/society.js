@@ -16,13 +16,9 @@ const SocietySchema = new Schema({ //schema
     exco_name_eng:String,
     status:String,
     exco_list:Array,
-    session:String,
     past_exco:Array,
-    activities:Array,
     code:String,
-    member:Array,
     type:String
-    
 });
 // ProductSchema.path('activity').ref(activity)
 const society = model("societies", SocietySchema);  //Creating a model
