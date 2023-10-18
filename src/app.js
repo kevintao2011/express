@@ -509,7 +509,7 @@ app.post('/api/getproduct',checkAuth, async (req, res) => { // get single produc
   res.status(200).send(JSON.stringify({product}))
 })
 
-app.post('/api/createproduct',async (req, res) => {
+app.post('/api/createproduct',checkAuth,async (req, res) => {
   const result = await createproduct(req);  
   res.send(result)
 })

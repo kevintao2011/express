@@ -1,5 +1,8 @@
 import mongoose, {  connect  } from "mongoose";
 import product from "../../models/product.js";
+import getoidbycode,{getoidandsessionbycode} from "../serverFunction/getoidbycode.js";
+import getUserOID from "../serverFunction/getuseroid.js";
+import moment from "moment/moment.js";
 
 // for show product in carousell 
 const createproduct = async (req)=>{
@@ -7,31 +10,41 @@ const createproduct = async (req)=>{
 
     console.log("req.body",req.body)
     const body = req.body;
-    try {
-        //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
-        console.log(body)
-        const newProduct = new product({
-            code:req.body.data.code,
-            status:req.body.data.status[0],
-            product_name:req.body.data.product_name[0],
-            type: req.body.data.type[0],
-            variants: req.body.data.variants,
-            description_chi:req.body.data.description_chi[0],
-            description_eng:req.body.data.description_eng[0]
-            
-        })
-        console.log(newProduct)
-        await product.create(newProduct)
-
-        return true
+    await getUserOID(req.body.tokeninfo.user_id).then(async useroid=>{
+        await getoidandsessionbycode(req.body.data.code).then(async result=>{
+            console.log("result",result)
+            const oid=result[0]
+            const session=result[1]
+            try {
+                //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
+                console.log("req body ",body)
+                var prod = {...req.body.data}
+                prod.created_by=useroid
+                prod.ref_society=oid
+                prod.session=session
+                prod.ref_category=session
+                prod.created_at=moment().utcOffset(8).toDate()
+                console.log("prod",prod)
+                const newProduct = new product(prod)
+                console.log(newProduct)
+                
+                await product.create(newProduct),then(doc=>{
+                    return true
+                })
         
-    } catch (err) {
-        console.log("error",err);
-        console.log("failed");
-        //await connect.disconnect()
-        return false
-
-    }
+                
+                
+            } catch (err) {
+                console.log("error",err);
+                console.log("failed");
+                //await connect.disconnect()
+                return false
+        
+            }
+        })
+    })
+    
+    
     
 
     

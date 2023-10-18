@@ -9,7 +9,7 @@ import allProducts,{allProductsSchema} from './allProducts.js';
 const ModificationSchema = new Schema({ //schema
     action:String, //[changePrice, rename , added new children]
     updatedAt:Date, //record modification 
-    modifiedBy:UserSchema
+    modifiedBy:{type:mongoose.Types.ObjectId,ref:'societies'}
 });
 
 const ProductSchema = new Schema({ //schema

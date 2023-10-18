@@ -1,41 +1,52 @@
 
-import { Schema, model} from 'mongoose';
+import mongoose,{ Schema, model} from 'mongoose';
 import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 const ProductVariantSchema = new Schema({ //schema
-    name:String,
-    totalSales: {type: Number,default:0},
-    price:Number,
-    index:Number,
-    inventory:Number,
-    icon_url:String
+    option:[{text:String,option:[String]}],
+    data:{},
+});
+
+const ModificationSchema = new Schema({ //schema
+    action:String, //[changePrice, rename , added new children]
+    updatedAt:Date, //record modification 
+    modifiedBy:{type:mongoose.Types.ObjectId,ref:'societies'}
 });
 
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
-    product_name:String,
-    product_name_eng:String,
-    type: String,
-    status:String, //selling//ended
-    img_url:String,
-    product_icon:String,
-    link:Array,
-    description_chi:String,
-    description_eng:String,
-    createdAt:{
+    ref_society:{type:mongoose.Types.ObjectId,ref:'societies'},
+    ref_category:{type:String},
+    product_name_chi:String, //product chinese name
+    product_type: String,   //membership, ticket , virtual , real
+    product_img_url:[String], //product url
+    product_link:[{type:[String],default:[]}], // link of form/post
+    product_description_chi:String, // product description in chinese
+    product_description_eng:String, // product description in english
+    created_at:{ 
         type:Date,
         immutable:true,
         default:()=>Date.now(),
     },
-    updatedAt:Date,
-    // delivery_option:Array,
-    // no_variants:Boolean,
-    variants:[ProductVariantSchema],
-    
+    created_by:{type:mongoose.Types.ObjectId,ref:"users"},
+    modification:{type:[ModificationSchema],default:[]}, // record user
+    has_variant:Boolean,
+    is_limited:Boolean,// some is unlimited, such as membership
+    inventory:Number,
+    total_sales:{type:Number,default:0},
+    tags:{type:[String],default:[]}, //for searching
+    allowed_coupon:[{type:mongoose.Types.ObjectId,ref:'coupons',default:[]}],
+    sku:String,
+    published:{type:Boolean },
+    session:{type:Number},
+
+    is_bundle:{type:Boolean,default:false},
+    bundle_list:[],
+    product_list:{type:ProductVariantSchema,default:{}},
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
 
 const vSchema = Schema(ProductVariantSchema)
 
-export default {product};
+export default product;
