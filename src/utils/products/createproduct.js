@@ -24,11 +24,25 @@ const createproduct = async (req)=>{
                 prod.session=session
                 prod.ref_category=session
                 prod.created_at=moment().utcOffset(8).toDate()
+                prod.options=prod.product_list.option?prod.product_list.option:[]
+                if(Object.keys(prod.product_list).length>0){
+                    prod.product_list=Object.keys(prod.product_list.data).map(p=>{
+                        console.log(p)
+                        console.log(prod.product_list.data)
+                        var obj = prod.product_list.data[p]
+                        obj.name = p
+                        return obj
+                    })
+                }
+                else{
+                    prod.product_list=[]
+                }
+                
                 console.log("prod",prod)
                 const newProduct = new product(prod)
                 console.log(newProduct)
                 
-                await product.create(newProduct),then(doc=>{
+                await product.create(newProduct).then(doc=>{
                     return true
                 })
         

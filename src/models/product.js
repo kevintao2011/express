@@ -3,8 +3,16 @@ import mongoose,{ Schema, model} from 'mongoose';
 import activity from './activity.js';
 import { ObjectId } from 'mongodb';
 const ProductVariantSchema = new Schema({ //schema
-    option:[{text:String,option:[String]}],
-    data:{},
+    name:String,
+    total_sales:{type:Number,default:0},
+    quantity:Number,
+    price:Number,
+    is_limited:Boolean,
+});
+
+const OptionSchema = new Schema({ //schema
+    text:String,
+    option:[String],
 });
 
 const ModificationSchema = new Schema({ //schema
@@ -20,7 +28,7 @@ const ProductSchema = new Schema({ //schema
     product_name_chi:String, //product chinese name
     product_type: String,   //membership, ticket , virtual , real
     product_img_url:[String], //product url
-    product_link:[{type:[String],default:[]}], // link of form/post
+    product_link:[Object], // link of form/post
     product_description_chi:String, // product description in chinese
     product_description_eng:String, // product description in english
     created_at:{ 
@@ -36,14 +44,13 @@ const ProductSchema = new Schema({ //schema
     sku:String,
     published:{type:Boolean },
     session:{type:Number},
+    options:[OptionSchema],
 
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
-    product_list:{type:ProductVariantSchema,default:{}},
+    product_list:{type:[ProductVariantSchema],default:[]},
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
-
-const vSchema = Schema(ProductVariantSchema)
 
 export default product;

@@ -15,7 +15,7 @@ const deductionSchema = new Schema({
 const couponSchema = new Schema({ //schema
     coupon_code:{type:String,immutable:true},
     coupon_type:String, //buy A get B, buy $100 - $10, 
-    end_date:Date, //when stop showing this coupon
+    published:Boolean, //when stop showing this coupon
     max_per_person:Number, //how many is allowed to use per person
     max_quantity:Number,// how many is allowed to use total
     used_quantity:Number,// how many is used

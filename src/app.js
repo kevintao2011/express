@@ -510,8 +510,21 @@ app.post('/api/getproduct',checkAuth, async (req, res) => { // get single produc
 })
 
 app.post('/api/createproduct',checkAuth,async (req, res) => {
-  const result = await createproduct(req);  
-  res.send(result)
+  await createproduct(req).then(result=>{
+    if(result){
+      res.send(JSON.stringify({
+        success:true,
+        message:"success",
+        data:result
+      }))
+    }else{
+      if(result){
+        res.send(JSON.stringify({
+          msg:"failed"
+        }))
+      }
+    }
+  });  
 })
 
 app.post('/api/addmembership',async (req, res) => {
