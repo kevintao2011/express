@@ -11,7 +11,7 @@ import product from "../../models/product.js";
   id: 'code'
 }
 */
-const getProduct = async (req)=>{
+const getSocProducts = async (req)=>{
     console.log("running getSocProduct",mongoose.connection.readyState , req.body)
     var connect;
 
@@ -33,18 +33,17 @@ const getProduct = async (req)=>{
         
     
         console.log("status before find",mongoose.connection.readyState)
-        const a = await product.findOne(
-            {_id:req.body.id}
-        ).then(product=>{
-            if (product){
-                console.log("products found")
-                console.log(product)
+        const a = await product.find(
+            {code:req.body.id}
+        ).then(products=>{
+            if (products){
+                console.log(products)
             }
             // //await connect.disconnect()
-            
-            return product
+            console.log("soc products function exe sucess")
+            return products
         })
-        
+
         return a
         
 
@@ -60,4 +59,4 @@ const getProduct = async (req)=>{
     
 }
 
-export default getProduct;
+export default getSocProducts;

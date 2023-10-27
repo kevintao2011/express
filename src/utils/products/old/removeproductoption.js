@@ -1,7 +1,7 @@
 import mongoose, {  connect, set  } from "mongoose";
-import product from "../../models/product.js";
+import product from "../../../models/product.js";
 // for show product in carousell 
-const updateProductOption = async (req)=>{
+const removeProductOption = async (req)=>{
     var connect;
     const body = req.body;
     try {
@@ -13,19 +13,12 @@ const updateProductOption = async (req)=>{
             doc.variants.forEach((variant,i)=>{
                 if (parseInt(variant.index) === parseInt(req.body.data.index)){
                     console.log("founded index") 
-                    const keys = Object.keys(variant)
-                    keys.forEach(key=>{
-                        if(req.body.data[key]){
-                            console.log("founded key",key,doc.variants[i][key]) 
-                            doc.variants[i][key]=req.body.data[key]
-                            console.log(`${key}changed from ${ doc.variants[i][key]} to ${req.body.data[key]}`)
-                        }
-                    })
+ console.log("remove",doc.variants.splice(i,1))                   
                 }
             })
             
             console.log("updated docs",doc)
-            doc.markModified('anything');
+         
             // await doc.save(function(err, doc) {
             //     if (err) return console.error(err);
             //     console.log("Document inserted succussfully!");
@@ -35,15 +28,15 @@ const updateProductOption = async (req)=>{
 
         })
         //await connect.disconnect()
-        return JSON.stringify({code:"success"})
+        return {code:"success"}
 
     } catch (err) {
         console.log("error",err);
         console.log("failed");
         //await connect.disconnect()
-        return JSON.stringify({code:err})
+        return {code:err}
 
     }
 }
 
-export default updateProductOption;
+export default removeProductOption;

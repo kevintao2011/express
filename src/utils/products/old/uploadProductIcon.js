@@ -1,33 +1,21 @@
 import mongoose, {  connect, set  } from "mongoose";
-import connectDB from "../connectDB.js";
-import product from "../../models/product.js";
-import activity from "../../models/activity.js";
+import connectDB from "../../connectDB.js";
+import product from "../../../models/product.js";
+import activity from "../../../models/activity.js";
 
 import { DBRef, ObjectId } from "mongodb";
 
 // for show product in carousell 
-const changeProductIcon = async (req)=>{
+const uploadProductIcon = async (req)=>{
     var connect;
     const body = req.body;
     try {
         //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
-        console.log(req.body.data.product_id)
-        await product.findOne({"_id":req.body.data.product_id}).then(async doc=>{  
-            console.log("doc exists",doc)
-            const varList = doc.variants.map((v=>{
-              
-                const option_index = String(v.index)
-                if (option_index==req.body.data.option_name){
-                    console.log("founded")
-                    v.icon_url = req.body.data.iconURL
-                    console.log("v",v)
-                    return v
-                }else{
-                    return v
-                }
-            }))
+        console.log(body)
+        await product.findOne({"_id":req.body.data.id}).then(async doc=>{  
+            console.log(doc,req.body.data.posterURL)
             await doc.updateOne({
-                variants:varList
+                posterURL:req.body.data.posterURL
             })
         })
     
@@ -78,4 +66,4 @@ const changeProductIcon = async (req)=>{
     
 }
 
-export default changeProductIcon;
+export default uploadProductIcon;

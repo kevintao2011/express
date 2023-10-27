@@ -1,7 +1,7 @@
 import mongoose, {  connect, set  } from "mongoose";
-import connectDB from "../connectDB.js";
-import product from "../../models/product.js";
-import activity from "../../models/activity.js";
+import connectDB from "../../connectDB.js";
+import product from "../../../models/product.js";
+import activity from "../../../models/activity.js";
 
 import { DBRef, ObjectId } from "mongodb";
 

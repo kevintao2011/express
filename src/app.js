@@ -3,7 +3,7 @@ import "dotenv/config";
 import editUser from "./utils/user/editUser.js";
 import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
-import getProduct from "./utils/products/getProduct.js";
+import getProduct from "./utils/products/old/getProduct.js";
 import createproduct from "./utils/products/createproduct.js";
 import newCreateProduct from "./utils/products/new/newCreateProduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
@@ -25,18 +25,20 @@ import createActivity from "./utils/activity/createActivity.js";
 import updateActivity from "./utils/activity/updateActivity.js";
 import getActivity from "./utils/activity/getactivity.js";
 import removeActivity from "./utils/activity/removeActivity.js";
-import getSocProduct from "./utils/products/getSocProduct.js";
+import getSocProducts from "./utils/products/getSocProducts.js";
+import getSocProduct from "./utils/products/editSocProduct.js";
 import getSocUser from "./utils/user/getSocUser.js";
 import getCatOption from "./utils/products/getCatOption.js";
+import getCatShownOption from "./utils/products/getCatShownOption.js";
 import changePoster from "./utils/activity/changePoster.js";
 import updateActivityProduct from "./utils/activity/updateActivityProduct.js";
-import updateProduct from "./utils/products/editProdct.js";
-import changeProductIcon from "./utils/products/changeProductIcon.js";
-import changeProductMainIcon from "./utils/products/changeProductMainIcon.js";
-import updateProductInfo from "./utils/products/updateproductinfo.js";
-import updateProductOption from "./utils/products/updateproductoption.js";
-import removeProductOption from "./utils/products/removeproductoption.js";
-import addProductOption from "./utils/products/addProductOption.js";
+import updateProduct from "./utils/products/old/editProdct.js";
+import changeProductIcon from "./utils/products/old/changeProductIcon.js";
+import changeProductMainIcon from "./utils/products/old/changeProductMainIcon.js";
+import updateProductInfo from "./utils/products/old/updateproductinfo.js";
+import updateProductOption from "./utils/products/old/updateproductoption.js";
+import removeProductOption from "./utils/products/old/removeproductoption.js";
+import addProductOption from "./utils/products/old/addProductOption.js";
 import getProducts from "./utils/products/getProducts.js";
 import uploadCart from "./utils/info/uploadcart.js";
 import createOrder from "./utils/order/createOrder.js";
@@ -48,6 +50,7 @@ import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
 import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
+import editSocProduct from "./utils/products/editSocProduct.js";
 import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
 import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
 import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
@@ -141,6 +144,16 @@ app.post('/api/getcatoption', async (req, res) => {
   console.log("calling socuser",req.body)
 
   const user = await getCatOption(req);
+  console.log("returning",user)
+  res.send(JSON.stringify(user))
+  //Create user profile on mongo when first log in
+  
+  
+})
+app.post('/api/getcatshownoption', async (req, res) => {
+  console.log("calling getshowncatoption",req.body)
+
+  const user = await getCatShownOption(req);
   console.log("returning",user)
   res.send(JSON.stringify(user))
   //Create user profile on mongo when first log in
@@ -587,18 +600,9 @@ app.post('/api/getmemberlist',async (req, res) => {
   
 })
 
-
-// app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
-//   const result = await getSocProduct(req);  
-//   console.log("result",result)
-//   res.send(result)
-// })
-
-app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
-  // const result = await priviledgedGetSocProducts(req);  
-  await pGetSocProductsByTree(req).then(
+app.post('/api/getsocproduct',async (req, res) => { 
+  await getSocProduct(req).then(
     r =>{
-      // console.log("r",r)
       if(r){
         res.send(JSON.stringify({
           state:"success",
@@ -612,8 +616,63 @@ app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
       }
     }
   );  
-  
 })
+
+app.post('/api/editsocproduct',async (req, res) => { 
+  await editSocProduct(req).then(
+    r =>{
+      if(r){
+        res.send(JSON.stringify({
+          state:"success",
+          data:r
+        }))
+      }else{
+        res.send(JSON.stringify({
+          state:"failed",
+          data:[]
+        }))
+      }
+    }
+  );  
+})
+app.post('/api/getsocproducts',async (req, res) => { 
+  await getSocProducts(req).then(
+    r =>{
+      if(r){
+        res.send(JSON.stringify({
+          state:"success",
+          data:r
+        }))
+      }else{
+        res.send(JSON.stringify({
+          state:"failed",
+          data:[]
+        }))
+      }
+    }
+  );  
+})
+
+// app.post('/api/getsocproduct',async (req, res) => { //getsocactivity
+//   // const result = await priviledgedGetSocProducts(req);  
+//   await pGetSocProductsByTree(req).then(
+//     r =>{
+//       // console.log("r",r)
+//       if(r){
+//         res.send(JSON.stringify({
+//           state:"success",
+//           data:r
+//         }))
+//       }else{
+//         res.send(JSON.stringify({
+//           state:"failed",
+//           data:[]
+//         }))
+//       }
+//     }
+//   );  
+  
+// })
 
 
 app.post('/api/getproducts',async (req, res) => { //getsocactivity

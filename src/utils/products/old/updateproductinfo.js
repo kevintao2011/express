@@ -1,5 +1,5 @@
 import mongoose, {  connect, set  } from "mongoose";
-import product from "../../models/product.js";
+import product from "../../../models/product.js";
 // for show product in carousell 
 const updateProductInfo = async (req)=>{
     var connect;
