@@ -22,15 +22,17 @@ const createproduct = async (req)=>{
                 prod.created_by=useroid
                 prod.ref_society=oid
                 prod.session=session
+                prod.sku=`${req.body.data.code}-${session}-${prod.sku}`
                 prod.ref_category=session
                 prod.created_at=moment().utcOffset(8).toDate()
                 prod.options=prod.product_list.option?prod.product_list.option:[]
                 if(Object.keys(prod.product_list).length>0){
-                    prod.product_list=Object.keys(prod.product_list.data).map(p=>{
+                    prod.product_list=Object.keys(prod.product_list.data).map((p,i)=>{
                         console.log(p)
                         console.log(prod.product_list.data)
                         var obj = prod.product_list.data[p]
                         obj.name = p
+                        obj.sku= `${prod.sku}-${i.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
                         return obj
                     })
                 }

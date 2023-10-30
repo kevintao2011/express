@@ -8,11 +8,12 @@ const ProductVariantSchema = new Schema({ //schema
     quantity:Number,
     price:Number,
     is_limited:Boolean,
+    sku:String
 });
 
 const OptionSchema = new Schema({ //schema
-    text:String,
-    option:[String],
+    text:String, //e.g. size
+    option:[String], //e.g. s,m,l
 });
 
 const ModificationSchema = new Schema({ //schema
