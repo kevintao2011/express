@@ -3,6 +3,7 @@ import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 import activity from "../../models/activity.js";
 import product from "../../models/product.js";
+import getoidbycode from "../serverFunction/getoidbycode.js";
 /*
 {
   user: {
@@ -33,18 +34,30 @@ const getSocProducts = async (req)=>{
         
     
         console.log("status before find",mongoose.connection.readyState)
-        const a = await product.find(
-            {code:req.body.id}
-        ).then(products=>{
-            if (products){
-                console.log(products)
-            }
-            // //await connect.disconnect()
-            console.log("soc products function exe sucess")
-            return products
+        return await getoidbycode(req.body.id).then(async oid=>{
+           return  await product.find(
+                {ref_society:oid}
+            ).then(products=>{
+                if (products){
+                    console.log(products)
+                }
+                // //await connect.disconnect()
+                console.log("soc products function exe sucess")
+                return products
+            })
         })
+        // const a = await product.find(
+        //     {code:req.body.id}
+        // ).then(products=>{
+        //     if (products){
+        //         console.log(products)
+        //     }
+        //     // //await connect.disconnect()
+        //     console.log("soc products function exe sucess")
+        //     return products
+        // })
 
-        return a
+        // return a
         
 
     } catch (err) {

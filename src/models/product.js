@@ -46,7 +46,7 @@ const ProductSchema = new Schema({ //schema
     published:{type:Boolean },
     session:{type:Number},
     options:[OptionSchema],
-    hidden:Boolean,
+    hidden:{type:Boolean,default:false},
 
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
