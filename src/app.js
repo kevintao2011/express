@@ -234,6 +234,21 @@ app.post('/api/updateproductinfo',checkAuth, async (req, res) => {
   
   
 })
+
+app.post('/api/${code}/manage/hideproduct',checkAuth, async (req, res) => {
+  await updateProductInfo(req).then(result=>{
+    console.log("updated product info",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+  })
+  
+  
+})
+
 app.post('/api/updateoptioninfo',checkAuth, async (req, res) => {
   await updateProductOption(req).then(result=>{
     console.log("updated Product Option",result)
