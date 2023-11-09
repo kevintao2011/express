@@ -57,6 +57,7 @@ import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
 import getMemberList from "./utils/society/member/getMemberList.js";
 import getUserMembership from "./utils/membership/getUserMembership.js";
 import mongoose from "mongoose";
+import getNextSKU from "./utils/products/getNextSKU.js";
 const app = express()
 const port = 3001
 
@@ -213,10 +214,17 @@ app.post('/api/updateActivityProduct',checkAuth, async (req, res) => {
 })
 app.post('/api/updateproduct',checkAuth, async (req, res) => {
   console.log("calling updateProduct",req.body)
-  const result = await updateProduct(req);
-  console.log("reutrning state",result)
-  res.send(JSON.stringify(result))
-  //Create user profile on mongo when first log in
+  await updateProduct(req).then(result=>{
+    console.log("result",result)
+    if(result.code=="success"){
+      res.status(200).json(result)
+    }
+    else{
+      res.status(500).json(result)
+    }
+    
+  });
+  
   
   
 })
@@ -617,6 +625,24 @@ app.post('/api/getmemberlist',async (req, res) => {
 
 app.post('/api/getsocproduct',async (req, res) => { 
   await getSocProduct(req).then(
+    r =>{
+      if(r){
+        res.send(JSON.stringify({
+          state:"success",
+          data:r
+        }))
+      }else{
+        res.send(JSON.stringify({
+          state:"failed",
+          data:[]
+        }))
+      }
+    }
+  );  
+})
+
+app.post('/api/getnextsku',async (req, res) => { 
+  await getNextSKU(req).then(
     r =>{
       if(r){
         res.send(JSON.stringify({

@@ -3,6 +3,7 @@ import product from "../../models/product.js";
 import getoidbycode,{getoidandsessionbycode} from "../serverFunction/getoidbycode.js";
 import getUserOID from "../serverFunction/getuseroid.js";
 import moment from "moment/moment.js";
+import stock from "../../models/stock.js";
 
 // for show product in carousell 
 const createproduct = async (req)=>{
@@ -24,7 +25,7 @@ const createproduct = async (req)=>{
                     prod.created_by=useroid
                     prod.ref_society=oid
                     prod.session=session
-                    prod.sku=`${req.body.data.code}-${session}-${p.length.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
+                    // prod.sku=`${req.body.data.code}-${session}-${p.length.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
                     prod.ref_category=session
                     prod.created_at=moment().utcOffset(8).toDate()
                     prod.options=prod.product_list.option?prod.product_list.option:[]
@@ -46,8 +47,42 @@ const createproduct = async (req)=>{
                     const newProduct = new product(prod)
                     console.log(newProduct)
                     
-                    await product.create(newProduct).then(doc=>{
+                    await product.create(newProduct).then(async doc=>{
+                        if(doc.is_limited){
+                            const stockInfos = doc.product_list.map(subproduct=>{
+                                return{
+                                    sku:subproduct.sku,
+                                    ref_society:doc.ref_society,
+                                    ref_product:doc._id,
+                                    created_by:doc.created_by,
+                                    spot_goods:true,
+                                    status:"for-sale"
+                                }
+                            })
+                            const stocksTobeCreated = doc.product_list.map((subproduct,i)=>{
+                                var stocks = [] 
+                                for (let index = 0; index < subproduct.quantity; index++) {
+                                    const doc = new stock(stockInfos[i])
+                                    console.log(doc.sku)
+                                    doc.sku=doc.sku+"-"+index.toLocaleString('en-US',{minimumIntegerDigits:subproduct.quantity.length<3?3:subproduct.quantity.length,useGrouping:false})
+                                    stocks.push(doc)
+                                }
+                                return stocks
+                                
+                            })
+
+                            stocksTobeCreated.forEach(async (docs,i)=>{
+                                console.log("creating ",i," subprod")
+                                await stock.insertMany(docs).then(()=>{
+                                    console.log("created ",i," subprod")
+                                })
+
+                            })
+                            
+                        }
+                        
                         return true
+
                     })
             
                     
