@@ -29,6 +29,7 @@ const updateProduct = async (req)=>{
             return await doc.updateOne(p).then(d=>{
                 console.log("updated doc",req.body.data)
                 // check if stock need to be updated
+                // how to handle if later ppl scan and entry new product stock
                 try{
                     if (originalDoc.product_list.length!=req.body.data.product_list.length){
                         
