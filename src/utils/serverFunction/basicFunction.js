@@ -87,6 +87,11 @@ function IntToFixDisgitString(integer,digit){
   return integer.toLocaleString('en-US', {minimumIntegerDigits: digit, useGrouping:false})
 }
 
+function IntToProdIndex(integer){
+  console.log("fn to fix",integer.toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping:false}))
+  return integer.toLocaleString('en-US', {minimumIntegerDigits: 3, useGrouping:false})
+}
+
 function findNextIndexString(ArrOfString){
   const digit = ArrOfString[0].length
   const nIndex = Math.max(...ArrOfString.map(str=> parseInt(str)))+1
@@ -101,6 +106,18 @@ function findNextIndexString(ArrOfString){
 function findNextIndex(ArrOfString){
   const digit = ArrOfString[0].length
   const nIndex = Math.max(...ArrOfString.map(str=> parseInt(str)))+1
+  if (nIndex < 10^digit){
+    return nIndex
+  }else{
+    throw console.error("overflow");
+  }
+  
+}
+
+function findNextSKUIndex(ArrOfString){
+  console.log("function findNextSKUIndex",ArrOfString)
+  const digit = ArrOfString[0].length
+  const nIndex = Math.max(...ArrOfString.map(str=> parseInt(str.split("-").pop())))+1
   if (nIndex < 10^digit){
     return nIndex
   }else{
@@ -133,7 +150,9 @@ export {
   IntToFixDisgitString,
   findNextIndexString,
   findNextIndex,
-  IndexStringIncreament
+  IndexStringIncreament,
+  IntToProdIndex,
+  findNextSKUIndex
 }
 
 

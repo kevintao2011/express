@@ -54,5 +54,5 @@ const ProductSchema = new Schema({ //schema
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
-
 export default product;
+

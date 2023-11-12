@@ -16,9 +16,13 @@ const StockSchema = new Schema({ //schema
     created_by:{type:mongoose.Types.ObjectId,ref:'users'},
     owner:{type:mongoose.Types.ObjectId,ref:'users'},
     spot_goods:{type:Boolean,default:true}, //spot_goods = if have actual products on hand
+    create_method:{type:String,default:"create-product"},
     sold_price:Number,
-    status:{type:String,default:""}//for-sale , sold , hold (not yet paid)
+    status:{type:String,default:""},//for-sale , sold , hold (not yet paid)
+    hidden:{type:Boolean,default:false}
 });
+
+
 // ProductSchema.path('activity').ref(activity)
 const stock = model("stocks", StockSchema);  //Creating a model
 export default stock;

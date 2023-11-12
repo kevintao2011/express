@@ -2,6 +2,7 @@ import mongoose, {  connect  } from "mongoose";
 import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 
+//uid should get by req.body.tokeninfo.user_id
 const getUserOID = async (uid)=>{
     console.log("find user",uid)
     var connect;

@@ -4,6 +4,7 @@ import getoidbycode,{getoidandsessionbycode} from "../serverFunction/getoidbycod
 import getUserOID from "../serverFunction/getuseroid.js";
 import moment from "moment/moment.js";
 import stock from "../../models/stock.js";
+import { IntToProdIndex } from "../serverFunction/basicfunction.js";
 
 // for show product in carousell 
 const createproduct = async (req)=>{
@@ -64,7 +65,7 @@ const createproduct = async (req)=>{
                                 for (let index = 0; index < subproduct.quantity; index++) {
                                     const doc = new stock(stockInfos[i])
                                     console.log(doc.sku)
-                                    doc.sku=doc.sku+"-"+index.toLocaleString('en-US',{minimumIntegerDigits:subproduct.quantity.length<3?3:subproduct.quantity.length,useGrouping:false})
+                                    doc.sku=doc.sku+"-"+IntToProdIndex(index)
                                     stocks.push(doc)
                                 }
                                 return stocks
