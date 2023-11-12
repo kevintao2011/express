@@ -111,6 +111,7 @@ const updateProduct = async (req)=>{
                                                 newStock.created_by = userOid
                                                 newStock.sku = `${subProduct.sku}-${IntToProdIndex(index)}`
                                                 newStock.status = "for-sale"
+                                                newStock.create_method = "edit"
                                                 newStocks.push(newStock)
                                             }
                                             await stock.insertMany(newStocks).then(async iresult=>{
@@ -147,6 +148,7 @@ const updateProduct = async (req)=>{
                                         d.ref_society=doc._id
                                         d.status = "for-sale"
                                         d.created_by = userOid
+                                        d.create_method = "edit"
                                         stocks.push(d)
                                     }
                                     return stocks
