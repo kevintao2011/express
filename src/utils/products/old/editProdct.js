@@ -163,105 +163,6 @@ const updateProduct = async (req)=>{
                                 return true
                             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            // forEach(async (docs,i)=>{
-                            //     console.log("creating ",i," subprod")
-                            //     await stock.insertMany(docs).then(()=>{
-                            //         console.log("created ",i," subprod")
-                            //         doc["product_list"].push(...req.body.data.product_list.slice(doc["product_list"].length,req.body.data.product_list.length-1))
-                            //     })
-                                
-                            // })
-                            
-
-                            // if(req.body.data.product_list.length>doc["product_list"].length){ // add new subprod
-                            //     const NewStocks=[]
-                            //     for (let index = doc["product_list"].length; index < req.body.data.product_list.length; index++) {
-                            //         console.log(req.body.data.product_list[index])
-                            //         const newSubProd=req.body.data.product_list[index]
-                            //         newSubProd
-                            //         NewStocks.push(new stock())
-                            //     }
-                            //     await stock.insertMany(NewStocks)
-                            //     return true
-                            // }else{
-                            //     return true
-                            // }
-                            
-                            // doc["product_list"].forEach(async (subProduct,i)=>{
-                            //     console.log(`"checking orignal " ${subProduct} and  ${req.body.data.product_list[i]}`)
-                            //     const match = new RegExp(`${subProduct.sku}`,"gm") 
-                            //     if(subProduct.quantity === req.body.data.product_list[i].quantity){ //nth
-                            //         console.log("no stocks to edit")
-                            //     }else if(subProduct.quantity>req.body.data.product_list[i].quantity){ //delet 
-                            //         console.log("delete some stock")
-                            //         try {
-                            //             const deletAmount = subProduct.quantity-req.body.data.product_list[i].quantity
-                            //             await stock.find(
-                            //                     {$and:[{sku:match},{$and:[{status:"for-sale"}]}]}
-                            //                     ,{_id:1}
-                            //                     ,{sort:{created_at:-1},limit:deletAmount}
-                            //                 ).then(async (result)=>{
-                            //                     console.log("stocks that can be deleted:", result)
-                            //                     const ids =  result.map(doc=>{
-                            //                     return doc._id 
-                            //                 })
-                            //                 await stock.deleteMany({_id:{$in:ids}}).then(dresult=>{
-                            //                     console.log("delete result: ",dresult.deletedCount)
-                            //                     doc.product_list[i].quantity-=dresult.deletedCount
-                            //                 })
-                                            
-                            //             })
-                            //         } catch (error) {
-                            //             console.log(error)
-                            //         }
-                                    
-                            //     }else if(subProduct.quantity<req.body.data.product_list[i].quantity){ //add
-                            //         console.log("add some stock")
-                            //         try {
-                            //             const increaseAmount = req.body.data.product_list[i].quantity-subProduct.quantity
-                            //             await stock.findOne({sku:match},{sku:1}).then(async result=>{
-                            //                 var startIndex = 0
-                            //                 if(result===undefined){
-                            //                     startIndex =  0
-                            //                 }else{
-                            //                     startIndex = findNextIndex([result.sku])
-                            //                 }
-                            //                 var newStocks = []
-                            //                 for (let index = startIndex; index < startIndex+increaseAmount; index++) {
-                            //                     var newStock = new stock()
-                            //                     newStock.ref_society = req.body.data.ref_society
-                            //                     newStock.created_by = userOid
-                            //                     newStock.sku = IntToProdIndex(index)
-                            //                     newStocks.push(newStock)
-                            //                 }
-                            //                 await stock.insertMany(newStocks).then(iresult=>{
-                            //                     console.log("added: ",iresult.length)
-                            //                     doc.product_list[i].quantity+=iresult.length
-                            //                 })
-                            //             })
-                            //         } catch (error) {
-                            //             console.log(error)
-                            //         }
-                                    
-                            //     }else{
-                            //         console.log("not match any")
-                            //     }
-        
-                                
-                            // }) 
                         }
                         
                     })
@@ -270,10 +171,10 @@ const updateProduct = async (req)=>{
                 console.log("doc before edit save",doc)
                 return await doc.save().then((r)=>{
                     if(r){
-                        return  JSON.stringify({code:"success"})
+                        return {success:true,data:`${r.product_name_chi} has been updated`}
                     
                     }else{
-                        return  JSON.stringify({code:"error"})
+                        return  {success:false,data:`${r.product_name_chi} failed to save`}
                     }
                 })
             })
@@ -285,7 +186,7 @@ const updateProduct = async (req)=>{
             console.log("error",err);
             console.log("failed");
             //await connect.disconnect()
-            return JSON.stringify({code:err})
+            return {success:false,data:`Product failed to save`}
     
         }
     })

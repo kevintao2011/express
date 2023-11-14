@@ -58,6 +58,7 @@ import getMemberList from "./utils/society/member/getMemberList.js";
 import getUserMembership from "./utils/membership/getUserMembership.js";
 import mongoose from "mongoose";
 import getNextSKU from "./utils/products/getNextSKU.js";
+import findSocietyStock from "./utils/stock/findSocietyStock.js";
 const app = express()
 const port = 3001
 
@@ -216,7 +217,7 @@ app.post('/api/updateproduct',checkAuth, async (req, res) => {
   console.log("calling updateProduct",req.body)
   await updateProduct(req).then(result=>{
     console.log("result",result)
-    if(result.code=="success"){
+    if(result.success){
       res.status(200).json(result)
     }
     else{
@@ -545,20 +546,34 @@ app.post('/api/getproduct',checkAuth, async (req, res) => { // get single produc
   res.status(200).send(JSON.stringify({product}))
 })
 
+app.post('/api/findsocietystock',checkAuth, async (req, res) => { // get single product
+  console.log("calling /api/product")
+  const product = await findSocietyStock(req).then(result=>{
+    console.log("findsocietystock",result)
+    if(result.success){
+      res.status(200).send(JSON.stringify(
+        result
+      ))
+    }else{
+      res.status(500).send(JSON.stringify(
+        result
+      ))
+    }
+  });
+  
+})
+
 app.post('/api/createproduct',checkAuth,async (req, res) => {
   await createproduct(req).then(result=>{
-    if(result){
-      res.send(JSON.stringify({
-        success:true,
-        message:"success",
-        data:result
-      }))
+    console.log("createproduct",result)
+    if(result.success){
+      res.status(200).send(JSON.stringify(
+        result
+      ))
     }else{
-      if(result){
-        res.send(JSON.stringify({
-          msg:"failed"
-        }))
-      }
+      res.status(500).send(JSON.stringify(
+        result
+      ))
     }
   });  
 })
@@ -644,16 +659,14 @@ app.post('/api/getsocproduct',async (req, res) => {
 app.post('/api/getnextsku',async (req, res) => { 
   await getNextSKU(req).then(
     r =>{
-      if(r){
-        res.send(JSON.stringify({
-          state:"success",
-          data:r
-        }))
+      if(r.success){
+        res.send(JSON.stringify(
+          r
+        ))
       }else{
-        res.send(JSON.stringify({
-          state:"failed",
-          data:[]
-        }))
+        res.send(JSON.stringify(
+          r
+        ))
       }
     }
   );  
@@ -664,12 +677,12 @@ app.post('/api/editsocproduct',async (req, res) => {
     r =>{
       if(r){
         res.send(JSON.stringify({
-          state:"success",
+          success:true,
           data:r
         }))
       }else{
         res.send(JSON.stringify({
-          state:"failed",
+          success:false,
           data:[]
         }))
       }

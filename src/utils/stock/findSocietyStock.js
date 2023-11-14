@@ -1,10 +1,14 @@
 import mongoose,{ Schema, model} from 'mongoose';
-import stock from '../../models/stock';
+import stock from '../../models/stock.js';
 import { ObjectId } from 'mongodb';
+import { getoidandsessionbycode } from '../serverFunction/getoidbycode.js';
 
 export default async function findSocietyStock(req){
-    
-    await stock.find({ref_society:ObjectId("64a554cd1596cf843e6a5b4a")},{},{$group:["ref_society","ref_product"]}).then(docs=>{
-        
+    await getoidandsessionbycode(req.body.data.code).then(async result=>{
+        const [oid,cuurentSession]=result
+        await stock.find({ref_society:oid},{},{$group:["ref_society","ref_product"]}).then(docs=>{
+            console.log(docs)
+        })
     })
+    return {success:true,data:"testing"}
 }
