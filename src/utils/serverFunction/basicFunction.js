@@ -137,7 +137,17 @@ function IndexStringIncreament(IndexString){
 
 }
 
+function sendResponse(res,result){
+  if(result.success){
+    res.status(200).send(result.data)
+  }else{
+    res.status(500).send(result.data)
+  }
+}
 
+function wrapResponse(success,data){
+  return {success:success,data:data}
+}
 
 export default TestBasicFuntionLibrary
 export {
@@ -152,7 +162,9 @@ export {
   findNextIndex,
   IndexStringIncreament,
   IntToProdIndex,
-  findNextSKUIndex
+  findNextSKUIndex,
+  sendResponse,
+  wrapResponse
 }
 
 

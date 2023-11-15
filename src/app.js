@@ -25,7 +25,7 @@ import createActivity from "./utils/activity/createActivity.js";
 import updateActivity from "./utils/activity/updateActivity.js";
 import getActivity from "./utils/activity/getactivity.js";
 import removeActivity from "./utils/activity/removeActivity.js";
-import getSocProducts from "./utils/products/getSocProducts.js";
+import getSocProducts, { getSessionSocProducts } from "./utils/products/getSocProducts.js";
 import getSocProduct from "./utils/products/editSocProduct.js";
 import getSocUser from "./utils/user/getSocUser.js";
 import getCatOption from "./utils/products/getCatOption.js";
@@ -59,6 +59,7 @@ import getUserMembership from "./utils/membership/getUserMembership.js";
 import mongoose from "mongoose";
 import getNextSKU from "./utils/products/getNextSKU.js";
 import findSocietyStock from "./utils/stock/findSocietyStock.js";
+import { sendResponse } from "./utils/serverFunction/basicfunction.js";
 const app = express()
 const port = 3001
 
@@ -703,6 +704,20 @@ app.post('/api/getsocproducts',async (req, res) => {
           data:[]
         }))
       }
+    }
+  );  
+})
+app.post('/api/getthissessionproducts',async (req, res) => { 
+  await getSessionSocProducts(req).then(
+    result =>{
+      sendResponse(res,result)
+    }
+  );  
+})
+app.post('/api/getthissessionstocks',async (req, res) => { 
+  await getSessionSocProducts(req).then(
+    result =>{
+      sendResponse(res,result)
     }
   );  
 })

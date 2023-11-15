@@ -3,7 +3,8 @@ import connectDB from "../connectDB.js";
 import user from "../../models/user.js";
 import activity from "../../models/activity.js";
 import product from "../../models/product.js";
-import getoidbycode from "../serverFunction/getoidbycode.js";
+import getoidbycode, { getoidandsessionbycode } from "../serverFunction/getoidbycode.js";
+import { wrapResponse } from "../serverFunction/basicfunction.js";
 /*
 {
   user: {
@@ -72,4 +73,34 @@ const getSocProducts = async (req)=>{
     
 }
 
+const getSessionSocProducts = async (req)=>{
+    console.log("running getSocProduct",req.body)
+    try {
+        console.log("status before find",mongoose.connection.readyState)
+        return await getoidandsessionbycode(req.body.data.code).then(async result=>{
+            const [oid,currentSessoion]=result
+            return  await product.find(
+                {ref_society:oid,sku:currentSessoion}
+            ).sort({sku:1}).then(products=>{
+                if (products){
+                    console.log(products)
+                    return wrapResponse(true,products)
+                }else{
+                    return wrapResponse(false,"Empty Products")
+                }
+                
+            })
+        })
+    } catch (err) {
+        console.log("error",err);
+        console.log("failed");
+        // //await connect.disconnect()
+        return wrapResponse(false,"Cannot get Products")
+    }
+    
+
+    
+}
+
 export default getSocProducts;
+export{getSessionSocProducts}
