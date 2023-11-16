@@ -25,7 +25,7 @@ const ModificationSchema = new Schema({ //schema
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
     ref_society:{type:mongoose.Types.ObjectId,ref:'societies'},
-    ref_category:{type:String},
+    ref_category:{type:mongoose.Types.ObjectId,ref:'categories'},
     product_name_chi:String, //product chinese name
     product_type: String,   //membership, ticket , virtual , real
     product_img_url:[String], //product url

@@ -5,6 +5,7 @@ import getUserOID from "../serverFunction/getuseroid.js";
 import moment from "moment/moment.js";
 import stock from "../../models/stock.js";
 import { IntToProdIndex } from "../serverFunction/basicfunction.js";
+import category from "../../models/category.js";
 
 // for show product in carousell 
 const createproduct = async (req)=>{
@@ -27,7 +28,15 @@ const createproduct = async (req)=>{
                     prod.ref_society=oid
                     prod.session=session
                     // prod.sku=`${req.body.data.code}-${session}-${p.length.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
-                    prod.ref_category=session
+                    prod.ref_category= await category.findOne({id:req.body.data.product_type},{id:1}).then(async doc=>{
+                        if(doc){
+                            return doc._id
+                        }else{
+                            await category.findOne({id:"other"},{id:1}).then(doc=>{
+                                return doc._id
+                            })
+                        }
+                    })
                     prod.created_at=moment().utcOffset(8).toDate()
                     prod.options=prod.product_list.option?prod.product_list.option:[]
                     if(Object.keys(prod.product_list).length>0){
@@ -43,6 +52,9 @@ const createproduct = async (req)=>{
                     else{
                         prod.product_list=[]
                     }
+
+                   
+
                     
                     console.log("prod to be create",prod)
                     const newProduct = new product(prod)
@@ -92,6 +104,7 @@ const createproduct = async (req)=>{
                         
 
                     })
+                   
             
                     
                     
