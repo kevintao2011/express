@@ -60,6 +60,7 @@ import mongoose from "mongoose";
 import getNextSKU from "./utils/products/getNextSKU.js";
 import findSocietyStock from "./utils/stock/findSocietyStock.js";
 import { sendResponse } from "./utils/serverFunction/basicfunction.js";
+import { getTypeProduct } from "./utils/products/getTypeProduct.js";
 const app = express()
 const port = 3001
 
@@ -576,6 +577,12 @@ app.post('/api/createproduct',checkAuth,async (req, res) => {
         result
       ))
     }
+  });  
+})
+app.post('/api/gettypeproduct',checkAuth,async (req, res) => {
+  await getTypeProduct(req).then(result=>{
+    sendResponse(res,result)
+    console.log("gettypeproduct",result)
   });  
 })
 

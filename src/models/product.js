@@ -54,5 +54,7 @@ const ProductSchema = new Schema({ //schema
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
-export default product;
 
+ProductSchema.methods.findSocMembership = function(code){return this.findOne({code:code})}
+export default product;
+export {ProductSchema,ProductVariantSchema}
