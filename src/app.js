@@ -61,6 +61,8 @@ import getNextSKU from "./utils/products/getNextSKU.js";
 import findSocietyStock from "./utils/stock/findSocietyStock.js";
 import { sendResponse } from "./utils/serverFunction/basicfunction.js";
 import { getTypeProduct } from "./utils/products/getTypeProduct.js";
+import createMembershipProduct from "./utils/membership/createMembershipProduct.js";
+import addMemberType from "./utils/membership/addMemberType.js";
 const app = express()
 const port = 3001
 
@@ -380,6 +382,13 @@ app.post('/api/updateorderstatus',checkAuth, async (req, res) => {
   })
 })
 
+app.post('/api/createmembershipproduct',checkAuth, async (req, res) => {
+  await createMembershipProduct(req).then(result=>{
+    console.log("createmembershipproduct",result)
+    sendResponse(res,result)
+  })
+})
+
 function checkAuth  (req, res, next) {
   console.log('middleware - checkauth')
   // console.log('req.body',req.body)
@@ -577,6 +586,14 @@ app.post('/api/createproduct',checkAuth,async (req, res) => {
         result
       ))
     }
+  });  
+})
+
+
+app.post('/api/addmembertype',checkAuth,async (req, res) => {
+  await addMemberType(req).then(result=>{
+    console.log("addmembertype",result)
+    sendResponse(res,result)
   });  
 })
 app.post('/api/gettypeproduct',checkAuth,async (req, res) => {

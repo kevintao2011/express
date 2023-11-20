@@ -1,3 +1,4 @@
+
 function TestBasicFuntionLibrary(){
     console.log("Basic Function lib exists!")
 }
@@ -114,10 +115,21 @@ function findNextIndex(ArrOfString){
   
 }
 
-function findNextSKUIndex(ArrOfString){
-  console.log("function findNextSKUIndex",ArrOfString)
-  const digit = ArrOfString[0].length
-  const nIndex = Math.max(...ArrOfString.map(str=> parseInt(str.split("-").pop())))+1
+function findNextSKUIndex(ArrOfSKUString){
+  console.log("function findNextSKUIndex",ArrOfSKUString)
+  const digit = ArrOfSKUString[0].length
+  const nIndex = Math.max(...ArrOfSKUString.map(str=> parseInt(str.split("-").pop())))+1
+  if (nIndex < 10^digit){
+    return nIndex
+  }else{
+    throw console.error("overflow");
+  }
+  
+}
+function findNextSKU(ArrOfSKUString){
+  console.log("function findNextSKUIndex",ArrOfSKUString)
+  const digit = ArrOfSKUString[0].length
+  const nIndex = Math.max(...ArrOfSKUString.map(str=> parseInt(str.split("-").pop())))+1
   if (nIndex < 10^digit){
     return nIndex
   }else{
@@ -136,6 +148,8 @@ function IndexStringIncreament(IndexString){
     }
 
 }
+
+
 
 function sendResponse(res,result){
   console.log("sending response",result)
@@ -165,7 +179,8 @@ export {
   IntToProdIndex,
   findNextSKUIndex,
   sendResponse,
-  wrapResponse
+  wrapResponse,
+  
 }
 
 
