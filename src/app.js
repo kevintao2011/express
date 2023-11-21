@@ -63,6 +63,7 @@ import { sendResponse } from "./utils/serverFunction/basicfunction.js";
 import { getTypeProduct } from "./utils/products/getTypeProduct.js";
 import createMembershipProduct from "./utils/membership/createMembershipProduct.js";
 import addMemberType from "./utils/membership/addMemberType.js";
+import createActivitynProduct from "./utils/activity/new/createActivitynProduct.js";
 const app = express()
 const port = 3001
 
@@ -740,6 +741,14 @@ app.post('/api/getthissessionproducts',async (req, res) => {
 })
 app.post('/api/getthissessionstocks',async (req, res) => { 
   await getSessionSocProducts(req).then(
+    result =>{
+      sendResponse(res,result)
+    }
+  );  
+})
+
+app.post('/api/createactivitynproduct',checkAuth,async (req, res) => { 
+  await createActivitynProduct(req).then(
     result =>{
       sendResponse(res,result)
     }

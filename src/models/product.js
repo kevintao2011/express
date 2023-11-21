@@ -7,7 +7,7 @@ const ProductVariantSchema = new Schema({ //schema
     total_sales:{type:Number,default:0},
     quantity:{type:Number,default:0},
     price:{type:Number,default:0},
-    is_limited:Boolean,
+    is_limited:{type:Boolean,default:true},
     sku:String
 });
 

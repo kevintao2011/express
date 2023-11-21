@@ -32,7 +32,7 @@ const createMembershipProduct = async(req)=>{
                             published:false,
                             session:session,
                             options:[{text:"會籍 Membership",option:["基本會員 Basic Member"]}],
-                            product_list:[{name:"基本會員 Basic Member",sku:SKUString+"-000"}]
+                            product_list:[{name:"基本會員 Basic Member",sku:SKUString+"-000",is_limited:false}]
                           
                         }).then((doc)=>{
                             return wrapResponse(true,doc)

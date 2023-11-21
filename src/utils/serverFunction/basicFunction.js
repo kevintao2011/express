@@ -153,11 +153,7 @@ function IndexStringIncreament(IndexString){
 
 function sendResponse(res,result){
   console.log("sending response",result)
-  if(result.success){
-    res.status(200).send(JSON.stringify(result.data))
-  }else{
-    res.status(500).send(JSON.stringify(result.data))
-  }
+  res.status(result.success?200:500).send(JSON.stringify(result))
 }
 
 function wrapResponse(success,data){
