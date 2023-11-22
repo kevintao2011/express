@@ -4,6 +4,7 @@ import { Schema, model} from 'mongoose';
 const ActivitySchema = new Schema({ //schema
 
     code: String,
+    activity_code:String,
     end_date: Date,
     start_date: Date,
     start_time: String,
@@ -16,11 +17,14 @@ const ActivitySchema = new Schema({ //schema
     ticket_product: {type:Schema.Types.ObjectId, ref:'products'},
     payment_method: String,
     description: String,
-    posterURL:String,
+    posterURL:[String],
     description_chi:String,
     description_eng:String,
     status:String,
+    session:Number,
     links:Array,
+    calendarMap:[EventSchema],
+    ref_ticket_sku:{type:String},
     createdAt:{
         type:Date,
         immutable:true,

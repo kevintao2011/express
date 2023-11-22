@@ -47,7 +47,7 @@ const ProductSchema = new Schema({ //schema
     session:{type:Number},
     options:[OptionSchema],
     hidden:{type:Boolean,default:false},
-
+    ticket_sku:String,
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
     product_list:{type:[ProductVariantSchema],default:[]},
