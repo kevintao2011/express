@@ -17,22 +17,6 @@ const getProducts = async (req)=>{
 
 
     try {
-        connect = await mongoose.connection.asPromise()
-        console.log("getSocProduct current connection",mongoose.connection.readyState)
-        if(mongoose.connection.readyState==0){
-            console.log("getSocProduct connecting")
-            //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
-        }
-        else{
-            console.log("getSocProduct adding connection")
-            
-            connect = mongoose
-            
-            console.log("getSocProduct added connection",mongoose.connection.readyState)
-        }
-        
-    
-        console.log("status before find",mongoose.connection.readyState)
         return await product.find(
             {}
         ).then(products=>{

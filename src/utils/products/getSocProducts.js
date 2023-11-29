@@ -40,7 +40,7 @@ const getSocProducts = async (req)=>{
                 {ref_society:oid}
             ).then(products=>{
                 if (products){
-                    console.log(products)
+                    // console.log(products)
                 }
                 // //await connect.disconnect()
                 console.log("soc products function exe sucess")

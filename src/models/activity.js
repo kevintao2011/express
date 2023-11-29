@@ -1,5 +1,21 @@
+import moment from 'moment';
 import { ObjectId } from 'mongodb';
 import { Schema, model} from 'mongoose';
+
+const EventSchema = new Schema({
+
+    // BEGIN:"VCALENDAR", 
+    // VERSION:"2.0",
+    // BEGIN:"VEVENT",
+    URL:{type:String,default:""},
+    DTSTART: {type:Date , default:moment().utcOffset(8).toDate()}, //Z indicates the use of UTC
+    DTEND:{type:Date , default:moment().utcOffset(8).toDate()},//`TZID=Asia/Hong_Kong;VALUE=DATE-TIME:${moment().utcOffset(8).toDate()}`
+    SUMMARY: {type:String,default:""},
+    DESCRIPTION: {type:String,default:"this event has no description"},
+    LOCATION: {type:String,default:"TBA"},
+    // END:"VEVENT",
+    // END:"VCALENDAR"
+})
 
 const ActivitySchema = new Schema({ //schema
 

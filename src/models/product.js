@@ -32,6 +32,7 @@ const ProductSchema = new Schema({ //schema
     product_link:[Object], // link of form/post
     product_description_chi:String, // product description in chinese
     product_description_eng:String, // product description in english
+    group:String,
     created_at:{ 
         type:Date,
         immutable:true,
@@ -50,6 +51,7 @@ const ProductSchema = new Schema({ //schema
     ticket_sku:String,
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
+    major_only:{type:Boolean,default:false},
     product_list:{type:[ProductVariantSchema],default:[]},
 });
 // ProductSchema.path('activity').ref(activity)

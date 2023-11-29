@@ -32,7 +32,8 @@ const createMembershipProduct = async(req)=>{
                             published:false,
                             session:session,
                             options:[{text:"會籍 Membership",option:["基本會員 Basic Member"]}],
-                            product_list:[{name:"基本會員 Basic Member",sku:SKUString+"-000",is_limited:false}]
+                            product_list:[{name:"基本會員 Basic Member",sku:SKUString+"-000",is_limited:false}],
+                            major_only: RegExp("1..","gm").test(code)?true:false
                           
                         }).then((doc)=>{
                             return wrapResponse(true,doc)

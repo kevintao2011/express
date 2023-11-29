@@ -66,7 +66,7 @@ const updateProduct = async (req)=>{
                                 const match = new RegExp(`${subProduct.sku}`,"gm") 
                                 if(subProduct.quantity === req.body.data.product_list[i].quantity){ //nth
                                     console.log("no stocks to edit",subProduct.quantity,"vs",req.body.data.product_list[i].quantity)
-                                }else if(subProduct.quantity>req.body.data.product_list[i].quantity){ //delet 
+                                }else if(subProduct.quantity>req.body.data.product_list[i].quantity){ //delete 
                                     console.log("delete some stock")
                                     try {
                                         const deletAmount = subProduct.quantity-req.body.data.product_list[i].quantity
@@ -128,6 +128,9 @@ const updateProduct = async (req)=>{
                                     
                                 }else{
                                     console.log("not match any")
+                                }
+                                if(subProduct.price !== req.body.data.product_list[i].price){
+                                    doc.product_list[i].price=req.body.data.product_list[i].price
                                 }
                                 
                             }

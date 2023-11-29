@@ -64,6 +64,9 @@ import { getTypeProduct } from "./utils/products/getTypeProduct.js";
 import createMembershipProduct from "./utils/membership/createMembershipProduct.js";
 import addMemberType from "./utils/membership/addMemberType.js";
 import createActivitynProduct from "./utils/activity/new/createActivitynProduct.js";
+import Shop from "./utils/shop/Shop.js";
+import getUserOID from "./utils/serverFunction/getuseroid.js";
+const shop = new Shop()
 const app = express()
 const port = 3001
 
@@ -156,6 +159,13 @@ app.post('/api/getcatoption', async (req, res) => {
   //Create user profile on mongo when first log in
   
   
+})
+
+app.post('/api/getshopcategory', async (req, res) => {
+  console.log("getshopcategory",req.body)
+  await shop.getCategory().then(r=>{
+    sendResponse(res,r)
+  })
 })
 app.post('/api/getcatshownoption', async (req, res) => {
   console.log("calling getshowncatoption",req.body)
@@ -553,9 +563,10 @@ app.post('/api/getusermembership',checkAuth,async (req, res) => { //getsocactivi
 })
 
 app.post('/api/getproduct',checkAuth, async (req, res) => { // get single product
-  console.log("calling /api/product")
-  const product = await getProduct(req);
-  res.status(200).send(JSON.stringify({product}))
+  console.log("calling /api/getproduct")
+  await shop.getProduct(req.body.data.sku).then(r=>{
+    sendResponse(res,r)
+  })
 })
 
 app.post('/api/findsocietystock',checkAuth, async (req, res) => { // get single product
@@ -777,10 +788,11 @@ app.post('/api/createactivitynproduct',checkAuth,async (req, res) => {
 // })
 
 
-app.post('/api/getproducts',async (req, res) => { //getsocactivity
-  const result = await getProducts(req);  
-  console.log("result",result)
-  res.json({products:result})
+app.post('/api/getshopproducts',checkAuth,async (req, res) => { //getsocactivity
+  await shop.getProducts(req.body.data.page,req.body.data.ipp).then(result=>{
+    sendResponse(res,result)
+  })
+
 })
 
 app.post('/api/getactivity',async (req, res) => { //getsocactivity
