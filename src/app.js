@@ -48,7 +48,6 @@ import getOrders from "./utils/order/getOrders.js";
 import getOrdersBySoc from "./utils/order/getOrdersBySoc.js";
 import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
-import { getStaticInfo } from "./utils/info/getStaticInfo.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
 import editSocProduct from "./utils/products/editSocProduct.js";
 import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
@@ -59,14 +58,18 @@ import getUserMembership from "./utils/membership/getUserMembership.js";
 import mongoose from "mongoose";
 import getNextSKU from "./utils/products/getNextSKU.js";
 import findSocietyStock from "./utils/stock/findSocietyStock.js";
-import { sendResponse } from "./utils/serverFunction/basicfunction.js";
+import { sendResponse, wrapResponse } from "./utils/serverFunction/basicfunction.js";
 import { getTypeProduct } from "./utils/products/getTypeProduct.js";
 import createMembershipProduct from "./utils/membership/createMembershipProduct.js";
 import addMemberType from "./utils/membership/addMemberType.js";
 import createActivitynProduct from "./utils/activity/new/createActivitynProduct.js";
 import Shop from "./utils/shop/Shop.js";
 import getUserOID from "./utils/serverFunction/getuseroid.js";
+import ProdGroup from "./models/product_group.js";
+import StaticInfo from "./utils/info/StaticInfo.js";
 const shop = new Shop()
+const ProductGroup = new ProdGroup()
+const staticInfo = new StaticInfo()
 const app = express()
 const port = 3001
 
@@ -475,8 +478,35 @@ app.post('/info', async (req, res) => {
 
 app.get('/api/getjupas', async (req, res) => {
   const result = await getinfo();
-  
   res.send(result)
+})
+
+app.post('/api/addProductGroup',async (req, res) => {
+  await ProductGroup.AddProductGroup(req.body.data).then(result=>{
+    sendResponse(res,result)
+  })
+})
+
+app.post('/api/getproductgroups',async (req, res) => {
+  await ProductGroup.getProductGroups(req.body.data).then(result=>{
+    sendResponse(res,result)
+  })
+})
+
+app.post('/api/getproductgrouptrees',async (req, res) => {
+  await ProductGroup.getProductGroupTrees(req.body.data).then(result=>{
+    sendResponse(res,result)
+  })
+})
+// app.post('/api/refreshproducttree',async (req, res) => {
+//   await ProductGroup.getProductGroupTrees(req.body.data).then(result=>{
+//     sendResponse(res,result)
+//   })
+// })
+app.post('/api/generateproductgrouptrees',async (req, res) => {
+  await ProductGroup.generateTreeArrayForRsByDB().then(success=>{
+    sendResponse(res,wrapResponse(success,"Re generated"))
+  })
 })
 
 app.get('/api/getsocieties', async (req, res) => {
@@ -490,20 +520,8 @@ app.get('/api/getsocieties', async (req, res) => {
 
 app.post('/api/websitestaticinfo', async (req, res) => {
   console.log("calling getStaticInfo",req.body)
-  await getStaticInfo().then(result=>{
-    if(result){
-      res.send(JSON.stringify({
-        success:true,
-        message:"success",
-        data:result
-      }))
-    }else{
-      if(result){
-        res.status(501).send(JSON.stringify({
-          msg:"failed"
-        }))
-      }
-    }
+  await staticInfo.getStaticInfo(req.body.data.ids).then(result=>{
+    sendResponse(res,result)
   });
   //Create user profile on mongo when first log in
 })
