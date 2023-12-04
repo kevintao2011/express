@@ -146,10 +146,16 @@ origianl Parent Field name : ${nameOfParentField}
                 // })
                 return await this.ProductGroup.updateMany({_id:{$in:doc.ancestors}},{$push:{parents:doc._id}}).
                 updateMany({_id:{$in:doc.parents}},{$push:{ancestors:doc._id}})
-                .then(result=>{
+                .then(async result=>{
                     if(result.acknowledged){
+                        await generateTreeArrayForRsByDB().then(success=>{
+                            if(success){
+                                return wrapResponse(true,`added ${doc.group_name} to ${result.modifiedCount} documents`)
+                            }else{
+                                return wrapResponse(false,`added but cannot regenerate tree`)
+                            }
+                        })
                         
-                        return wrapResponse(true,`added ${doc.group_name} to ${result.modifiedCount} documents`)
                         
                     }
                 }).catch(err=>{
@@ -185,6 +191,22 @@ origianl Parent Field name : ${nameOfParentField}
             return wrapResponse(false,err.name)
         })
     }
+
+    async getProductGroupsForRsByDB(){
+        return this.ProductGroup.find({visible:true}).populate(["ancestors","parents"]).then(docs=>{
+            if(docs.length>0){
+                const mappedDoc =docs.map(doc=>{
+                    return {...doc,label:doc.group_name,data:doc._id}
+                })
+                return wrapResponse(true,mappedDoc)
+            }else{
+                return wrapResponse(false,"No Product Group")
+            }
+        }).catch(err=>{
+            return wrapResponse(false,err.name)
+        })
+    }
+
 
 
 }

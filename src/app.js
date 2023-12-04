@@ -493,6 +493,12 @@ app.post('/api/getproductgroups',async (req, res) => {
   })
 })
 
+app.post('/api/getproductgroupsforrsbydb',async (req, res) => {
+  await ProductGroup.getProductGroupsForRsByDB(req.body.data).then(result=>{
+    sendResponse(res,result)
+  })
+})
+
 app.post('/api/getproductgrouptrees',async (req, res) => {
   await ProductGroup.getProductGroupTrees(req.body.data).then(result=>{
     sendResponse(res,result)

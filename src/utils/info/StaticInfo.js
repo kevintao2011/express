@@ -12,7 +12,7 @@ class StaticInfo{
         try{
             //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
             return await website_info.find(
-                specify_ids.legnth<1?null:{id:{$in:specify_ids}},
+                specify_ids.length<1?{}:{id:{$in:specify_ids}},
             ).then(async info=>{
                 console.log(info)
                 if(specify_ids.includes("socMap")){
