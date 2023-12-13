@@ -22,6 +22,7 @@ const UserSchema = new Schema({ //schema
     cart:{type:[Schema.Types.ObjectId],default:[]},
     last_sign_in:{ type: Date,default:moment().utcOffset(8).toDate() },
     first_login:{ type: Boolean,default:false },
+    cart:{type:[ObjectId],default:[]}
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
 

@@ -532,6 +532,15 @@ app.post('/api/websitestaticinfo', async (req, res) => {
   //Create user profile on mongo when first log in
 })
 
+app.post('/api/addtocart', async (req, res) => {
+  console.log("calling addtocart",req.body)
+  await staticInfo.getStaticInfo(req.body.data.ids).then(result=>{
+    sendResponse(res,result)
+  });
+  //Create user profile on mongo when first log in
+})
+
+
 app.post('/api/setwebsitestaticinfo', checkAuth,async (req, res) => {
   console.log("calling setStaticInfo",req.body)
   const result = await setStaticInfo(req);
