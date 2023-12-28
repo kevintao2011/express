@@ -67,9 +67,11 @@ import Shop from "./utils/shop/Shop.js";
 import getUserOID from "./utils/serverFunction/getuseroid.js";
 import ProdGroup from "./models/product_group.js";
 import StaticInfo from "./utils/info/StaticInfo.js";
+import Payment from "./utils/payment/payment.js";
 const shop = new Shop()
 const ProductGroup = new ProdGroup()
 const staticInfo = new StaticInfo()
+const PaymentMethod = new Payment()
 const app = express()
 const port = 3001
 
@@ -574,6 +576,12 @@ app.post('/api/removeactivity',checkAuth,async (req, res) => { //check auth chec
 app.post('/api/getsocactivity',async (req, res) => { //getsocactivity
   const result = await getSocActivity(req);  
   res.send(result)
+})
+
+app.post('/api/getpaymentmethod',async (req, res) => { //getsocactivity
+  await PaymentMethod.getPaymentMethods(req.body.data.code).then(result=>{
+    sendResponse(res,result)
+  })
 })
 
 app.post('/api/getusermembership',checkAuth,async (req, res) => { //getsocactivity
