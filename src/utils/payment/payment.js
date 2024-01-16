@@ -20,7 +20,11 @@ export default class Payment{
             })
         })
     }
-
+    /**
+     * Get Payment Details of the society, create payment info if false
+     * @param {string} oid  
+     * @returns {object} 
+     */
     async editPaymentMethods(oid){
         return await getoidandsessionbycode(oid).then(async (oid,session)=>{
             return await paymentMethod.findOne({ref_soc:oid}).then(async method=>{
@@ -34,4 +38,21 @@ export default class Payment{
             })
         })
     }
+
+    /**
+     * Get Payment Details of the society
+     * @param {string} oid  of the society
+     * @param {object} info update Info 
+     * @returns {object} {success:bool,data:obj}
+     */
+    async updatePaymentDetials(oid,info){
+        return await getoidandsessionbycode(oid).then(async (oid,session)=>{
+            return await paymentMethod.updateOne({ref_soc:oid},info).then(async result=>{
+                if(result.modifiedCount>1){
+                    return wrapResponse(true,method)
+                }
+            })
+        })
+    }
+
 }

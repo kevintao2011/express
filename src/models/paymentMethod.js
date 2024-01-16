@@ -32,7 +32,7 @@ const DeopositSchema = new Schema({
 })
 
 const PaymentMethodSchema = new Schema({ //schema
-    ref_society:String,
+    ref_society:{type:String,unique: true },
     FPS:{type:FPSSchema,default:{}},
     Payme:{type:PaymeSchema,default:{}},
     Cash:{type:CashSchema,default:{}},
