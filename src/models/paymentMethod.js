@@ -1,34 +1,28 @@
 import { ObjectId } from 'mongodb';
 import { Schema, model} from 'mongoose';
 const FPSSchema = new Schema({
-    qr_code_url:String,
     phone_number:Number,
-    bank_account:{
-        index:String,
-        number:Number,   
-    },
+    bank_account:String,
     shown_name:String,
-    activated:{type:String,default:false}
+    activated:{type:Boolean,default:false}
 })
 
 const PaymeSchema = new Schema({
     payme_url:String,
     phone_number:Number,
     shown_name:String,
-    activated:{type:String,default:false}
+    activated:{type:Boolean,default:false}
 })
 
 const CashSchema = new Schema({
-    activated:{type:String,default:false}
+    activated:{type:Boolean,default:false}
 })
 
 const DeopositSchema = new Schema({
-    bank_account:{
-        index:String,
-        number:Number,   
-    },
+    bank_index:String,
+    bank_account:String,
     shown_name:String,
-    activated:{type:String,default:false}
+    activated:{type:Boolean,default:false}
 })
 
 const PaymentMethodSchema = new Schema({ //schema

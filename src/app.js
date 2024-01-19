@@ -534,14 +534,25 @@ app.post('/api/websitestaticinfo', async (req, res) => {
   //Create user profile on mongo when first log in
 })
 
-app.post('/api/addtocart', async (req, res) => {
-  console.log("calling addtocart",req.body)
-  await staticInfo.getStaticInfo(req.body.data.ids).then(result=>{
-    sendResponse(res,result)
-  });
+/**
+ * add to cart
+ */
+app.post('/api/addtocart',checkAuth, async (req, res) => {
+  console.log("calling add to cart",req.body)
+    await shop.addToCart(req.body.tokeninfo.uid,req.body.data.sku,req.body.data.quantity)
+  // console.log("calling addtocart",req.body)
+  // await staticInfo.getStaticInfo(req.body.data.ids).then(result=>{
+  //   sendResponse(res,result)
+  // });
   //Create user profile on mongo when first log in
 })
 
+app.post('/api/getcart',checkAuth, async (req, res) => {
+  
+  await shop.getCart(req.body.tokeninfo.uid).then(result=>{
+    sendResponse(res,result)
+  })
+})
 
 app.post('/api/setwebsitestaticinfo', checkAuth,async (req, res) => {
   console.log("calling setStaticInfo",req.body)
@@ -583,6 +594,13 @@ app.post('/api/getpaymentmethod',async (req, res) => { //getsocactivity
     sendResponse(res,result)
   })
 })
+
+app.post('/api/updatepaymentmethod',async (req, res) => { //getsocactivity
+  await PaymentMethod.updatePaymentDetials(req.body.data.code,req.body.data.info).then(result=>{
+    sendResponse(res,result)
+  })
+})
+
 
 app.post('/api/getusermembership',checkAuth,async (req, res) => { //getsocactivity
   await getUserMembership(req).then(result=>{

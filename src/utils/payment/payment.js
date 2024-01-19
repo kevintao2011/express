@@ -43,13 +43,18 @@ export default class Payment{
      * Get Payment Details of the society
      * @param {string} oid  of the society
      * @param {object} info update Info 
-     * @returns {object} {success:bool,data:obj}
+     * @returns {object} {success:bool,data:obj||string}
      */
     async updatePaymentDetials(oid,info){
-        return await getoidandsessionbycode(oid).then(async (oid,session)=>{
-            return await paymentMethod.updateOne({ref_soc:oid},info).then(async result=>{
-                if(result.modifiedCount>1){
-                    return wrapResponse(true,method)
+        console.log("data",oid,info)
+        return await getoidandsessionbycode(oid).then(async ([oid,session])=>{
+            console.log(oid,session)
+            return await paymentMethod.updateOne({ref_society:oid},info).then(async result=>{
+                console.log(result)
+                if(result.modifiedCount>=1){
+                    return wrapResponse(true,"updated")
+                }else{
+                    return wrapResponse(true,"did not update")
                 }
             })
         })

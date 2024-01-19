@@ -52,11 +52,13 @@ const ProductSchema = new Schema({ //schema
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
     major_only:{type:Boolean,default:false},
-    product_list:{type:[ProductVariantSchema],default:[]},
+    product_list:{type:[ObjectId],ref:"product_models",default:[]},
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model
 
+const productModels = model("product_models", ProductVariantSchema); 
+
 ProductSchema.methods.findSocMembership = function(code){return this.findOne({code:code})}
 export default product;
-export {ProductSchema,ProductVariantSchema}
+export {ProductSchema,ProductVariantSchema,productModels}

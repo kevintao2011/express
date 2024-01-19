@@ -1,0 +1,1 @@
+//this model if for storing purchase date, order number, stock 
