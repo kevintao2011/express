@@ -91,18 +91,20 @@ app.use(cors(corsOptions))
 
 var connect
 try {
-    connect = await mongoose.connect("mongodb+srv://lingusuwebsite:6X5ZJZrNVxShxLzp@database.wqsyfyy.mongodb.net/website?retryWrites=true&w=majority");
-    console.log(
-        "Database connected: ",
-        connect.connection.host,
-        connect.connection.name
-    );
-  
+  connect = await mongoose.connect("mongodb+srv://lingusuwebsite:4igU2P3UeNtL7NsO@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority&appName=database");
+  //mongodb+srv://lingusuwebsite:4igU2P3UeNtL7NsO@atlascluster.1hhiebv.mongodb.net/website?retryWrites=true&w=majority&appName=AtlasCluster
+  //mongodb+srv://lingusuwebsite:<password>@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority&appName=database
+  console.log(
+      "Database connected: ",
+      connect.connection.host,
+      connect.connection.name
+  );
+
 } catch (err) {
-    console.log(err);
-    await connect.disconnect();
-    process.exit(1);
-    
+  // console.log(err);
+  await connect.disconnect();
+  process.exit(1);
+  
 }
 
 
