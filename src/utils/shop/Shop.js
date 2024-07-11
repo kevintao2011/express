@@ -89,10 +89,12 @@ export default class Shop{
                         }else{
                             return await Cart.findOneAndUpdate(
                                 {user:oid},{$push:{products:{prod_id:prod._id,quantity:quantity,model_id:model_id}}},{new:true}
-                            ).then(doc=>{//output 2:push new prod to cart
-                                console.log("no same items in cart",doc,model_id)
-                                return wrapResponse(true,{type:'inc',sku:prod.sku,prod_info:prod.toObject()})
-                            },()=>{//output 3:failed
+                            ).then(
+                                doc=>{//output 2:push new prod to cart
+                                    console.log("no same items in cart",doc,model_id)
+                                    return wrapResponse(true,{type:'inc',sku:prod.sku,prod_info:prod.toObject()})
+                                }
+                                ,()=>{//output 3:failed
                                 console.log("couldnt add")
                                 return wrapResponse(false,"couldnt add")
                             })
