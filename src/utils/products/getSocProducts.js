@@ -41,6 +41,9 @@ const getSocProducts = async (req)=>{
             ).then(products=>{
                 if (products){
                     // console.log(products)
+                    products.forEach((p,i)=>{
+                        console.log(i,p.product_name_chi)
+                    })
                 }
                 // //await connect.disconnect()
                 console.log("soc products function exe sucess")

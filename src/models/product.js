@@ -52,7 +52,7 @@ const ProductSchema = new Schema({ //schema
     is_bundle:{type:Boolean,default:false},
     bundle_list:[],
     major_only:{type:Boolean,default:false},
-    product_list:{type:[ObjectId],ref:"product_models",default:[]},
+    product_list:{},//type:[ObjectId],ref:"product_models",default:[]
 });
 // ProductSchema.path('activity').ref(activity)
 const product = model("products", ProductSchema);  //Creating a model

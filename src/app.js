@@ -91,7 +91,7 @@ app.use(cors(corsOptions))
 
 var connect
 try {
-  connect = await mongoose.connect("mongodb+srv://lingusuwebsite:4igU2P3UeNtL7NsO@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority&appName=database");
+  connect = await mongoose.connect("mongodb+srv://lingusuwebsite:4igU2P3UeNtL7NsO@database.wqsyfyy.mongodb.net/website?retryWrites=true&w=majority&appName=database");
   //mongodb+srv://lingusuwebsite:4igU2P3UeNtL7NsO@atlascluster.1hhiebv.mongodb.net/website?retryWrites=true&w=majority&appName=AtlasCluster
   //mongodb+srv://lingusuwebsite:<password>@database.wqsyfyy.mongodb.net/?retryWrites=true&w=majority&appName=database
   console.log(
