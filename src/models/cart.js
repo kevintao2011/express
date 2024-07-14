@@ -1,11 +1,10 @@
 import { ObjectId } from 'mongodb';
 import mongoose, { Schema, model} from 'mongoose';
-
+import { ProductVariantSchema } from './product.js';
 
 const detailsSchema = new Schema({
-    prod_id:{type:ObjectId,ref:"products"},
-    quantity:{type:Number},
-    model_id:{type:ObjectId,ref:'product_models'}
+    prod_id:{type:ProductVariantSchema,ref:'products'}, 
+    quantity:{type:Number}, // 
 })
 const CartSchema = new Schema({ //schema
     user:{type:mongoose.Schema.Types.ObjectId,ref:"users"},

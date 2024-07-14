@@ -8,12 +8,16 @@ const ProductVariantSchema = new Schema({ //schema
     quantity:{type:Number,default:0},
     price:{type:Number,default:0},
     is_limited:{type:Boolean,default:true},
-    sku:String
+    sku:String,
+    // added not not yet do 
+    img_url:String,// for preview and show selected option
+    valid:Boolean// is there this product or not 
 });
 
 const OptionSchema = new Schema({ //schema
     text:String, //e.g. size
     option:[String], //e.g. s,m,l
+    
 });
 
 const ModificationSchema = new Schema({ //schema
@@ -33,25 +37,25 @@ const ProductSchema = new Schema({ //schema
     product_description_chi:String, // product description in chinese
     product_description_eng:String, // product description in english
     group:String,
-    created_at:{ 
+    created_at:{ // creation date
         type:Date,
         immutable:true,
         default:()=>Date.now(),
     },
-    created_by:{type:mongoose.Types.ObjectId,ref:"users"},
+    created_by:{type:mongoose.Types.ObjectId,ref:"users"}, // record who create
     modification:{type:[ModificationSchema],default:[]}, // record user
     is_limited:{type:Boolean,default:true},// some is unlimited, such as membership
     tags:{type:[String],default:[]}, //for searching
-    allowed_coupon:[{type:mongoose.Types.ObjectId,ref:'coupons',default:[]}],
-    sku:String,
-    published:{type:Boolean },
-    session:{type:Number},
-    options:[OptionSchema],
-    hidden:{type:Boolean,default:false},
+    allowed_coupon:[{type:mongoose.Types.ObjectId,ref:'coupons',default:[]}], //should done in coupon
+    sku:String, //storing sku of the product
+    published:{type:Boolean }, 
+    session:{type:Number}, // start selling in which year
+    options:[OptionSchema], // provided options, each option lead to a product variant in product list
+    hidden:{type:Boolean,default:false}, //shown in website or not
     ticket_sku:String,
     is_bundle:{type:Boolean,default:false},
-    bundle_list:[],
-    major_only:{type:Boolean,default:false},
+    bundle_list:[], 
+    major_only:{type:Boolean,default:false}, //specified for target group user
     product_list:{},//type:[ObjectId],ref:"product_models",default:[]
 });
 // ProductSchema.path('activity').ref(activity)

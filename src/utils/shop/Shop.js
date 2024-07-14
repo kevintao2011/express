@@ -43,7 +43,7 @@ export default class Shop{
     async getCart(useruid){
         return await getUserOID(useruid).then(async oid=>{
             if(oid!==null){//,{},{populate:"products"}
-            return await Cart.findOne({user:oid},{},{populate:["products.prod_id","products.model_id"],new:true}).then(async result=>{
+            return await Cart.findOne({user:oid},{},{populate:["products.prod_id"],new:true}).then(async result=>{
                     if(result!==null){
                         return wrapResponse(true,result.products)
                     }else{
@@ -66,52 +66,53 @@ export default class Shop{
      * @param {*} quantity +n for add, -n for decrease
      */
     async addToCart(useruid,sku,quantity){
+        // pass in sku of selected option and quantity
         console.log(useruid,sku,quantity)
         
         return await getUserOID(useruid).then(async oid=>{
             return await product.findOne(
-                {"product_list.sku":sku}
+                {"product_list.sku":sku} //1. Find the product doc
             ).then(async prod=>{
                 console.log(prod)
-                if (prod!==null){
+                if (prod!==null){ //2.1 if found the product 
                     console.log("found product")
-                    return await Cart.findOneAndUpdate(
+                    return await Cart.findOneAndUpdate(//3 update user cart
+                        // find user's cart and correct product_id, increase 
                         {user:oid,'products.prod_id':prod._id},
-                        {$inc:{'products.$[elem].quantity':quantity}},
-                        {arrayFilters: [{ "elem.prod_id": prod._id }],new:true}
-                    ).then(async doc=>{
-                        let model_id
-                        model_id = prod.product_list.filter(subprods=>subprods.sku==sku)[0]._id
-                        console.log("model_id",model_id)
-                        if(doc){//output 1: increased for existed prod in cart
-                                console.log(doc)
-                                return wrapResponse(true,{type:'inc',prod_id:prod.sku})
-                        }else{
-                            return await Cart.findOneAndUpdate(
-                                {user:oid},{$push:{products:{prod_id:prod._id,quantity:quantity,model_id:model_id}}},{new:true}
-                            ).then(
-                                doc=>{//output 2:push new prod to cart
-                                    console.log("no same items in cart",doc,model_id)
-                                    return wrapResponse(true,{type:'inc',sku:prod.sku,prod_info:prod.toObject()})
-                                }
-                                ,()=>{//output 3:failed
-                                console.log("couldnt add")
-                                return wrapResponse(false,"couldnt add")
-                            })
-                        } 
-                    })
-                    // await Cart.findOneAndUpdate(
-                    //     {user:oid,"products.prod_id":prod._id},
-                    //     {$inc:{"products.$.quantity":1}}
-                    // ).then(doc=>{
-                    //     if(doc){
-                    //         return wrapResponse(true,doc.toObject())
-                    //     }else{
+                        { //updates
+                            $inc:{'products.$[elem].quantity':quantity},
                             
-                    //         return wrapResponse(false,"no such doc")
-                    //     }
-                    // })
-                    //await Cart.create({user:oid,products:{id:{}}})
+                        },
+                        {
+                            arrayFilters: [{"elem.prod_id": prod._id }],
+                            new: true,
+                            upsert: true // Make this update into an upsert
+                        }
+                    ).then(cart=>{
+                        console.log("updated cart :",cart)
+                    })
+                    // .then(async doc=>{
+                    //     let model_id
+                    //     model_id = prod.product_list.filter(subprods=>subprods.sku==sku)[0]._id
+                    //     console.log("model_id",model_id)
+                    //     if(doc){//output 1: increased for existed prod in cart
+                    //             console.log(doc)
+                    //             return wrapResponse(true,{type:'inc',prod_id:prod.sku})
+                    //     }else{
+                    //         return await Cart.findOneAndUpdate(
+                    //             {user:oid},{$push:{products:{prod_id:prod._id,quantity:quantity,model_id:model_id}}},{new:true}
+                    //         ).then(
+                    //             doc=>{//output 2:push new prod to cart
+                    //                 console.log("no same items in cart",doc,model_id)
+                    //                 return wrapResponse(true,{type:'inc',sku:prod.sku,prod_info:prod.toObject()})
+                    //             }
+                    //             ,()=>{//output 3:failed
+                    //             console.log("couldnt add")
+                    //             return wrapResponse(false,"couldnt add")
+                    //         })
+                    //     } 
+                    // },(rejected)=>{console.log("function error")})
+                    
                 }else{
                     return wrapResponse(false,"failed to add cart")
                 }
