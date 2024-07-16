@@ -3,9 +3,9 @@ import "dotenv/config";
 import editUser from "./utils/user/editUser.js";
 import getUser from "./utils/user/getUser.js";
 import getinfo from "./utils/info/major.js";
-import getProduct from "./utils/products/old/getProduct.js";
+// import getProduct from "./utils/products/old/getProduct.js";
 import createproduct from "./utils/products/createproduct.js";
-import newCreateProduct from "./utils/products/new/newCreateProduct.js";
+// import newCreateProduct from "./utils/products/new/newCreateProduct.js";
 import { loginfirebase } from "./auth/firebaseclientfunction.js";
 import { getUserSociety } from "./utils/info/info.js";
 import handleUserLogin from "./utils/user/handleUserLogin.js";
@@ -32,13 +32,13 @@ import getCatOption from "./utils/products/getCatOption.js";
 import getCatShownOption from "./utils/products/getCatShownOption.js";
 import changePoster from "./utils/activity/changePoster.js";
 import updateActivityProduct from "./utils/activity/updateActivityProduct.js";
-import updateProduct from "./utils/products/old/editProdct.js";
-import changeProductIcon from "./utils/products/old/changeProductIcon.js";
-import changeProductMainIcon from "./utils/products/old/changeProductMainIcon.js";
-import updateProductInfo from "./utils/products/old/updateproductinfo.js";
-import updateProductOption from "./utils/products/old/updateproductoption.js";
-import removeProductOption from "./utils/products/old/removeproductoption.js";
-import addProductOption from "./utils/products/old/addProductOption.js";
+// import updateProduct from "./utils/products/old/editProdct.js";
+// import changeProductIcon from "./utils/products/old/changeProductIcon.js";
+// import changeProductMainIcon from "./utils/products/old/changeProductMainIcon.js";
+// import updateProductInfo from "./utils/products/old/updateproductinfo.js";
+// import updateProductOption from "./utils/products/old/updateproductoption.js";
+// import removeProductOption from "./utils/products/old/removeproductoption.js";
+// import addProductOption from "./utils/products/old/addProductOption.js";
 import getProducts from "./utils/products/getProducts.js";
 import uploadCart from "./utils/info/uploadcart.js";
 import createOrder from "./utils/order/createOrder.js";
@@ -50,8 +50,8 @@ import updateOrderStatus from "./utils/order/updateOrderStatus.js";
 import getSocList from "./utils/info/getSocList.js";
 import setStaticInfo from "./utils/info/setStaticInfo.js";
 import editSocProduct from "./utils/products/editSocProduct.js";
-import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
-import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
+// import priviledgedGetSocProducts from "./utils/products/new/PriviledgedGetSocProducts.js";
+// import {pGetSocProductsByTree} from "./utils/products/new/pGetSocProductByTree.js";
 import updateSocietyInfo from "./utils/society/updateSocietyInfo.js";
 import getMemberList from "./utils/society/member/getMemberList.js";
 import getUserMembership from "./utils/membership/getUserMembership.js";
@@ -203,27 +203,27 @@ app.post('/api/changeposter',checkAuth, async (req, res) => {
 })
 
 
-app.post('/api/changeproducticon',checkAuth, async (req, res) => {
-  console.log("calling changeproducticon",req.body)
+// app.post('/api/changeproducticon',checkAuth, async (req, res) => {
+//   console.log("calling changeproducticon",req.body)
 
-  const result = await changeProductIcon(req);
-  console.log("reutrning state",result)
-  res.send(JSON.stringify(result))
-  //Create user profile on mongo when first log in
+//   const result = await changeProductIcon(req);
+//   console.log("reutrning state",result)
+//   res.send(JSON.stringify(result))
+//   //Create user profile on mongo when first log in
   
   
-})
+// })
 
-app.post('/api/changeproductmainicon',checkAuth, async (req, res) => {
-  console.log("calling changeproducticon",req.body)
+// app.post('/api/changeproductmainicon',checkAuth, async (req, res) => {
+//   console.log("calling changeproducticon",req.body)
 
-  const result = await changeProductMainIcon(req);
-  console.log("reutrning state",result)
-  res.send(JSON.stringify(result))
-  //Create user profile on mongo when first log in
+//   const result = await changeProductMainIcon(req);
+//   console.log("reutrning state",result)
+//   res.send(JSON.stringify(result))
+//   //Create user profile on mongo when first log in
   
   
-})
+// })
 
 app.post('/api/updateActivityProduct',checkAuth, async (req, res) => {
   console.log("calling updateActivityProduct",req.body)
@@ -235,92 +235,92 @@ app.post('/api/updateActivityProduct',checkAuth, async (req, res) => {
   
   
 })
-app.post('/api/updateproduct',checkAuth, async (req, res) => {
-  console.log("calling updateProduct",req.body)
-  await updateProduct(req).then(result=>{
-    console.log("result",result)
-    if(result.success){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
+// app.post('/api/updateproduct',checkAuth, async (req, res) => {
+//   console.log("calling updateProduct",req.body)
+//   await updateProduct(req).then(result=>{
+//     console.log("result",result)
+//     if(result.success){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
     
-  });
+//   });
   
   
   
-})
+// })
 
-app.post('/api/updateproductinfo',checkAuth, async (req, res) => {
-  await updateProductInfo(req).then(result=>{
-    console.log("updated product info",result)
-    if(result.code=="success"){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
-  })
+// app.post('/api/updateproductinfo',checkAuth, async (req, res) => {
+//   await updateProductInfo(req).then(result=>{
+//     console.log("updated product info",result)
+//     if(result.code=="success"){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
+//   })
   
   
-})
+// })
 
-app.post('/api/${code}/manage/hideproduct',checkAuth, async (req, res) => {
-  await updateProductInfo(req).then(result=>{
-    console.log("updated product info",result)
-    if(result.code=="success"){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
-  })
+// app.post('/api/${code}/manage/hideproduct',checkAuth, async (req, res) => {
+//   await updateProductInfo(req).then(result=>{
+//     console.log("updated product info",result)
+//     if(result.code=="success"){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
+//   })
   
   
-})
+// })
 
-app.post('/api/updateoptioninfo',checkAuth, async (req, res) => {
-  await updateProductOption(req).then(result=>{
-    console.log("updated Product Option",result)
-    if(result.code=="success"){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
-  })
+// app.post('/api/updateoptioninfo',checkAuth, async (req, res) => {
+//   await updateProductOption(req).then(result=>{
+//     console.log("updated Product Option",result)
+//     if(result.code=="success"){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
+//   })
   
   
-})
+// })
 //comment
-app.post('/api/removeproductoption',checkAuth, async (req, res) => {
-  await removeProductOption(req).then(result=>{
-    console.log("removeproductiotuin",result)
-    if(result.code=="success"){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
-  })
+// app.post('/api/removeproductoption',checkAuth, async (req, res) => {
+//   await removeProductOption(req).then(result=>{
+//     console.log("removeproductiotuin",result)
+//     if(result.code=="success"){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
+//   })
   
   
-})
+// })
 
-app.post('/api/addproductoption',checkAuth, async (req, res) => {
-  await addProductOption(req).then(result=>{
-    console.log("addProductOption",result)
-    if(result.index){
-      res.status(200).json(result)
-    }
-    else{
-      res.status(500).json(result)
-    }
-  })
+// app.post('/api/addproductoption',checkAuth, async (req, res) => {
+//   await addProductOption(req).then(result=>{
+//     console.log("addProductOption",result)
+//     if(result.index){
+//       res.status(200).json(result)
+//     }
+//     else{
+//       res.status(500).json(result)
+//     }
+//   })
   
   
-})
+// })
 
 app.post('/api/placeorder',checkAuth, async (req, res) => {
   await createOrder(req).then(result=>{

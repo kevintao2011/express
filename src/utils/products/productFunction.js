@@ -1,2 +1,1 @@
-import product from "../../models/product";
-
+// new add centralized lib for functions handling Products
