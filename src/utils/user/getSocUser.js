@@ -24,7 +24,7 @@ const getSocUser = async (req)=>{
         //     console.log("getSocActivity added connection",mongoose.connection.readyState)
         // }
         
-
+        
         const a = await society.find(
             {code:req.body.id}
             ,{member:1} //,_id:0
