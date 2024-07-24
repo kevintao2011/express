@@ -1,4 +1,4 @@
-import product,{ProductVariantSchema} from "../../models/product.js";
+import product from "../../models/product.js";
 import { IntToProdIndex, findNextSKUIndex, wrapResponse } from "../serverFunction/basicfunction.js";
 
 async function addMemberType(req){

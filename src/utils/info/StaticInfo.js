@@ -14,7 +14,7 @@ class StaticInfo{
             return await website_info.find(
                 specify_ids.length<1?{}:{id:{$in:specify_ids}},
             ).then(async info=>{
-                console.log(info)
+                // console.log(info)
                 if(specify_ids.includes("socMap")){
                     return await society.find(
                         {},
@@ -37,7 +37,7 @@ class StaticInfo{
                         }
                     }).then(customobj=>{
                         info.push(customobj)
-                        console.log("info: ",info)
+                        // console.log("info: ",info)
                         return wrapResponse(true,info) 
                     })
                 }

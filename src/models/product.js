@@ -2,6 +2,7 @@
 import mongoose,{ Schema, model} from 'mongoose';
 import activity from './activity.js';
 import { ObjectId } from 'mongodb';
+import stock from './stock.js';
 const ProductVariantSchema = new Schema({ //schema
     name:String,
     total_sales:{type:Number,default:0},
@@ -9,10 +10,12 @@ const ProductVariantSchema = new Schema({ //schema
     price:{type:Number,default:0},
     is_limited:{type:Boolean,default:true},
     sku:String,
+    ref_product:{type:mongoose.Types.ObjectId,ref:"products"},
     // added not not yet do 
     img_url:String,// for preview and show selected option
     valid:Boolean// is there this product or not 
 });
+
 
 const OptionSchema = new Schema({ //schema
     text:String, //e.g. size
@@ -29,7 +32,7 @@ const ModificationSchema = new Schema({ //schema
 const ProductSchema = new Schema({ //schema
     code:String, //soc-code
     ref_society:{type:mongoose.Types.ObjectId,ref:'societies'},
-    ref_category:{type:mongoose.Types.ObjectId,ref:'categories'},
+    ref_category:{}, //type:mongoose.Types.ObjectId,ref:'categories'
     product_name_chi:String, //product chinese name
     product_type: String,   //membership, ticket , virtual , real
     product_img_url:[String], //product url
@@ -56,13 +59,57 @@ const ProductSchema = new Schema({ //schema
     is_bundle:{type:Boolean,default:false},
     bundle_list:[], 
     major_only:{type:Boolean,default:false}, //specified for target group user
-    product_list:{},//type:[ObjectId],ref:"product_models",default:[]
+    product_list:{type:[ObjectId],ref:"product_variants",default:[]}//{type:[ObjectId],ref:"product_variants",default:[]},//type:[ObjectId],ref:"product_models",default:[]
 });
-// ProductSchema.path('activity').ref(activity)
+
+
+
+// })
+
+
 const product = model("products", ProductSchema);  //Creating a model
+const product_variants = model("product_variants", ProductVariantSchema);  //Creating a model
 
-const productModels = model("product_models", ProductVariantSchema); 
+product_variants.watch().on('change',async change=>{
+    console.log("change",change)
+    if (change.operationType === 'insert') {
+        const subproductDetails = change.fullDocument;
+        await product.findByIdAndUpdate(
+            {_id:subproductDetails.ref_product},
+            { $push: { product_list: subproductDetails._id } },
+            { new: true }
+        );
+        await stock.create(
+            {
+                sku:subproductDetails.sku,
+                ref_society:subproductDetails.ref_society,
+                created_at:Date.now(),
+                created_by:subproductDetails.created_by,
+                create_method:"auto-generate",
+                status:"for-sale",
+            }
+        )
+    }else if(change.operationType === 'delete'){
+        const subproductDetails = change.fullDocument;
+        await product.findByIdAndUpdate(
+            {_id:subproductDetails.ref_product},
+            { $pull: { product_list: subproductDetails._id } },
+            { new: true }
+        );
+    }
+})
 
-ProductSchema.methods.findSocMembership = function(code){return this.findOne({code:code})}
+product.watch().on('change',async change=>{
+    console.log("change",change)
+    if (change.operationType === 'delete') {
+        const productDetails = change.fullDocument;
+        await product_variants.deleteMany({ref_product:productDetails._id})
+    }
+})  
+
+ProductSchema.statics.findprod = function(id){
+    return this.findOne({"product_list._id": ObjectId(id)})
+};
+
 export default product;
-export {ProductSchema,ProductVariantSchema,productModels}
+export {ProductSchema,product_variants,ProductVariantSchema}

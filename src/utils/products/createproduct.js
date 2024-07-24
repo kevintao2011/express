@@ -1,5 +1,5 @@
 import mongoose, {  connect  } from "mongoose";
-import product from "../../models/product.js";
+import product, { product_variants } from "../../models/product.js";
 import getoidbycode,{getoidandsessionbycode} from "../serverFunction/getoidbycode.js";
 import getUserOID from "../serverFunction/getuseroid.js";
 import moment from "moment/moment.js";
@@ -20,15 +20,16 @@ const createproduct = async (req)=>{
                 const oid=result[0]
                 const session=result[1]
                 try {
-                    //connect = await mongoose.connect(String(process.env.CONNECTION_STRING));
                     
                     var prod = {...req.body.data}
                     console.log("prod.product_list b4 modify",prod.product_list)
                     prod.created_by=useroid
                     prod.ref_society=oid
                     prod.session=session
-                    // prod.sku=`${req.body.data.code}-${session}-${p.length.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`
-                    prod.ref_category= await category.findOne({id:req.body.data.product_type},{id:1}).then(async doc=>{
+                    
+
+                    //1. find the reference category _id
+                    prod.ref_category = await category.findOne({id:req.body.data.product_type},{id:1}).then(async doc=>{
                         if(doc){
                             return doc._id
                         }else{
@@ -37,76 +38,93 @@ const createproduct = async (req)=>{
                             })
                         }
                     })
+
+                    //2. mark the current time as creat time
                     prod.created_at=moment().utcOffset(8).toDate()
+                    //3. handle subproducts in product list
                     prod.options=prod.product_list.option?prod.product_list.option:[]
-                    if(Object.keys(prod.product_list).length>0){
-                        prod.product_list=Object.keys(prod.product_list.data).map((p,i)=>{
-                            console.log(p)
-                            console.log(prod.product_list.data)
-                            var obj = prod.product_list.data[p]
-                            obj.name = p
-                            obj.sku= `${prod.sku}-${IntToProdIndex(i)}`
-                            return obj
-                        })
-                    }
-                    else{
-                        prod.product_list=[]
-                    }
 
-                   
-
-                    
-                    console.log("prod to be create",prod)
+                    //4. create new local product doc       
+                    //4a. remove the product_list from the product to avoid wrong data    
+                    const product_list = prod.product_list.data?prod.product_list.data:{}
+                    prod.product_list=[]
                     const newProduct = new product(prod)
-                    console.log(newProduct)
+
                     
-                    return await product.create(newProduct).then(async doc=>{
-                        if(doc.is_limited){
-                            const stockInfos = doc.product_list.map(subproduct=>{
-                                return{
-                                    sku:subproduct.sku,
-                                    ref_society:doc.ref_society,
-                                    ref_product:doc._id,
-                                    created_by:doc.created_by,
-                                    spot_goods:true,
-                                    status:"for-sale"
-                                }
-                            })
-                            const stocksTobeCreated = doc.product_list.map((subproduct,i)=>{
-                                var stocks = [] 
-                                for (let index = 0; index < subproduct.quantity; index++) {
-                                    const doc = new stock(stockInfos[i])
-                                    
-                                    doc.sku=doc.sku+"-"+IntToProdIndex(index)
-                                    console.log(doc.sku)
-                                    stocks.push(doc)
-                                }
-                                return stocks
-                                
-                            })
-                            // console.log("newStocks after fflatiing",stocksTobeCreated.flat())
-                            // for (const [i,docs] in stocksTobeCreated.flat()) {
-                            //     console.log("creating ",i," subprod")
-                            //     await stock.insertMany(docs).then(()=>{
-                            //         console.log("created ",i," subprod")
-                            //     })
-                            // }
-                            console.log("newStocks after fflatiing",stocksTobeCreated.flat())
-                            await stock.insertMany(stocksTobeCreated.flat()).then((r)=>{
+                    let productVariants = []
+                    if(Object.keys(product_list).length>0){ // if there are subproducts
+                        //3a. map subproduct to product array
+                        productVariants=Object.keys(product_list).map((p,i)=>{
+                            console.log(p)
+                            console.log(product_list)
+                            var obj = product_list[p]
+                            obj.name = p
+                            console.log("ref prod id",newProduct._id)
+                            obj.ref_product = newProduct._id
+                            //generate sku for the subproduct
+                            obj.sku= `${prod.sku}-${IntToProdIndex(i)}` 
+                            console.log("obj",obj)
+                            return new product_variants(obj)
+
+                            
+                        })
                         
-                                console.log("created ",r.length," subprod")
-                            })
-                            return {success:true,data:"created product an stocks"}
-                        }else{
-                            return {success:true,data:"create product only (no stock)"}
-                        }
+                    }
+                    
+
+                    
+                    
+                    //5. add the doc to the 'products 'collection
+                    return await product.create(newProduct).then(async doc=>{
+                        //6. if the product not unlimited, create stocks for each subproduct
+
+                        return await product_variants.insertMany(productVariants).then(
+                            suc=>{return {success:true,data:"added"}},
+                            err=>{return {success:false,data:err.name}}
+                        )
+                       
+
+
+                        // if(doc.is_limited){ //if the product is limited,
+                        //     //  retrieve informations for need stocks 
+                        //     const stockInfos = doc.product_list.map(subproduct=>{
+                        //         return{
+                        //             sku:subproduct.sku,
+                        //             ref_society:doc.ref_society,
+                        //             ref_product:doc._id,
+                        //             created_by:doc.created_by,
+                        //             spot_goods:true,
+                        //             status:"for-sale"
+                        //         }
+                        //     })
+                        //     // create stocks for each subproduct as requested
+                        //     const stocksTobeCreated = doc.product_list.map((subproduct,i)=>{
+                        //         var stocks = [] 
+                        //         for (let index = 0; index < subproduct.quantity; index++) {
+                        //             const doc = new stock(stockInfos[i])
+                                    
+                        //             doc.sku=doc.sku+"-"+IntToProdIndex(index)
+                        //             console.log(doc.sku)
+                        //             stocks.push(doc)
+                        //         }
+                        //         return stocks
+                                
+                        //     })
+                            
+                        //     console.log("newStocks after flatiing",stocksTobeCreated.flat())
+                        //     await stock.insertMany(stocksTobeCreated.flat()).then((r)=>{
+                        
+                        //         console.log("created ",r.length," subprod")
+                        //     })
+                        //     return {success:true,data:"created product an stocks"}
+                        // }else{
+                        //     return {success:true,data:"create product only (no stock)"}
+                        // }
                         
                         
 
                     })
-                   
-            
-                    
+
                     
                 } catch (err) {
                     console.log("error",err);
@@ -122,10 +140,6 @@ const createproduct = async (req)=>{
         }
         
     })
-    
-    
-    
-
     
 }
 

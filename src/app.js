@@ -68,6 +68,8 @@ import Shop from "./utils/shop/Shop.js";
 import ProdGroup from "./models/product_group.js";
 import StaticInfo from "./utils/info/StaticInfo.js";
 import Payment from "./utils/payment/payment.js";
+import product, { product_variants } from "./models/product.js";
+import { error } from "firebase-functions/logger";
 
 const shop = new Shop()
 const ProductGroup = new ProdGroup()
@@ -132,7 +134,7 @@ app.post('/api/getuser',checkAuth, async (req, res) => {
   console.log("calling getuser",req.body)
 
   const user = await handleUserLogin(req);
-  console.log("reutrning user",user)
+  // console.log("reutrning user",user)
   res.send(JSON.stringify(user))
 
   
@@ -480,7 +482,12 @@ app.post('/api/setwebsitestaticinfo', checkAuth,async (req, res) => {
 //add to cart in shop product page
 app.post('/api/addtocart',checkAuth, async (req, res) => {
   console.log("calling add to cart",req.body)
-    await shop.addToCart(req.body.tokeninfo.uid,req.body.data.sku,req.body.data.quantity)
+    await shop.addToCart(req.body.tokeninfo.uid,req.body.data.sku,req.body.data.quantity).then(
+      result=>{
+        console.log("addtocart res",result)
+        sendResponse(res,result)
+      }
+    )
   // console.log("calling addtocart",req.body)
   // await staticInfo.getStaticInfo(req.body.data.ids).then(result=>{
   //   sendResponse(res,result)
@@ -630,6 +637,62 @@ app.post('/api/gettypeproduct',checkAuth,async (req, res) => {
 app.post('/api/addmembership',async (req, res) => {
   const result = await createproduct(req);  
   res.send(result)
+})
+
+app.post('/api/move',async (req, res) => {
+  await product.find().then(docs=>{
+    console.log(docs)
+    let arra = []
+    docs.forEach(doc=>{
+      if (Array.isArray(doc.product_list)){
+        doc.product_list.forEach(subdoc=>{
+          subdoc.ref_product = subdoc._id
+          arra.push(subdoc)
+        })
+      }
+      
+    })
+    product_variants.insertMany(arra).then(r=>{res.send("success")})
+  })
+  
+})
+
+app.post('/api/clear',async (req, res) => {
+  await product.find().then(async docs=>{
+    console.log(docs)
+    for await (const doc of docs){
+      let arra = []
+      if (Array.isArray(doc.product_list)){
+        doc.product_list.forEach(subdoc=>{
+          arra.push(subdoc._id)
+        })
+        doc.product_list = arra
+      }else{
+        doc.product_list = []
+      }
+      await doc.save().then(r=>{console.log("saved")})
+    }
+
+  })
+  res.send("done")
+  
+})
+
+app.post('/api/delet',async (req, res) => {
+  await product.find().then(docs=>{
+    // console.log(docs)
+    docs.forEach(async doc=>{
+      let arra = []
+      if(doc.ref_category = "30"){
+        console.log(doc._id , doc.product_name_chi)
+        await doc.deleteOne()
+      }
+      
+      
+      
+    },error=>{console.log(error.doc)})
+  })
+  res.send("done")
 })
 
 // app.post('/api/newcreateproduct',checkAuth,async (req, res) => {
@@ -837,6 +900,13 @@ app.post('/api/signin',async (req, res) => {
   // });
 
   
+})
+
+app.get('/api/prod',async (req, res) => {
+  product.findprod("6551fad7cc6beb58144ada68").thn(r=>{
+    res.send(r)
+  })
+  res.send('failed')
 })
 
 //account creation

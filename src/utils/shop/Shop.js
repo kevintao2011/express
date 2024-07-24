@@ -1,6 +1,7 @@
+import e from "express";
 import Cart from "../../models/cart.js";
 import category from "../../models/category.js";
-import product from "../../models/product.js";
+import product, { product_variants } from "../../models/product.js";
 import user from "../../models/user.js";
 import getUserMembership from "../membership/getUserMembership.js";
 import { wrapResponse } from "../serverFunction/basicfunction.js";
@@ -31,7 +32,9 @@ export default class Shop{
         console.log("sku",sku)
         return await product.findOne(
             {sku:sku}
-        ).then(prod=>{
+        )
+        .populate({ path: 'product_list',model:product_variants})
+        .then(prod=>{
             if (prod!==null){
                 return wrapResponse(true,prod)
             }else{
@@ -43,11 +46,22 @@ export default class Shop{
     async getCart(useruid){
         return await getUserOID(useruid).then(async oid=>{
             if(oid!==null){//,{},{populate:"products"}
-            return await Cart.findOne({user:oid},{},{populate:["products.prod_id"],new:true}).then(async result=>{
+            return await Cart.findOne({user:oid},{})
+            .populate(
+                {
+                    path: 'products.prod_id',
+                    model: 'product_variants',
+                    populate: {
+                        path: 'ref_product',
+                        model: 'products'
+                    }
+                }
+            ).then(async result=>{//,{populate:["products.prod_id"],new:true}
+                    console.log("get cart",result)
                     if(result!==null){
                         return wrapResponse(true,result.products)
                     }else{
-                        return await Cart.create({user:oid}).then(doc=>{
+                        return await Cart.create({user:oid}).then(async doc=>{
                             return wrapResponse(true,doc.products)
                         })
                     }
@@ -69,55 +83,65 @@ export default class Shop{
         // pass in sku of selected option and quantity
         console.log(useruid,sku,quantity)
         
-        return await getUserOID(useruid).then(async oid=>{
-            return await product.findOne(
-                {"product_list.sku":sku} //1. Find the product doc
-            ).then(async prod=>{
-                console.log(prod)
-                if (prod!==null){ //2.1 if found the product 
-                    console.log("found product")
-                    return await Cart.findOneAndUpdate(//3 update user cart
-                        // find user's cart and correct product_id, increase 
-                        {user:oid,'products.prod_id':prod._id},
-                        { //updates
-                            $inc:{'products.$[elem].quantity':quantity},
-                            
-                        },
-                        {
-                            arrayFilters: [{"elem.prod_id": prod._id }],
-                            new: true,
-                            upsert: true // Make this update into an upsert
-                        }
-                    ).then(cart=>{
-                        console.log("updated cart :",cart)
-                    })
-                    // .then(async doc=>{
-                    //     let model_id
-                    //     model_id = prod.product_list.filter(subprods=>subprods.sku==sku)[0]._id
-                    //     console.log("model_id",model_id)
-                    //     if(doc){//output 1: increased for existed prod in cart
-                    //             console.log(doc)
-                    //             return wrapResponse(true,{type:'inc',prod_id:prod.sku})
-                    //     }else{
-                    //         return await Cart.findOneAndUpdate(
-                    //             {user:oid},{$push:{products:{prod_id:prod._id,quantity:quantity,model_id:model_id}}},{new:true}
-                    //         ).then(
-                    //             doc=>{//output 2:push new prod to cart
-                    //                 console.log("no same items in cart",doc,model_id)
-                    //                 return wrapResponse(true,{type:'inc',sku:prod.sku,prod_info:prod.toObject()})
-                    //             }
-                    //             ,()=>{//output 3:failed
-                    //             console.log("couldnt add")
-                    //             return wrapResponse(false,"couldnt add")
-                    //         })
-                    //     } 
-                    // },(rejected)=>{console.log("function error")})
-                    
-                }else{
-                    return wrapResponse(false,"failed to add cart")
-                }
+        try
+        {
+            return await getUserOID(useruid).then(async oid=>{
+                return await product_variants.findOne(
+                    {"sku":sku} //1. Find the product doc
+                ).then(async prod=>{
+                    console.log("product able to add cart")
+                    if (prod!==null){ //2.1 if found the product 
+                        return await Cart.findOneAndUpdate(//3 update user cart
+                            // find user's cart and correct product_id, increase 
+                            {user:oid},
+                            { 
+                            },
+                            {
+                                new: true,
+                                upsert: true // Make this update into an upsert
+                            }
+                        ).then(async cart=>{
+                                console.log("updated cart :",cart)
+                                console.log("add prod :",prod)
+                                //if product in cart, increase quantity and return
+                                for (let cart_prod of cart.products){
+                                    console.log(prod._id,cart_prod.prod_id)
+                                    if(prod._id.toString()==cart_prod.prod_id.toString()){
+                                        console.log("found same prod in cart",cart_prod.quantity,quantity)
+                                        cart_prod.quantity += parseInt(quantity);
+                                        return await cart.save().then(async doc => {
+                                            console.log("return 1")
+                                            return wrapResponse(true, "increased in cart");
+                                        });
+                                        
+                                    }
+                                }
+                                //otherwise, add new product to cart products list
+                                cart.products.push({prod_id:prod._id,quantity:quantity})
+                                return await cart.save().then(async doc=>{
+                                    console.log("return 2")
+                                    return wrapResponse(true,"added to cart")
+                                })
+                                
+                            },
+                            err=>{ 
+                                console.log("return 3")
+                                return wrapResponse(false,"failed")
+                            }
+                        )
+                        
+                        
+                    }else{
+                        console.log("return 4")
+                        return wrapResponse(false,"failed to add cart")
+                    }
+                })
             })
-        })
+        }catch(err){
+            console.log(err)
+            return wrapResponse(false,err.name)
+        }
         
     }
 }
+

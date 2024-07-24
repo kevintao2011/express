@@ -27,7 +27,7 @@ const getSocActivity = async (req)=>{
             {code:req.body.id}
         ).then(async activities=>{
             if (activities){
-                console.log(activities)
+                console.log('founded activities')
             }
             //await connect.disconnect()
             console.log("function exe sucess")

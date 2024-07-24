@@ -156,6 +156,12 @@ function sendResponse(res,result){
   res.status(result.success?200:500).send(JSON.stringify(result))
 }
 
+/**
+ * wrap the data with success status
+ * @param {*} success 
+ * @param {*} data 
+ * @returns {success:boolean,data:object}
+ */
 function wrapResponse(success,data){
   return {success:success,data:data}
 }

@@ -4,6 +4,7 @@ import product from './product.js';
 import { ObjectId } from 'mongodb';
 import { TransactionSchema } from './transaction.js';
 import moment from 'moment/moment.js';
+import Cart from './cart.js';
 const CartSchema = new Schema({
     id:{type:ObjectId,ref:"product"},
     quantity:{type:Number}
@@ -30,5 +31,14 @@ const UserSchema = new Schema({ //schema
 });
 const user = model("user", UserSchema);  //Creating a model (collectionName)
 
+user.watch().on('change', change => {
+   if(change.operationType === 'insert'){
+       const user = change.fullDocument;
+       Cart.create({
+           user:user._id,
+           products:[],
+       })
+   }
+});
 export {UserSchema};
 export default user ;
